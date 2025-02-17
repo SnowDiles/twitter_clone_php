@@ -1,33 +1,41 @@
-# Welcome !
+# Welcome!
 
-## Project assets :
+## Project assets
 
-Font : Urbanist
+Font - Urbanist
 
-Framework : https://picocss.com/docs
+Framework - https://picocss.com/docs
 
-Icons : [here](./assets/icons)
+Icons - [here](./assets/icons)
 
-Project subject : [here](./assets/tweet_academie.pdf)
+Project subject - [here](./assets/tweet_academie.pdf)
 
 ## Project management
 
 ### Roles
 
-**_Teach lead_** :
+#### Tech lead (Marwan)
 
-the tech lead need to validate **each PR** This is mandatory. He also has to be include in every dilema or issue within the project. He also has to be includes in all changes or addition in the project.
+the tech lead need to validate **each PR** This is mandatory. He also has to ensure the quality of the code.
 
-**_Lead dev_** :
-
-there is 2 lead dev, Front & Back. Each front-end PR need to be overwiew by the associated lead dev.
-
-Each individual of the project will work has front & back developper but the lead dev role will stay still.
-
-**Product Owner**
+#### Product Owner (PO) (Brahim)
 
 there will be one product owner, his goal will have to create issues with the team and make sure each task will be done and can be done.
 
 ## Github Doc
 
 you will find [here](./doc/github.md) the github documentation about everything you will need to know about the github project, how to do a branch a pr...
+
+## Project techno
+
+#### back-end
+
+PHP - SQL
+
+#### front-end
+
+Html (in the php views) - CSS & Picoss for the framework css - JS
+
+## Project architecture
+
+MVC (Model - Views - Controller) using JS for dynamic loading
