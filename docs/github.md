@@ -1,6 +1,6 @@
 # Github Documentation
 
-### Branch creation :
+### Branch creation
 
 each branch need to include a definition :
 
@@ -12,7 +12,7 @@ and then the name of the action, example :
 
 `feat/login-page-creation`
 
-### Commit naming :
+### Commit naming
 
 Each commit need to be written in english.
 
@@ -22,7 +22,7 @@ example :
 
 `[fix] fixed issues with the forgot password button in the login page`
 
-### Github project :
+### Github project
 
 We are using github project to follow each task.
 
