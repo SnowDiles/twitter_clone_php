@@ -13,13 +13,16 @@ CREATE TABLE Media (
 CREATE TABLE Users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
+    display_name VARCHAR(100) NOT NULL,
     password_hash CHAR(40) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     bio TEXT,
     profile_picture_id INT,
+    banner_id INT,
     theme_id INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (profile_picture_id) REFERENCES Media(media_id),
+    FOREIGN KEY (banner_id) REFERENCES Media(media_id),
     FOREIGN KEY (theme_id) REFERENCES Themes(theme_id)
 );
 
