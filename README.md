@@ -28,11 +28,11 @@ you will find [here](./doc/github.md) the github documentation about everything 
 
 ## Project techno
 
-#### back-end
+### Back-end
 
 PHP - SQL
 
-#### front-end
+### Front-end
 
 Html (in the php views) - CSS & Picoss for the framework css - JS
 
