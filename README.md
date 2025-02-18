@@ -39,3 +39,7 @@ Html (in the php views) - CSS & Picoss for the framework css - JS
 ## Project architecture
 
 MVC (Model - Views - Controller) using JS for dynamic loading
+
+### Folder architecture
+
+"src" & "public" folder structure. "index.php" and client side in the "public" directory. "src" is where the rest of the back-end goes.
