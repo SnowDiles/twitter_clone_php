@@ -16,10 +16,9 @@ CREATE TABLE Users (
     password_hash CHAR(40) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     bio TEXT,
+    date_of_birth DATE,
     theme_id INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (profile_picture_id) REFERENCES Media(media_id),
-    FOREIGN KEY (banner_id) REFERENCES Media(media_id),
     FOREIGN KEY (theme_id) REFERENCES Themes(theme_id)
 );
 
@@ -55,14 +54,6 @@ CREATE TABLE PostHashtag (
     FOREIGN KEY (hashtag_id) REFERENCES Hashtags(hashtag_id)
 );
 
-CREATE TABLE Mentions (
-    mention_id INT PRIMARY KEY AUTO_INCREMENT,
-    post_id INT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES Posts(post_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
-);
-
 CREATE TABLE Follows (
     follower_id INT NOT NULL,
     following_id INT NOT NULL,
@@ -84,12 +75,14 @@ CREATE TABLE Messages (
 
 CREATE TABLE PostMedia (
     post_id INT,
+    media_id INT NOT NULL,
     FOREIGN KEY (post_id) REFERENCES Posts(post_id) ON DELETE SET NULL,
     FOREIGN KEY (media_id) REFERENCES Media(media_id)
 );
 
 CREATE TABLE MessageMedia (
     message_id INT,
+    media_id INT NOT NULL,
     FOREIGN KEY (message_id) REFERENCES Messages(message_id) ON DELETE SET NULL,
     FOREIGN KEY (media_id) REFERENCES Media(media_id)
 );
