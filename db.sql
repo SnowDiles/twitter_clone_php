@@ -16,8 +16,6 @@ CREATE TABLE Users (
     password_hash CHAR(40) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     bio TEXT,
-    profile_picture_id INT,
-    banner_id INT,
     theme_id INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (profile_picture_id) REFERENCES Media(media_id),
@@ -85,15 +83,13 @@ CREATE TABLE Messages (
 );
 
 CREATE TABLE PostMedia (
-    post_id INT NOT NULL,
-    media_id INT NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES Posts(post_id) ON DELETE CASCADE,
+    post_id INT,
+    FOREIGN KEY (post_id) REFERENCES Posts(post_id) ON DELETE SET NULL,
     FOREIGN KEY (media_id) REFERENCES Media(media_id)
 );
 
 CREATE TABLE MessageMedia (
-    message_id INT NOT NULL,
-    media_id INT NOT NULL,
-    FOREIGN KEY (message_id) REFERENCES Messages(message_id) ON DELETE CASCADE,
+    message_id INT,
+    FOREIGN KEY (message_id) REFERENCES Messages(message_id) ON DELETE SET NULL,
     FOREIGN KEY (media_id) REFERENCES Media(media_id)
 );
