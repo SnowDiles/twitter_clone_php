@@ -10,6 +10,16 @@ Icons - [here](./assets/icons)
 
 Project subject - [here](./assets/tweet_academie.pdf)
 
+## Project installation
+
+Make sure to install all the dependancies
+
+`npm install`
+
+then build the css :
+
+`npm run build:css`
+
 ## Project management
 
 ### Roles
