@@ -1,0 +1,52 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.divider{
+    padding: 20px;
+}
+.logo{
+    width: 160px;
+    padding-bottom: 150px;
+}
+p{
+    padding-bottom: 10px;
+}
+.btn{
+    border-radius: 10px;
+    width: 300px;
+}
+.btn2{
+    border: 1px solid rgb(143, 143, 143);
+    color: #1d9bf0;
+}
+
+
+#main{
+
+
+    align-items: center; /* Center vertically */
+    height: 100vh;
+}
+@media screen and (min-width: 641px) {
+    /* Add your styles for screens above 641px here */
+    #main {
+        flex-direction: row;
+        
+        justify-content: space-around;
+    }
+
+    .logo {
+        width: 500px;
+        padding-bottom: 100px;
+    }
+
+    hr.divider{
+
+        display: none;
+    }
+    .btn {
+        width: 350px;
+    }
+}
