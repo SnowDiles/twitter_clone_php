@@ -20,6 +20,16 @@ then build the css :
 
 `npm run build:css`
 
+also install the composer dependancies
+
+`composer install`
+
+then copy the .env.example and change the value by your values
+
+`cp .env.example .env`
+
+You should now be able to use PDO !
+
 ## Project management
 
 ### Roles

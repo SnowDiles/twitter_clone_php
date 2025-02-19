@@ -1,0 +1,17 @@
+{
+  "name": "tompilate/w-web-090-lil-1-1-academie-tom.pilate",
+  "autoload": {
+    "psr-4": {
+      "Tompilate\\WWeb090Lil11AcademieTomPilate\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "TPilate",
+      "email": "peroron.tm@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  }
+}
