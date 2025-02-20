@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default {
   darkMode: 'selector',
   content: [
-    "./**/*.{html,js,jsx,ts,tsx}",
+    "./**/*.{html,js,jsx,ts,tsx,php}",
     "./index.html",
     join(dirname(fileURLToPath(import.meta.url)), 'node_modules/@skeletonlabs/skeleton/**/*.{html,js,svelte}')
   ],
