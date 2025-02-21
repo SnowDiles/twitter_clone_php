@@ -1,5 +1,3 @@
 <?php
 
-
-include_once('../Views/auth/login.php')
-?>
+require_once("../Views/auth/login.php");
