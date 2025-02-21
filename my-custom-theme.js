@@ -13,11 +13,11 @@ export const myCustomTheme = {
 		"--theme-rounded-container": "8px",
 		"--theme-border-base": "1px",
 		// =~= Theme On-X Colors =~=
-		"--on-primary": "255 255 255",
-		"--on-secondary": "255 255 255",
+		"--on-primary": "0 0 0",
+		"--on-secondary": "0 0 0",
 		"--on-tertiary": "0 0 0",
-		"--on-success": "255 255 255",
-		"--on-warning": "255 255 255",
+		"--on-success": "0 0 0",
+		"--on-warning": "0 0 0",
 		"--on-error": "255 255 255",
 		"--on-surface": "255 255 255",
 		// =~= Theme Colors  =~=
