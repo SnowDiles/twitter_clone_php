@@ -8,7 +8,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "postcss ./public/css/style.css -o dist/styles.css"
+    "build:css": "postcss ./public/css/style.css -o dist/styles.css",
+    "lint:php": "./vendor/bin/phpcs --standard=PSR12",
+    "sniff:src": "./vendor/bin/phpcs --standard=PSR12 src",
+    "sniff:controllers": "./vendor/bin/phpcs --standard=PSR12 src/Controllers",
+    "sniff:models": "./vendor/bin/phpcs --standard=PSR12 src/Models",
+    "sniff:views": "./vendor/bin/phpcs --standard=PSR12 src/Views",
+    "sniff:partials": "./vendor/bin/phpcs --standard=PSR12 src/_partials"
   },
   "repository": {
     "type": "git",

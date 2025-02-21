@@ -2,9 +2,9 @@
 
 ## Project assets
 
-Font - Urbanist
+Font - Manrope
 
-Framework - https://picocss.com/docs
+Framework - https://www.skeleton.dev/
 
 Icons - [here](./assets/icons)
 
@@ -30,17 +30,13 @@ then copy the .env.example and change the value by your values
 
 You should now be able to use PDO !
 
+## Project quality - security
+
+We are using PHP_CodeSniffer to ensure that our code adheres to coding standards. You can find the doc [**here**](./docs/phpintegrity.md)
+
 ## Project management
 
-### Roles
-
-#### Tech lead (Marwan)
-
-the tech lead need to validate **each PR** This is mandatory. He also has to ensure the quality of the code.
-
-#### Product Owner (PO) (Brahim)
-
-there will be one product owner, his goal will have to create issues with the team and make sure each task will be done and can be done.
+We define roles to ensure the follow and quality of the project. You can find everything about it [**here**](./docs/roles.md)
 
 ## Github Doc
 
