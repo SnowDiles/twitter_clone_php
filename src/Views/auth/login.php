@@ -18,14 +18,14 @@
         </div>
         <div>
             <div>
-                <p>Inscrivez-vous.</p>
-                <button class="btn variant-filled-primary text-secondary-500 rounded-lg" id="register-open-modal">Créer
+                <p >Inscrivez-vous.</p>
+                <button class="btn variant-filled-primary text-secondary-500 rounded-lg" id="registerOpenModal">Créer
                     un compte</button>
             </div>
             <div class="divider"></div>
             <div>
                 <p>Vous avez deja un compte ?</p>
-                <button class="btn variant-outlined btn2 rounded-lg">Se connecter</button>
+                <button class="btn variant-outlined btn2 rounded-lg" id="connexionOpenModal">Se connecter</button>
             </div>
         </div>
     </div>
@@ -38,19 +38,19 @@
                 <img src="../../assets/icons/logo.png" alt="Logo" class="logo-modal" />
             </div>
             <div>
-                <h1 class="modal-title">Inscrivez-vous ! </h1>
+                <h1 class="modal-title" id="modalTitle">Inscrivez-vous ! </h1>
             </div>
 
             <div class="form-container">
                 <form action="" method="POST">
-                    <input type="text" placeholder="Nom" required name="name" />
+                    <input type="text" placeholder="Nom" required name="name" id="nameInput"/>
                     <input type="email" placeholder="Email" required name="email" />
-                    <input type="text" placeholder="Pseudo" required name="username" />
+                    <input type="text" placeholder="Pseudo" required name="username" id="pseudoInput"/>
                     <input type="password" placeholder="Mot de passe" required  name="password" />
-                    <input type="password" placeholder="Confirmez le mot de passe " required name="confirmPassword" />
+                    <input type="password" placeholder="Confirmez le mot de passe" required name="confirmPassword" id="confirmPassword"/>
                     <div class="form-container--button">
-                        <button type="submit" class="btn variant-filled-primary text-secondary-500 rounded-lg btn-register">Inscription</button>
-                        <button type="submit" class="btn variant-outline-primary btn3 rounded-lg">Déjà un compte ?</button>
+                        <button type="submit" class="btn variant-filled-primary text-secondary-500 rounded-lg btn-register" name="login" id="loginBtn">Inscription</button>
+                        <button type="submit" class="btn variant-outline-primary btn3 rounded-lg " id="alreadyBtn">Déjà un compte ?</button>
                     </div>
                 </form>
             </div>
