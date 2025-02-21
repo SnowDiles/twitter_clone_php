@@ -3,10 +3,21 @@ document.addEventListener('DOMContentLoaded', function() {
     let buttons = main.getElementsByTagName('button');
     let modalContainer = document.getElementById("ModalContainer");
     let closeButton = document.getElementById("closeButton");
-    document.getElementById("register-open-modal").addEventListener('click', function() {
+    let modalTitle = document.getElementById("modalTitle");
+    
+    document.getElementById("registerOpenModal").addEventListener('click', function() {
         modal.style.display = "flex";
         modalContainer.style.display = "block";
+        modalTitle.innerHTML = "Inscrivez-vous !";
+        
     });
+
+    document.getElementById("connexionOpenModal").addEventListener('click', function() {
+        modal.style.display = "flex";
+        modalContainer.style.display = "block";
+        modalTitle.innerHTML = "Connectez-vous";
+    });
+
     modalContainer.addEventListener("click", function(event) {
         if (event.target === modalContainer) {
             modalContainer.style.display = "none";

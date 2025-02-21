@@ -18,14 +18,14 @@
         </div>
         <div>
             <div>
-                <p>Inscrivez-vous.</p>
-                <button class="btn variant-filled-primary text-secondary-500 rounded-lg" id="register-open-modal">Créer
+                <p >Inscrivez-vous.</p>
+                <button class="btn variant-filled-primary text-secondary-500 rounded-lg" id="registerOpenModal">Créer
                     un compte</button>
             </div>
             <div class="divider"></div>
             <div>
                 <p>Vous avez deja un compte ?</p>
-                <button class="btn variant-outlined btn2 rounded-lg">Se connecter</button>
+                <button class="btn variant-outlined btn2 rounded-lg" id="connexionOpenModal">Se connecter</button>
             </div>
         </div>
     </div>
@@ -38,12 +38,12 @@
                 <img src="../../assets/icons/logo.png" alt="Logo" class="logo-modal" />
             </div>
             <div>
-                <h1 class="modal-title">Inscrivez-vous ! </h1>
+                <h1 class="modal-title" id="modalTitle">Inscrivez-vous ! </h1>
             </div>
 
             <div class="form-container">
                 <form action="" method="POST">
-                    <input type="text" placeholder="Nom" required name="name" />
+                    <input type="text" placeholder="Nom" required name="name" id="nameInput"/>
                     <input type="email" placeholder="Email" required name="email" />
                     <input type="text" placeholder="Pseudo" required name="username" />
                     <input type="password" placeholder="Mot de passe" required  name="password" />
