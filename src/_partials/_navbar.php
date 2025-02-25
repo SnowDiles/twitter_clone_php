@@ -1,117 +1,68 @@
-<style>
-    .navbar img {
-        width: 100%;
-        height: auto;
-        filter: invert(100%);
-    }
-
-    .dark .navbar img {
-        width: 100%;
-        height: auto;
-        filter: invert(0);
-    }
-
-    .navbar-desktop .logo {
-            margin-right: 75px
-        }
-
-    @media (min-width: 600px) and (max-width: 1080px){
-        .navbar-desktop {
-            width: 200px !important;
-        }
-
-        .navbar-desktop img {
-            width: 40px;
-            filter: invert(100%);
-        }
-
-        .navbar-desktop .mb-8 {
-            margin-bottom: 1rem;
-        }
-
-        .navbar-desktop .py-8 {
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
-
-        .navbar-desktop .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .navbar-desktop .gap-4 {
-            gap: 0.5rem;
-        }
-
-        .navbar-desktop .text-base {
-            font-size: 0.875rem;
-        }
-    }
-
-    @media (min-width: 768px) {
-        .navbar-desktop {
-            width: 440px;
-        }
-
-        .navbar-desktop img {
-            width: 50px;
-            filter: invert(100%);
-        }
-
-        .dark .navbar-desktop img {
-            filter: invert(0);
-        }
-    }
-</style>
-
-<!-- View Mobile -->
-<div class="navbar fixed bottom-0 left-0 right-0 flex justify-between items-center bg-surface-100-800-token shadow-lg px-4 py-2 md:invisible">
-    <a href="../src/Controllers/HomeController.php" class="block w-12 h-12 order-1">
-        <img src="../assets/icons/outline/home.png" alt="Home">
-    </a>
-    <a href="../src/Controllers/SearchController.php" class="block w-12 h-12 order-2">
-        <img src="../assets/icons/search.png" alt="Search">
-    </a>
-    <a href="../src/Controllers/MessageController.php" class="block w-12 h-12 order-3">
-        <img src="../assets/icons/outline/message.png" alt="Message">
-    </a>
-</div>
-
-<!-- View Desktop -->
-<div class="navbar-desktop hidden fixed left-0 top-0 bottom-0 flex-col justify-start items-center bg-surface-100-800-token shadow-lg px-4 py-8 md:flex">
-    <img src="../assets/icons/logo.png" alt="Logo" class="logo mb-8 py-8">
-
-    <div class="w-full flex flex-col items-center">
-        <a href="../src/Controllers/HomeController.php" class="flex items-center gap-4 py-2">
-            <div class="w-12 flex justify-center">
-                <img id="home-icon" src="../assets/icons/outline/home.png" alt="Home">
+<div class="navbar-desktop hidden fixed left-0 top-0 bottom-0 flex-col justify-start items-center bg-surface-100-800-token shadow-lg px-4 py-8 md:flex md:w-[88px] lg:w-[400px] z-50">
+    <!-- Logo -->
+    <div class="w-full text-center mb-8">
+        <img src="../../assets/icons/logo.png" alt="Logo" class="w-32 mb-8 invert dark:invert-0 mx-auto lg:flex md:hidden">
+        <img src="../../assets/icons/logo.png" alt="Logo" class="w-12 mb-8 invert dark:invert-0 mx-auto lg:hidden md:flex">
+    </div>
+    <!-- Menu Items -->
+    <div class="flex flex-col space-y-4 w-full ">
+        <a href="../Controllers/HomeController.php" class="flex items-center lg:justify-start space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <div class="w-12 flex justify-center shrink-0">
+                <img id="home-icon" src="../../assets/icons/outline/home.png" alt="Home" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-base w-16">Home</span>
+            <span class="text-sm lg:flex xl:hidden">Home</span>
+            </a>
+        
+        <a href="../Controllers/SearchController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <div class="w-12 flex justify-center shrink-0">
+                <img src="../../assets/icons/search.png" alt="Search" class="w-12 h-12 invert dark:invert-0">
+            </div>
+            <span class="text-sm lg:flex xl:hidden">Explore</span>
         </a>
-
-        <a href="../src/Controllers/SearchController.php" class="flex items-center gap-4 py-2">
-            <div class="w-12 flex justify-center">
-                <img src="../assets/icons/search.png" alt="Search">
+        <a href="../Controllers/MessageController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <div class="w-12 flex justify-center shrink-0">
+                <img id="message-icon" src="../../assets/icons/outline/message.png" alt="Message" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-base w-16">Explore</span>
+            <span class="text-sm lg:flex xl:hidden">Message</span>
         </a>
-
-        <a href="../src/Controllers/MessageController.php" class="flex items-center gap-4 py-2">
-            <div class="w-12 flex justify-center">
-                <img id="message-icon" src="../assets/icons/outline/message.png" alt="Message">
+        <a href="../Controllers/UserController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <div class="w-12 flex justify-center shrink-0">
+                <img id="user-icon" src="../../assets/icons/outline/account.png" alt="Compte" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-base w-16">Message</span>
-        </a>
-
-        <a href="../src/Controllers/UserController.php" class="flex items-center gap-4 py-2">
-            <div class="w-12 flex justify-center">
-                <img id="user-icon" src="../assets/icons/outline/account.png" alt="Compte">
-            </div>
-            <span class="text-base w-16">Profile</span>
+            <span class="text-sm lg:flex xl:hidden">Profile</span>
         </a>
     </div>
 </div>
 
+<style>
+    .navbar-desktop {
+        transition: width 0.3s ease;
+    }
+
+    @media (max-width: 1280px) and (min-width: 768px) {
+        .navbar-desktop {
+            width: 88px;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .navbar-desktop .w-8 {
+            min-width: 2rem; 
+            min-height: 2rem;
+            margin: 0 auto;
+        }
+        
+        .navbar-desktop a {
+            padding: 0.75rem;
+        }
+        
+    }
+    @media (max-width: 1280px) {
+        .navbar-desktop .text-sm {
+            display: none;
+        }
+    }
+    
+</style>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const fullPath = window.location.pathname;
@@ -136,4 +87,4 @@
             }
         }
     });
-</script>   
+</script>

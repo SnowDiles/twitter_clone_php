@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:css": "postcss ./public/css/style.css -o dist/styles.css --watch",
+    "watch:php": "nodemon --watch src --ext php --exec 'echo \"PHP files changed\"'",
+    "dev": "concurrently \"npm run watch:css\" \"npm run watch:php\"",
     "build:css": "postcss ./public/css/style.css -o dist/styles.css",
     "watch:css": "postcss ./public/css/style.css -o dist/styles.css --watch",
     "watch:php": "nodemon --watch src --ext php --exec 'echo \"PHP files changed\"'",

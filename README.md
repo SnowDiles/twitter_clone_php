@@ -16,9 +16,11 @@ Make sure to install all the dependancies
 
 `npm install`
 
-then build the css :
+then you can use the command
 
-`npm run build:css`
+`npm run dev`
+
+to watch all changes and compiled everytime there is a change.
 
 also install the composer dependancies
 
