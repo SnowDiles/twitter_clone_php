@@ -2,7 +2,10 @@
 
 namespace Model;
 
-require_once __DIR__ . "/../Controllers/DatabaseConnector.php";
+require_once __DIR__ . "/../Controllers/PDOConnection.php";
+
+use Environment\DB;
+use Environment\Env;
 
 class Auth
 {
@@ -15,11 +18,11 @@ class Auth
     {
         $this->email = $email;
         $this->username = $username;
-        $this->passwordHash = hash("ripemd160", $password . $_ENV["PASSWORD_SALT"]);
+        $this->passwordHash = hash("ripemd160", $password . Env::get()->passwordSalt);
     }
     public function requestId(): int|false
     {
-        global $pdo;
+        $pdo = DB::connection();
 
         if (!$this->username && !$this->email) {
             return false;

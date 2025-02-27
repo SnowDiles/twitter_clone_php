@@ -2,10 +2,11 @@
 
 namespace Model;
 
-use DateTime;
-
-require_once __DIR__ . "/../Controllers/DatabaseConnector.php";
+require_once __DIR__ . "/../Controllers/PDOConnection.php";
 require_once __DIR__ . "/../Models/AuthModel.php";
+
+use Environment\DB;
+use DateTime;
 
 class User
 {
@@ -43,7 +44,7 @@ class User
         string $displayName,
         DateTime $dateOfBirth
     ): ?User {
-        global $pdo;
+        $pdo = DB::connection();
         $query = "INSERT INTO Users (username, display_name, password_hash, email, date_of_birth)
         VALUES (:username, :display_name, :password_hash, :email, :date_of_birth);";
 
@@ -70,7 +71,7 @@ class User
 
     public static function fetch(int $id): ?User
     {
-        global $pdo;
+        $pdo = DB::connection();
 
         $query = "SELECT * FROM Users WHERE user_id = ?";
         $stmt = $pdo->prepare($query);
