@@ -1,42 +1,253 @@
+/**
+ * Class representing a tweet posting functionality
+ * @class
+ */
 class TweetPost {
+    /**
+     * Creates an instance of TweetPost and initializes DOM elements
+     * @constructor
+     */
     constructor() {
-        this.textarea = document.getElementById('postTextarea');
-        this.postButton = document.getElementById('postButton');
-        this.uploadButton = document.getElementById('uploadButton');
-        this.fileInput = document.getElementById('fileInput');
+        this.tweetContentTextarea = document.getElementById('post-text-area-desktop');
+        this.submitTweetButton = document.getElementById('post-button-desktop');
+        this.mediaUploadButton = document.getElementById('upload-button-desktop');
+        this.mediaFileInput = document.getElementById('file-input-desktop');
+
+        this.mobileTweetContentTextarea = document.getElementById('post-text-area-mobile');
+        this.mobileSubmitTweetButton = document.getElementById('post-button-mobile');
+        this.mobileMediaUploadButton = document.getElementById('upload-button-mobile');
+        this.mobileMediaFileInput = document.getElementById('file-input-mobile');
+
+        this.mobileModal = document.getElementById('mobile-modal');
+        this.btnMobileModal = document.getElementById('btn-mobile-modale');
+        this.btnCloseMobileModal = document.getElementById('close-mobile-modal');
         this.initializeEventListeners();
     }
 
+    /**
+     * Initializes event listeners for tweet posting functionality
+     * @private
+     */
     initializeEventListeners() {
-        this.textarea.addEventListener('input', () => this.handleTextareaInput());
-        this.uploadButton.addEventListener('click', () => this.handleUploadClick());
-        this.fileInput.addEventListener('change', (event) => this.handleFileSelection(event));
+        this.tweetContentTextarea.addEventListener('input', () => this.updateSubmitButtonState());
+        this.mediaUploadButton.addEventListener('click', () => this.triggerFileUpload());
+        this.mediaFileInput.addEventListener('change', (event) => this.handleMediaSelection(event, 'desktop'));
+        this.submitTweetButton.addEventListener('click', () => this.submitTweet());
+
+        this.mobileTweetContentTextarea?.addEventListener('input', () => this.updateSubmitButtonState('mobile'));
+        this.mobileMediaUploadButton?.addEventListener('click', () => this.triggerFileUpload('mobile'));
+        this.mobileMediaFileInput?.addEventListener('change', (event) => this.handleMediaSelection(event, 'mobile'));
+        this.mobileSubmitTweetButton?.addEventListener('click', () => this.submitTweet('mobile'));
+
+        this.btnMobileModal.addEventListener('click', () => this.openMobileModal());
+        this.btnCloseMobileModal.addEventListener('click', () => this.closeMobileModal());
     }
 
-    handleTextareaInput() {
-        this.postButton.disabled = this.textarea.value.trim() === '';
+
+    /**
+     * Close the mobile modal for tweet posting
+     * @private
+     */
+    closeMobileModal() {
+        if (this.mobileModal) {
+            this.mobileModal.classList.add('hidden');
+            this.mobileModal.classList.remove('flex')
+        }
     }
 
-    handleUploadClick() {
-        this.fileInput.click();
+    /**
+     * Opens the mobile modal for tweet posting
+     * @private
+     */
+    openMobileModal() {
+        if (this.mobileModal) {
+            this.mobileModal.classList.remove('hidden');
+            this.mobileModal.classList.add('flex')
+        }
     }
 
-    handleFileSelection(event) {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            console.log('Fichier sélectionné :', selectedFile.name);
-            // Vous pouvez ajouter ici le code pour gérer le fichier sélectionné
+    /**
+     * Handles tweet submission with or without media
+     * @private
+     */
+    submitTweet(view) {
+        const textarea = view === 'mobile' ? this.mobileTweetContentTextarea : this.tweetContentTextarea;
+        const fileInput = view === 'mobile' ? this.mobileMediaFileInput : this.mediaFileInput;
+
+        const tweetContent = textarea.value;
+        const authorId = 5; // To be changed for dynamic retrieval
+        const formData = new FormData();
+
+        formData.append('userId', authorId);
+        formData.append('content', tweetContent);
+
+        if (this.isValidTweetLength(tweetContent)) {
+            const mediaFile = fileInput.files[0];
+            if (mediaFile) {
+                formData.append('image', mediaFile);
+                formData.append('action', 'addPostsMedia');
+            } else {
+                formData.append('action', 'addPosts');
+            }
+
+            this.submitTweetMedia(formData, view);
+        } else {
+            alert("Message trop long");
+        }
+    }
+
+    /**
+     * Submits a tweet 
+     * @param {FormData} formData - Form data containing tweet content
+     * @returns {Promise<void>}
+     * @private
+     * @async
+     */
+    async submitTweetMedia(formData, view) {
+        try {
+            const response = await fetch("../../src/Controllers/HomeController.php", {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new TypeError("La réponse n'est pas au format JSON!");
+            }
+    
+            const responseData = await response.json();
+    
+            if (responseData.success) {
+                this.clearTextArea(view);
+                if (view === 'mobile') {
+                    this.closeMobileModal();
+                }
+            } else {
+                console.error("Erreur serveur:", responseData.message);
+                alert(responseData.message || "Une erreur est survenue");
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'envoi du tweet:", error);
+            alert("Une erreur est survenue lors de l'envoi du tweet");
+        }
+    }
+    
+    /**
+     * Clears the tweet textarea and removes image preview
+     * @returns {boolean} True if clearing was successful
+     */
+    clearTextArea(view) {
+        const textarea = view === 'mobile' ? this.mobileTweetContentTextarea : this.tweetContentTextarea;
+        textarea.value = '';
+
+        const existingImageContainer = document.querySelector(
+            view === 'mobile' ? '#mobile-modal .image-preview-container' : '.image-preview-container'
+        );
+        if (existingImageContainer) {
+            existingImageContainer.remove();
+        }
+        return true;
+    }
+
+    /**
+     * Validates the length of tweet content
+     * @param {string} content - The tweet content to validate
+     * @returns {boolean} True if content length is valid (0-140 characters)
+     * @private
+     */
+    isValidTweetLength(content) {
+        return content.length <= 140 && content.length >= 0;
+    }
+
+    /**
+     * Updates submit button state based on content and media presence
+     * @private
+     */
+    updateSubmitButtonState() {
+        const hasContent = this.tweetContentTextarea.value.trim() !== '';
+        const hasMediaFile = this.mediaFileInput.files.length > 0;
+        this.submitTweetButton.disabled = !hasContent && !hasMediaFile;
+    }
+
+    /**
+     * Triggers the file upload dialog
+     * @private
+     */
+    triggerFileUpload(view) {
+        const fileInput = view === 'mobile' ? this.mobileMediaFileInput : this.mediaFileInput;
+        fileInput.click();
+    }
+
+    /**
+     * Handles media file selection and preview
+     * @param {Event} event - File input change event
+     * @private
+     */
+    handleMediaSelection(event, view) {
+        const mediaFile = event.target.files[0];
+        if (mediaFile && mediaFile.type.startsWith('image/')) {
+            this.selectedMediaFile = mediaFile;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const previewImage = document.createElement('img');
+                previewImage.src = e.target.result;
+                previewImage.className = 'max-w-full h-auto rounded-lg mt-2 mb-2 max-h-[200px] object-contain';
+
+                const existingImageContainer = document.querySelector(
+                    view === 'mobile' ? '#mobile-modal .image-preview-container' : '.image-preview-container'
+                );
+                if (existingImageContainer) {
+                    existingImageContainer.remove();
+                }
+
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'image-preview-container w-full flex justify-center items-center';
+                imageContainer.appendChild(previewImage);
+
+                if (view === 'mobile') {
+                    const mobileContainer = document.querySelector('#mobile-modal .flex-1');
+                    if (mobileContainer) {
+                        const textareaContainer = mobileContainer.querySelector('.flex.gap-4');
+                        if (textareaContainer) {
+                            mobileContainer.insertBefore(imageContainer, textareaContainer.nextSibling);
+                        }
+                    }
+                } else {
+                    const desktopContainer = this.tweetContentTextarea.closest('.flex-grow.flex.flex-col.gap-4') ||
+                        this.tweetContentTextarea.closest('.bg-white.dark\\:bg-gray-800');
+
+                    if (desktopContainer) {
+                        const insertBeforeElement = desktopContainer.querySelector('.flex.justify-between') ||
+                            desktopContainer.lastElementChild;
+                        desktopContainer.insertBefore(imageContainer, insertBeforeElement);
+                    }
+                }
+            };
+            reader.readAsDataURL(mediaFile);
+            this.updateSubmitButtonState(view);
+        } else {
+            alert("Veuillez sélectionner une image valide");
         }
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const tweetPost = new TweetPost();
+    const tweetPostHandler = new TweetPost();
 });
+
+
 
 let page = 1;
 let isLoading = false;
-const tweetsContainer = document.getElementById('tweets-container');
+const desktopTweetsContainer = document.getElementById('tweets-container');
+const mobileTweetsContainer = document.querySelector('.feed.md\\:invisible');
 const loadingElement = document.getElementById('loading');
 
 function createTweetElement(tweet) {
@@ -104,7 +315,7 @@ const mockTweets = [
 
 async function loadMoreTweets() {
     if (isLoading) return;
-    
+
     isLoading = true;
     loadingElement.classList.remove('hidden');
 
@@ -116,9 +327,14 @@ async function loadMoreTweets() {
             return;
         }
         const duplicatedTweets = Array(3).fill(mockTweets).flat();
-        
+
         duplicatedTweets.forEach(tweet => {
-            tweetsContainer.insertAdjacentHTML('beforeend', createTweetElement(tweet));
+            if (desktopTweetsContainer) {
+                desktopTweetsContainer.insertAdjacentHTML('beforeend', createTweetElement(tweet));
+            }
+            if (mobileTweetsContainer) {
+                mobileTweetsContainer.insertAdjacentHTML('beforeend', createTweetElement(tweet));
+            }
         });
 
         page++;

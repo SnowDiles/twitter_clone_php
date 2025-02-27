@@ -2,8 +2,9 @@
 
 namespace Model;
 
-require_once __DIR__ . "/../Controllers/DatabaseConnector.php";
+require_once __DIR__ . "/../Controllers/PDOConnection.php";
 
+use Environment\DB;
 use DateTime;
 
 class Post
@@ -24,7 +25,7 @@ class Post
 
     public static function create(User $user, string $content): ?Post
     {
-        global $pdo;
+        $pdo = DB::connection();
         $sqlQuery = "INSERT INTO Posts (user_id, content) VALUES (:userid, :content)";
         $stmt = $pdo->prepare($sqlQuery);
 
@@ -38,12 +39,13 @@ class Post
         }
 
         $postId = $pdo->lastInsertId();
+
         return new self($postId, $user->getId(), $content);
     }
 
     public static function attachMedia(Post $post, Media $media): bool
     {
-        global $pdo;
+        $pdo = DB::connection();
         $sqlQuery = "INSERT INTO PostMedia (post_id, media_id) VALUES (:postId, :mediaId)";
         $stmt = $pdo->prepare($sqlQuery);
 

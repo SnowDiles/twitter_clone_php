@@ -2,7 +2,8 @@
 
 namespace Model;
 
-require_once __DIR__ . "/../Controllers/DatabaseConnector.php";
+require_once __DIR__ . "/../Controllers/PDOConnection.php";
+use Environment\DB;
 
 use DateTime;
 
@@ -23,7 +24,7 @@ class Media
 
     public static function create(string $fileName, string $shortUrl): ?Media
     {
-        global $pdo;
+        $pdo = DB::connection();
         $sqlQuery = "INSERT INTO Media (file_name, short_url) VALUES (:fileName, :shortUrl)";
         $stmt = $pdo->prepare($sqlQuery);
 
@@ -37,6 +38,7 @@ class Media
         }
 
         $mediaId = $pdo->lastInsertId();
+
         return new self($mediaId, $fileName, $shortUrl);
     }
 

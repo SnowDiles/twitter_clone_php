@@ -23,43 +23,45 @@
 
             <!-- Feed -->
             <div class="feed md:invisible">
-                <div class="p-4 max-w-xl">
-                    <div class="flex gap-3">
-                        <div class="w-12 h-12">
-                            <img src="../../assets/icons/profile.png"
-                                alt="profile"
-                                class="invert dark:invert-0 w-full h-full rounded-full">
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xl">Augustin V</span>
-                                <span class="">@Augustin V</span>
-                                <span class="text-xs">•</span>
-                                <span class="">1j</span>
-                            </div>
-                            <div class="ml-0 mt-3">
-                                <div class="text-xl">
-                                    bonjour les z'amis !
-                                </div>
-                                <div class="flex items-center gap-4">
-                                    <button class="flex items-center">
-                                        <img class="invert dark:invert-0 w-5 h-5"
-                                            src="../../assets/icons/comment.png"
-                                            alt="Commentaire">
-                                        <span>9</span>
-                                    </button>
-                                    <button class="flex items-center">
-                                        <img class="invert dark:invert-0 w-5 h-5"
-                                            src="../../assets/icons/repost.png"
-                                            alt="Repost">
-                                        <span>23</span>
-                                    </button>
-                                </div>
-                            </div>
+                <div id="loading-mobile" class="text-center p-4 hidden">
+                    <span>Chargement...</span>
+                </div>
+            </div>
+
+            <!-- Bouton pour tweet en vue mobile -->
+            <button id="btn-mobile-modale" class="fixed bottom-20 right-4 w-14 h-14 bg-blue-500 rounded-full flex 
+            items-center justify-center text-white text-6xl font-bold shadow-lg hover:bg-blue-600 transition-colors">
+                +
+            </button>
+
+            <!-- Modal for mobile tweet creation -->
+            <div id="mobile-modal" class="fixed inset-0 bg-white dark:bg-gray-800 z-50 hidden flex-col">
+                <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                    <button id="close-mobile-modal" class="text-base">Annuler</button>
+                    <img src="../../assets/icons/logo.png" alt="logo" class="invert dark:invert-0 w-8 h-8">
+                    <button id="post-button-mobile" class="px-4 py-2 bg-blue-500 text-white rounded-full">
+                        Poster
+                    </button>
+                </div>
+
+                <div class="flex-1 p-4">
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <textarea id="post-text-area-mobile" maxlength="140" placeholder="écrivez votre ressenti ici" class="w-full bg-transparent border-none focus:outline-none resize-none mb-4 text-xl dark:text-white h-32"></textarea>
                         </div>
                     </div>
                 </div>
+
+                <div class="border-t dark:border-gray-700 p-4">
+                    <div class="flex justify-start items-center">
+                        <button id="upload-button-mobile" class="invert dark:invert-0 p-2 rounded-full">
+                            <img src="../../assets/icons/image.png" alt="Ajouter une image" class="w-6 h-6">
+                        </button>
+                        <input type="file" id="file-input-mobile" class="hidden">
+                    </div>
+                </div>
             </div>
+
         </div>
 
         <?php
@@ -77,24 +79,22 @@
             <div class="hidden md:block sticky top-0 z-40 header-desktop border-y bg-[#d9d9d9] dark:bg-[#000000]">
                 <div class="max-w-xl mx-auto p-4">
                     <div class="flex gap-4">
-                        <div class="w-12 h-12">
-                            <img src="../../assets/icons/profile.png"
-                                alt="profile"
-                                class="invert dark:invert-0 rounded-full">
-                        </div>
+                        <img src="../../assets/icons/profile.png"
+                            alt="profile"
+                            class="invert dark:invert-0 rounded-full w-12 h-12 object-cover">
 
                         <div class="flex-grow flex flex-col gap-4">
                             <div class="flex items-center gap-4">
-                            <textarea id="postTextarea" maxlength="140" placeholder="écrivez votre ressenti ici" class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none"></textarea>
-                                <button id="postButton" class="btn variant-filled" disabled=""> Post </button>
+                                <textarea id="post-text-area-desktop" maxlength="140" placeholder="écrivez votre ressenti ici" class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none"></textarea>
+                                <button id="post-button-desktop" class="btn variant-filled" disabled=""> Post </button>
                             </div>
 
                             <div class="flex justify-start items-center">
-                                <button id="uploadButton" class="invert dark:invert-0 p-2 rounded-full">
+                                <button id="upload-button-desktop" class="invert dark:invert-0 p-2 rounded-full">
                                     <img src="../../assets/icons/image.png" alt="Ajouter une image" class="w-6 h-6">
                                 </button>
 
-                                <input type="file" id="fileInput" class="hidden">
+                                <input type="file" id="file-input-desktop" class="hidden">
                             </div>
                         </div>
                     </div>
