@@ -6,7 +6,6 @@ use DateTime;
 
 require_once __DIR__ . "/../Controllers/DatabaseConnector.php";
 require_once __DIR__ . "/../Models/AuthModel.php";
-require_once __DIR__ . "/../Models/AuthToken.php";
 
 class User
 {
@@ -45,18 +44,18 @@ class User
         DateTime $dateOfBirth
     ): ?User {
         global $pdo;
-        $query = "INSERT INTO Users (username, display_name, password_hash, email, date_of_birth)  
-        VALUES (:username, :display_name, :password_hash, :email, :date_of_birth);";  
-        
-        $stmt = $pdo->prepare($query);  
-        
-        $params = [  
-            ":username" => $auth->getUsername(),  
-            ":display_name" => $displayName,  
-            ":password_hash" => $auth->getPasswordHash(),  
-            ":email" => $auth->getEmail(),  
-            ":date_of_birth" => $dateOfBirth->format("Y-m-d"),  
-        ];  
+        $query = "INSERT INTO Users (username, display_name, password_hash, email, date_of_birth)
+        VALUES (:username, :display_name, :password_hash, :email, :date_of_birth);";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":username" => $auth->getUsername(),
+            ":display_name" => $displayName,
+            ":password_hash" => $auth->getPasswordHash(),
+            ":email" => $auth->getEmail(),
+            ":date_of_birth" => $dateOfBirth->format("Y-m-d"),
+        ];
 
         if (!$stmt->execute($params)) {
             return null;
