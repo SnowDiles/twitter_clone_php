@@ -28,7 +28,6 @@ class Post
         $pdo = DB::connection();
         $sqlQuery = "INSERT INTO Posts (user_id, content) VALUES (:userid, :content)";
         $stmt = $pdo->prepare($sqlQuery);
-
         $params = [
             ":userid" => $user->getId(),
             ":content" => $content
@@ -37,9 +36,7 @@ class Post
         if (!$stmt->execute($params)) {
             return null;
         }
-
         $postId = $pdo->lastInsertId();
-
         return new self($postId, $user->getId(), $content);
     }
 

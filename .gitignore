@@ -1,6 +1,6 @@
 .env
+assets/upload/
 /node_modules/
 /dist
 /vendor/
 test/
-upload/

@@ -7,7 +7,8 @@ require_once __DIR__ . "/../Models/AuthModel.php";
 
 use Environment\DB;
 use DateTime;
-
+use PDO;
+use PDOException;
 class User
 {
     private int $id;
@@ -31,12 +32,27 @@ class User
         $this->username = $username;
         $this->displayName = $displayName;
         $this->dateOfBirth = $dateOfBirth;
-        $this->bio = null;
+        $this->bio = $bio;
         $this->createdAt = $createdAt;
 
         if ($theme) {
             $this->theme = $theme;
         }
+    }
+
+    public static function searchUsernames(string $username): array|null
+    {
+        $pdo = DB::connection();
+        $query = "SELECT username FROM Users WHERE username LIKE ? LIMIT 5";
+        $username .= '%';
+        $stmt = $pdo->prepare($query);
+
+
+        if (!$stmt->execute([$username])) {
+            return null;
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public static function signUp(

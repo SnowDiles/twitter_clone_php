@@ -10,13 +10,13 @@ use Model\Media;
 
 session_start();
 
-// Logique pour check si la personne est log
-
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     header('Content-Type: application/json');
 
     if (isset($_POST['action'])) {
+
         switch ($_POST['action']) {
+
             case 'addPosts':
                 $content = htmlspecialchars($_POST['content']);
 
@@ -25,6 +25,21 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
             case 'addPostsMedia':
                 handleMediaUpload($_FILES['image'], $_POST);
+                break;
+
+            case 'autoCompletation':
+                if (isset($_POST['username'])) {
+
+                    $username = htmlspecialchars($_POST['username']);
+                    $users = User::searchUsernames(username: $username);
+                    if ($users !== false) {
+                        echo json_encode(['success' => true, 'data' => ['user' => $users]]);
+                        die();
+                    } else {
+                        echo json_encode(['success' => false]);
+                        die();
+                    }
+                }
                 break;
         }
     } else {
