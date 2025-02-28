@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let alreadyBtn = document.getElementById("existing-account-button");
 
     document.getElementById("register-open-modal").addEventListener('click', function() {
-        console.log("j'open  ma modal");
         modalContainer.style.display = "";
         modalTitle.innerHTML = "Inscrivez-vous !";
         nameInput.style.display = "";

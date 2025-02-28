@@ -75,10 +75,8 @@ class TweetPost {
         const fileInput = view === 'mobile' ? this.mobileMediaFileInput : this.mediaFileInput;
 
         const tweetContent = textarea.value;
-        const authorId = 5; // To be changed for dynamic retrieval
         const formData = new FormData();
 
-        formData.append('userId', authorId);
         formData.append('content', tweetContent);
 
         if (this.isValidTweetLength(tweetContent)) {
@@ -138,7 +136,7 @@ class TweetPost {
             alert("Une erreur est survenue lors de l'envoi du tweet");
         }
     }
-    
+
     /**
      * Clears the tweet textarea and removes image preview
      * @returns {boolean} True if clearing was successful

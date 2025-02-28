@@ -1,4 +1,5 @@
 <?php
+
 require_once('../Models/PostModel.php');
 require_once('../Models/MediaModel.php');
 require_once('../Models/UserModel.php');
@@ -17,10 +18,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'addPosts':
-                $userId = htmlspecialchars($_POST['userId']);
                 $content = htmlspecialchars($_POST['content']);
 
-                createPost($userId, $content);
+                createPost($content);
                 break;
 
             case 'addPostsMedia':
@@ -129,13 +129,12 @@ function generateRandomCode($length = 6)
  * Creates a new post in the database
  *
  * @param HomeController $homeController The home controller instance
- * @param int $userId The ID of the user creating the post
  * @param string $content The content of the post
  * @return int|bool Returns the post ID if successful, false otherwise
  */
-function createPost($userId, $content)
+function createPost($content)
 {
-    $result = Post::create(User::fetch($userId), $content); //$_SESSION["id"]
+    $result = Post::create(User::fetch($_SESSION["user_id"]), $content);
 
     if ($result instanceof Post) {
         echo json_encode([
