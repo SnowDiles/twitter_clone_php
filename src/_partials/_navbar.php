@@ -10,26 +10,26 @@
             <div class="w-12 flex justify-center shrink-0">
                 <img id="home-icon" src="../../assets/icons/outline/home.png" alt="Home" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-sm lg:flex xl:hidden">Home</span>
+            <span class="text-xl xl:flex sm:hidden lg:hidden">Home</span>
             </a>
         
         <a href="../Controllers/SearchController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             <div class="w-12 flex justify-center shrink-0">
                 <img src="../../assets/icons/search.png" alt="Search" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-sm lg:flex xl:hidden">Explore</span>
+            <span class="text-xl xl:flex sm:hidden lg:hidden">Explore</span>
         </a>
         <a href="../Controllers/MessageController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             <div class="w-12 flex justify-center shrink-0">
                 <img id="message-icon" src="../../assets/icons/outline/message.png" alt="Message" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-sm lg:flex xl:hidden">Message</span>
+            <span class="text-xl xl:flex sm:hidden lg:hidden">Message</span>
         </a>
         <a href="../Controllers/UserController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             <div class="w-12 flex justify-center shrink-0">
                 <img id="user-icon" src="../../assets/icons/outline/account.png" alt="Compte" class="w-12 h-12 invert dark:invert-0">
             </div>
-            <span class="text-sm lg:flex xl:hidden">Profile</span>
+            <span class="text-xl xl:flex sm:hidden lg:hidden">Profile</span>
         </a>
     </div>
 </div>
