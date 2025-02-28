@@ -45,6 +45,18 @@ class User
         DateTime $dateOfBirth
     ): ?User {
         $pdo = DB::connection();
+
+        $checkEmailQuery = "SELECT COUNT(*) FROM Users WHERE email = ?";
+        $checkStmt = $pdo->prepare($checkEmailQuery);
+
+        if (!$checkStmt->execute([$auth->getEmail()])) {
+            return null;
+        }
+
+        if ($checkStmt->fetchColumn() > 0) {
+            return null;
+        }
+
         $query = "INSERT INTO Users (username, display_name, password_hash, email, date_of_birth)
         VALUES (:username, :display_name, :password_hash, :email, :date_of_birth);";
 
@@ -63,10 +75,7 @@ class User
         }
 
         $id = $pdo->lastInsertId();
-        $user = new User($id, $auth->getUsername(), $displayName, $dateOfBirth);
-        return $user;
-
-        return null;
+        return new User($id, $auth->getUsername(), $displayName, $dateOfBirth);
     }
 
     public static function fetch(int $id): ?User
