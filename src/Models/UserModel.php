@@ -55,6 +55,21 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function searchHashtag(string $hashtag): array|null
+    {
+        $pdo = DB::connection();
+        $query = "SELECT tag FROM Hashtags WHERE tag LIKE ? LIMIT 5";
+        $hashtag .= '%';
+        $stmt = $pdo->prepare($query);
+
+
+        if (!$stmt->execute([$hashtag])) {
+            return null;
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function signUp(
         Auth $auth,
         string $displayName,
