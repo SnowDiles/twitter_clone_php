@@ -16,7 +16,7 @@ if ($method) {
 
                 if (empty($formData['confirm_password'])) {
                     $email = empty($formData['email']) ? null : htmlspecialchars($formData['email']);
-                    $name = empty($formData['nom']) ? null : htmlspecialchars($formData['nom']);
+                    $name = empty($formData['username']) ? null : htmlspecialchars($formData['username']);
 
                     $auth = new Auth(htmlspecialchars($formData['password']), $email, $name);
                     $id = $auth->requestId();
@@ -29,12 +29,12 @@ if ($method) {
                 } else {
                     /**
                      * @var int $error Error code indicating the type of error.
-                     * 
+                     *
                      * Possible values:
                      * - 1: Passwords do not match.
                      */
                     if ($formData['password'] !== $formData['confirm_password']) {
-                        header('Location: ' . $_SERVER['REQUEST_URI'] . '?error=1');
+                        header('Location: ./AuthController.php?error=1');
                         exit();
                     }
 
@@ -45,12 +45,12 @@ if ($method) {
                     $auth = new Auth(
                         htmlspecialchars($formData['password']),
                         htmlspecialchars($formData['email']),
-                        htmlspecialchars($formData['nom'])
+                        htmlspecialchars($formData['username'])
                     );
 
                     $user = User::signUp(
                         $auth,
-                        htmlspecialchars($formData['username']),
+                        htmlspecialchars($formData['nom']),
                         $dateOfBirth
                     );
 
@@ -62,13 +62,13 @@ if ($method) {
                 }
                 /**
                  * @var int $error
-                 * 
+                 *
                  * Represents the error code for the form.
-                 * 
+                 *
                  * Possible values:
                  * - 2: A generic error occurred in the form.
                  */
-                header('Location: ' . $_SERVER['REQUEST_URI'] . '?error=2');
+                header('Location: ./AuthController.php?error=2');
                 exit();
             }
             break;
