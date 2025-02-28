@@ -1,6 +1,8 @@
 <?php
+
 require_once('../Models/UserModel.php');
 use Model\User;
+
 session_start();
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     header('Content-Type: application/json');
