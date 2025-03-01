@@ -40,7 +40,7 @@ class User
         }
     }
 
-    public static function searchUsernames(string $username): array|null
+    public static function searchUsernames(string $username): ?array
     {
         $pdo = DB::connection();
         $query = "SELECT username FROM Users WHERE username LIKE ? LIMIT 5";
@@ -55,7 +55,7 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function searchHashtag(string $hashtag): array|null
+    public static function searchHashtag(string $hashtag): ?array
     {
         $pdo = DB::connection();
         $query = "SELECT tag FROM Hashtags WHERE tag LIKE ? LIMIT 5";
