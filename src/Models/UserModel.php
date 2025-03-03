@@ -71,6 +71,18 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function retrieveIdWithUsername($username): ?int
+    {
+        $pdo = DB::connection();
+        $query = "SELECT user_id FROM Users WHERE username = ? LIMIT 1";
+        $stmt = $pdo->prepare($query);
+        if (!$stmt->execute([$username])) {
+            return null;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? (int)$result['user_id'] : null;
+    }
+
     public static function signUp(
         Auth $auth,
         string $displayName,
