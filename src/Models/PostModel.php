@@ -40,6 +40,29 @@ class Post
         return new self($postId, $user->getId(), $content);
     }
 
+    public static function insertHashtagIntoDatabase(string $hashtag): bool
+    {
+        $pdo = DB::connection();
+        $sqlQuery = "INSERT INTO Hashtags (tag) VALUES (:tag)";
+        $stmt = $pdo->prepare($sqlQuery);
+        $params = [
+            ":tag" => $hashtag
+        ];
+        return $stmt->execute($params) !== false;
+    }
+
+    public static function checkExistingHashtag(string $hashtag): bool
+    {
+        $pdo = DB::connection();
+        $sqlQuery = "SELECT * FROM Hashtags WHERE tag = :tag";
+        $stmt = $pdo->prepare($sqlQuery);
+        $params = [
+            ":tag" => $hashtag
+        ];
+        $stmt->execute($params);
+        return $stmt->fetch() !== false;
+    }
+
     public static function attachMedia(Post $post, Media $media): bool
     {
         $pdo = DB::connection();

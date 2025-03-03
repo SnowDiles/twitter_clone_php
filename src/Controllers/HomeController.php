@@ -24,8 +24,13 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
             case 'addPosts':
                 $content = htmlspecialchars($_POST['content']);
-
                 createPost($content);
+                preg_match(pattern: '/#(\w+)/', subject: $content, matches: $matches);
+                if (!empty($matches[1])) {
+                    if (Post::checkExistingHashtag($matches[1]) === false) {
+                        Post::insertHashtagIntoDatabase($matches[1]);
+                    }
+                }
                 break;
 
             case 'addPostsMedia':
