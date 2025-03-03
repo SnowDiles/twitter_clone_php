@@ -256,9 +256,8 @@ const mobileTweetsContainer = document.querySelector('.feed.md\\:invisible');
 const loadingElement = document.getElementById('loading');
 
 function createTweetElement(tweet) {
-  const tweetContent = tweet.content.slice(tweet.content.search('@'))
-  const mentions = tweetContent.match(/@[a-zA-Z0-9_]+/g);
-
+  const tweetContentMentions = tweet.content.slice(tweet.content.search('@'))
+  const mentions = tweetContentMentions.match(/@[a-zA-Z0-9_]+/g);
   if (mentions) {
       const createLinkElement = document.createElement("a")
       createLinkElement.href = `/profile/${mentions[0].trim().substring(1)}`
@@ -266,7 +265,15 @@ function createTweetElement(tweet) {
       createLinkElement.classList.add('text-primary-500')
       tweet.content = tweet.content.replace(mentions[0], createLinkElement.outerHTML)
   }
-
+  const tweetContentHashtag = tweet.content.slice(tweet.content.search('#'))
+  const hashtags = tweetContentHashtag.match(/#[a-zA-Z0-9_]+/g);
+  if (hashtags) {
+      const createLinkElement = document.createElement("a");
+      createLinkElement.href = `/explore/${hashtags[0].trim().substring(1)}`;
+      createLinkElement.textContent = hashtags[0];
+      createLinkElement.classList.add('text-primary-500');
+      tweet.content = tweet.content.replace(hashtags[0], createLinkElement.outerHTML)
+  }
   return `
       <div class="p-4 max-w-xl">
           <div class="flex gap-3">
