@@ -254,18 +254,15 @@ class TweetFeed {
     }
 
     createTweetElement(tweet) {
-        // Traitement existant pour les mentions
         const tweetContentMentions = tweet.content.slice(tweet.content.search('@'));
         const mentions = tweetContentMentions.match(/@[a-zA-Z0-9_]+/g);
         if (mentions) {
             const createLinkElement = document.createElement("a");
-            createLinkElement.href = `/profile/${mentions[0].trim().substring(1)}`;
+            createLinkElement.href = `./UserController.php?userId=${mentions[0].trim().substring(1)}`;
             createLinkElement.textContent = mentions[0];
             createLinkElement.classList.add('text-primary-500');
             tweet.content = tweet.content.replace(mentions[0], createLinkElement.outerHTML);
         }
-
-        // Traitement existant pour les hashtags
         const tweetContentHashtag = tweet.content.slice(tweet.content.search('#'));
         const hashtags = tweetContentHashtag.match(/#[a-zA-Z0-9_]+/g);
         if (hashtags) {

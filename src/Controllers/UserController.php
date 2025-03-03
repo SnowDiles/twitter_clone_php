@@ -12,7 +12,12 @@ use Model\User;
 
 if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
-
+    if (!is_numeric($id) || $id < 0) {
+        $id = USER::retrieveIdWithUsername($id);
+        $otherUser = USER::fetch($id);
+        include_once '../Views/user/otherProfile.php';
+        exit;
+    }
     if ($id == $_SESSION['user_id']) {
         $CurrentUser = USER::fetch($_SESSION['user_id']);
         include_once('../Views/user/currentProfile.php');
