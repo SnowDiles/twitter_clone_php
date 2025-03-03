@@ -276,12 +276,6 @@ class TweetFeed {
             tweet.content = tweet.content.replace(hashtags[0], createLinkElement.outerHTML);
         }
 
-        const imageElement = tweet.image_url ? `
-            <div class="mt-3 mb-3">
-                <img src="${tweet.image_url}" alt="Tweet media" class="max-w-full h-auto rounded-lg max-h-[300px] object-contain">
-            </div>
-        ` : '';
-
         return `
             <div class="p-4 max-w-xl">
                 <div class="flex gap-3">
@@ -290,8 +284,8 @@ class TweetFeed {
                     </div>
                     <div>
                     <div class="flex items-center gap-2">
-                        <span class="text-xl">${tweet.username}</span>
-                        <span class="text-tertiary-500">@${tweet.handle}</span>
+                        <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
+                        <a class="text-tertiary-500" href="./UserController.php?userId=${tweet.user_id}">@${tweet.handle}</a>
                         <span class="text-xs">•</span>
                         <span class="">${tweet.date}</span>
                     </div>
@@ -342,7 +336,6 @@ class TweetFeed {
             }
 
             const responseData = await response.json();
-            console.log(responseData)
             if (responseData.success) {
                 return responseData;
             } else {
@@ -388,7 +381,8 @@ class TweetFeed {
                         content: post.content,
                         comments: post.comments_count || 0,
                         reposts: post.reposts_count || 0,
-                        image_url: post.media?.[0]?.file_name || null
+                        image_url: post.media?.[0]?.file_name || null,
+                        user_id: post.user_id
                     };
 
                     if (this.desktopTweetsContainer) {

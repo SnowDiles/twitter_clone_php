@@ -167,7 +167,8 @@ class User
                 p.content,
                 u.username,
                 u.display_name,
-                p.created_at
+                p.created_at,
+                u.user_id
               FROM
                 Posts p
               JOIN
