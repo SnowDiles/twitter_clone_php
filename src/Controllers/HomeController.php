@@ -10,7 +10,7 @@ use Model\Media;
 
 session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === NULL || empty($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SESSION['user_id'])) {
     header("Location: AuthController.php");
     exit;
 }
