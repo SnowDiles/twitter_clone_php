@@ -4,6 +4,10 @@ require_once('../Models/UserModel.php');
 use Model\User;
 
 session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === NULL || empty($_SESSION['user_id'])) {
+    header("Location: AuthController.php");
+    exit;
+}
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     header('Content-Type: application/json');
     if (isset($_POST['action'])) {

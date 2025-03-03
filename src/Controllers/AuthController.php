@@ -2,7 +2,11 @@
 
 require_once __DIR__ . "/../../src/Models/UserModel.php";
 session_start();
-
+if (isset($_SESSION['user_id'])) {
+    unset($_SESSION['user_id']);
+} else {
+    $_SESSION['user_id'] = null;
+}
 use Model\User;
 use Model\Auth;
 
