@@ -6,7 +6,7 @@ require_once __DIR__ . "/../Controllers/PDOConnection.php";
 
 use Environment\DB;
 use DateTime;
-
+use PDO;
 class Post
 {
     private int $id;
@@ -40,6 +40,20 @@ class Post
         return new self($postId, $user->getId(), $content);
     }
 
+
+
+    public static function insertIntoPostHashtag($postId, $hashtagId): bool
+    {
+        $pdo = DB::connection();
+        $sqlQuery = "INSERT INTO PostHashtag (post_id, hashtag_id) VALUES (:postId, :hashtagId)";
+        $stmt = $pdo->prepare($sqlQuery);
+        $params = [
+            ":postId" => $postId,
+            ":hashtagId" => $hashtagId
+        ];
+        return $stmt->execute($params);
+    }
+
     public static function insertHashtagIntoDatabase(string $hashtag): bool
     {
         $pdo = DB::connection();
@@ -62,6 +76,17 @@ class Post
         $stmt->execute($params);
         return $stmt->fetch() !== false;
     }
+
+    public static function getHashtagId(string $hashtag): ?int
+    {
+        $pdo = DB::connection();
+        $sqlQuery = "SELECT hashtag_id FROM Hashtags WHERE tag = :tag";
+        $stmt = $pdo->prepare($sqlQuery);
+        $stmt->execute([":tag" => $hashtag]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? (int) $result['hashtag_id'] : null;
+    }
+
 
     public static function attachMedia(Post $post, Media $media): bool
     {

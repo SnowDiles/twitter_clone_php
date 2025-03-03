@@ -23,13 +23,15 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         switch ($_POST['action']) {
 
             case 'addPosts':
-                $content = htmlspecialchars($_POST['content']);
-                createPost($content);
+                $content = htmlspecialchars(string: $_POST['content']);
+                $post = createPost(content: $content);
                 preg_match(pattern: '/#(\w+)/', subject: $content, matches: $matches);
                 if (!empty($matches[1])) {
-                    if (Post::checkExistingHashtag($matches[1]) === false) {
-                        Post::insertHashtagIntoDatabase($matches[1]);
-                    }
+                    if (Post::checkExistingHashtag(hashtag: $matches[1]) === false) {
+                        Post::insertHashtagIntoDatabase(hashtag: $matches[1]);
+                    } 
+                    $hashtagId = Post::getHashtagId(hashtag: $matches[1]);
+                    Post::insertIntoPostHashtag($post, $hashtagId);
                 }
                 break;
 
@@ -157,21 +159,24 @@ function generateRandomCode($length = 6)
  * @param string $content The content of the post
  * @return int|bool Returns the post ID if successful, false otherwise
  */
-function createPost($content)
+function createPost($content): int|null
 {
     $result = Post::create(User::fetch($_SESSION["user_id"]), $content);
-
     if ($result instanceof Post) {
-        echo json_encode([
+        $response = [
             'success' => true,
             'postId' => $result->getId(),
             'userId' => $result->getUserId(),
             'content' => $result->getContent(),
             'createdAt' => $result->getCreatedAt()->format('Y-m-d H:i:s')
-        ]);
+        ];
+        echo json_encode($response);
+        return $result->getId(); 
     } else {
         echo json_encode(['success' => false]);
+        return null; 
     }
 }
+
 
 include_once('../Views/home/home.php');
