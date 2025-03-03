@@ -254,6 +254,15 @@ class TweetFeed {
     }
 
     createTweetElement(tweet) {
+        if (tweet.message) {
+            return `
+            <div class="p-4 max-w-xl">
+                <div class="flex justify-center items-center gap-3">
+                    ${tweet.message}
+                </div>
+            </div>
+            `;
+        }
         const tweetContentMentions = tweet.content.slice(tweet.content.search('@'));
         const mentions = tweetContentMentions.match(/@[a-zA-Z0-9_]+/g);
         if (mentions) {
@@ -340,8 +349,8 @@ class TweetFeed {
                 alert(responseData.message || "Une erreur est survenue");
             }
         } catch (error) {
-            console.error("Erreur lors de l'envoi du tweet:", error);
-            alert("Une erreur est survenue lors de l'envoi du tweet");
+            console.error("Erreur lors du chargement des posts:", error);
+            alert("Une erreur est survenue lors du chargement des posts");
         }
     }
 
@@ -357,6 +366,15 @@ class TweetFeed {
         return `${Math.floor(diffSeconds / 604800)}sem`;
     }
 
+    insertTweetInContainers(tweet) {
+        if (this.desktopTweetsContainer) {
+            this.desktopTweetsContainer.insertAdjacentHTML('beforeend', this.createTweetElement(tweet));
+        }
+        if (this.mobileTweetsContainer) {
+            this.mobileTweetsContainer.insertAdjacentHTML('beforeend', this.createTweetElement(tweet));
+        }
+    }
+
     async loadTweets() {
         if (this.isLoading) return;
 
@@ -368,7 +386,6 @@ class TweetFeed {
             formData.append('action', 'getAllPosts');
 
             const response = await this.getPost(formData);
-
             if (response.success && response.posts) {
                 response.posts.forEach(post => {
                     const tweet = {
@@ -381,14 +398,16 @@ class TweetFeed {
                         image_url: post.media?.[0]?.file_name || null,
                         user_id: post.user_id
                     };
+                    this.insertTweetInContainers(tweet);
 
-                    if (this.desktopTweetsContainer) {
-                        this.desktopTweetsContainer.insertAdjacentHTML('beforeend', this.createTweetElement(tweet));
-                    }
-                    if (this.mobileTweetsContainer) {
-                        this.mobileTweetsContainer.insertAdjacentHTML('beforeend', this.createTweetElement(tweet));
-                    }
                 });
+
+            } else if (response.message === "Pas de tweet") {
+                const tweet = {
+                    message: response.message
+                };
+                this.insertTweetInContainers(tweet);
+
             }
         } catch (error) {
             console.error('Erreur lors du chargement des tweets:', error);

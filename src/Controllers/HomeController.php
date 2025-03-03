@@ -19,9 +19,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     header('Content-Type: application/json');
 
     if (isset($_POST['action'])) {
-
         switch ($_POST['action']) {
-
             case 'addPosts':
                 $content = htmlspecialchars(string: $_POST['content']);
                 $post = createPost(content: $content);
@@ -29,7 +27,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 if (!empty($matches[1])) {
                     if (Post::checkExistingHashtag(hashtag: $matches[1]) === false) {
                         Post::insertHashtagIntoDatabase(hashtag: $matches[1]);
-                    } 
+                    }
                     $hashtagId = Post::getHashtagId(hashtag: $matches[1]);
                     Post::insertIntoPostHashtag($post, $hashtagId);
                 }
@@ -41,7 +39,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
             case 'autoCompletation':
                 if (isset($_POST['username'])) {
-
                     $username = htmlspecialchars($_POST['username']);
                     $users = User::searchUsernames(username: $username);
                     if ($users !== false) {
@@ -52,10 +49,13 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                         die();
                     }
                 }
+                break;
             case 'getAllPosts':
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
                 getAllPost($user);
                 break;
+            default:
+                echo json_encode(['success' => false, 'message' => "Méthode non reconnu"]);
         }
     } else {
         echo json_encode(['success' => false, 'message' => "Méthode non autorisée", 'data' => $data]);
@@ -68,41 +68,42 @@ function getAllPost($user)
 {
     if ($user) {
         $follingList = $user->getAllFollowing($user->getId());
-        if ($follingList) {
-            $followingIds = array_map(function ($item) {
-                return $item['following_id'];
-            }, $follingList);
+        if ($follingList === false) {
+            echo json_encode(['success' => true, 'message' => 'Pas de tweet']);
+            return;
+        }
 
-            $followingIds[] = $user->getId();
+        $followingIds = array_map(function ($item) {
+            return $item['following_id'];
+        }, $follingList);
 
-            $allPosts = [];
-            foreach ($followingIds as $followingId) {
-                $posts = $user->getAllPosts($followingId);
-                if ($posts) {
-                    foreach ($posts as &$post) {
-                        $media = $user->getPostMedia($followingId);
-                        $post['media'] = array_filter($media, function ($m) use ($post) {
-                            return $m['post_id'] == $post['post_id'];
-                        });
-                    }
-                    $allPosts = array_merge($allPosts, $posts);
+        $followingIds[] = $user->getId();
+
+        $allPosts = [];
+        foreach ($followingIds as $followingId) {
+            $posts = $user->getAllPosts($followingId);
+            if ($posts) {
+                foreach ($posts as &$post) {
+                    $media = $user->getPostMedia($followingId);
+                    $post['media'] = array_filter($media, function ($m) use ($post) {
+                        return $m['post_id'] == $post['post_id'];
+                    });
                 }
+                $allPosts = array_merge($allPosts, $posts);
             }
+        }
 
-            usort($allPosts, function ($a, $b) {
-                return strtotime($b['created_at']) - strtotime($a['created_at']);
-            });
+        usort($allPosts, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
 
-            if (!empty($allPosts)) {
-                echo json_encode(['success' => true, 'posts' => $allPosts]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Aucun post trouvé']);
-            }
+        if (!empty($allPosts)) {
+            echo json_encode(['success' => true, 'posts' => $allPosts]);
         } else {
-            echo json_encode(['succes' => false, 'message' => 'Erreur lors de la récupération des followeur.']);
+            echo json_encode(['success' => true, 'message' => 'Pas de tweet']);
         }
     } else {
-        echo json_encode(['succes' => false, 'message' => 'Erreur lors de la création de l\'user.']);
+        echo json_encode(['success' => false, 'message' => 'Erreur lors de la création de l\'user.']);
     }
 }
 
@@ -216,10 +217,10 @@ function createPost($content): int|null
             'createdAt' => $result->getCreatedAt()->format('Y-m-d H:i:s')
         ];
         echo json_encode($response);
-        return $result->getId(); 
+        return $result->getId();
     } else {
         echo json_encode(['success' => false]);
-        return null; 
+        return null;
     }
 }
 
