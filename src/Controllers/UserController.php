@@ -13,22 +13,22 @@ use Model\User;
 if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
     if (!is_numeric($id) || $id < 0) {
-        $id = USER::retrieveIdWithUsername($id);
-        $otherUser = USER::fetch($id);
+        $id = User::retrieveIdWithUsername($id);
+        $otherUser = User::fetch($id);
         include_once '../Views/user/otherProfile.php';
         exit;
     }
     if ($id == $_SESSION['user_id']) {
-        $CurrentUser = USER::fetch($_SESSION['user_id']);
+        $CurrentUser = User::fetch($_SESSION['user_id']);
         include_once('../Views/user/currentProfile.php');
         exit;
     } else {
-        $otherUser = USER::fetch($id);
+        $otherUser = User::fetch($id);
         include_once('../Views/user/otherProfile.php');
         exit;
     }
 } else {
-    $CurrentUser = USER::fetch($_SESSION['user_id']);
+    $CurrentUser = User::fetch($_SESSION['user_id']);
     include_once('../Views/user/currentProfile.php');
     exit;
 }
