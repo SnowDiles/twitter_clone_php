@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const textareaMobile = document.getElementById("post-text-area-mobile");
   const userListDivDesktop = document.getElementById("user-desktop");
   const userListDivMobile = document.getElementById("user-mobile");
-  const autoComplete = new handleAutoCompletion(textareaDesktop, textareaMobile, userListDivDesktop, userListDivMobile, "../../src/Controllers/HomeController.php");
+  const autoComplete = new handleAutoCompletion(textareaDesktop, textareaMobile, userListDivDesktop, userListDivMobile, "../../src/Controllers/HomeController.php","@");
   autoComplete.init();
 });
 
