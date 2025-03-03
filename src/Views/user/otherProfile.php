@@ -12,7 +12,7 @@
   <div>
     <div class="flex flex-col items-center">
       <div class="md:max-w-xl justify-self-center w-full h-[54px] px-4 items-center flex gap-5">
-        <a href="">
+        <a href="HomeController.php">
           <img src="../../assets/icons/arrow-back.png"
             alt="arrow back icon"
             class="h-[24px] w-[24px] invert dark:invert-0">
