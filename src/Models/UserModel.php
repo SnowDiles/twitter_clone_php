@@ -9,6 +9,7 @@ use Environment\DB;
 use DateTime;
 use PDO;
 use PDOException;
+
 class User
 {
     private int $id;
@@ -138,6 +139,90 @@ class User
 
         return $user;
     }
+
+    public function getAllFollowing(int $id): ?array
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT following_id FROM Follows WHERE follower_id = :user_id";
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":user_id" => $id
+        ];
+
+        if (!$stmt->execute($params)) {
+            return null;
+        }
+
+        return $stmt->fetchAll();
+    }
+
+    public function getAllPosts(int $id): ?array
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT
+                p.post_id,
+                p.content,
+                u.username,
+                u.display_name,
+                p.created_at
+              FROM
+                Posts p
+              JOIN
+                Users u ON p.user_id = u.user_id
+              WHERE
+                p.user_id = :user_id
+              ORDER BY p.created_at DESC";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":user_id" => $id
+        ];
+
+        if (!$stmt->execute($params)) {
+            return null;
+        }
+
+        return $stmt->fetchAll();
+    }
+
+    public function getPostMedia(int $userId): ?array
+    {
+        $pdo = DB::connection();
+
+        $query = " SELECT
+                        p.post_id,
+                        p.content,
+                        m.media_id,
+                        m.file_name,
+                        m.short_url
+                    FROM
+                        Posts p
+                    JOIN
+                        PostMedia pm ON p.post_id = pm.post_id
+                    JOIN
+                        Media m ON pm.media_id = m.media_id
+                    WHERE
+                        p.user_id = :user_id
+                    ORDER BY
+                        p.created_at DESC";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":user_id" => $userId
+        ];
+
+        if (!$stmt->execute($params)) {
+            return null;
+        }
+
+        return $stmt->fetchAll();
+    }
+
 
     public function getId(): int
     {

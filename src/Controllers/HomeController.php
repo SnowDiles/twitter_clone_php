@@ -36,7 +36,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 break;
 
             case 'addPostsMedia':
-                handleMediaUpload($_FILES['image'], $_POST);
+                handleMediaUpload($_FILES['image'], $_POST, htmlspecialchars($_SESSION['user_id']));
                 break;
 
             case 'autoCompletation':
@@ -52,6 +52,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                         die();
                     }
                 }
+            case 'getAllPosts':
+                $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
+                getAllPost($user);
                 break;
         }
     } else {
@@ -61,19 +64,61 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     exit;
 }
 
+function getAllPost($user)
+{
+    if ($user) {
+        $follingList = $user->getAllFollowing($user->getId());
+        if ($follingList) {
+            $followingIds = array_map(function ($item) {
+                return $item['following_id'];
+            }, $follingList);
+
+            $followingIds[] = $user->getId();
+
+            $allPosts = [];
+            foreach ($followingIds as $followingId) {
+                $posts = $user->getAllPosts($followingId);
+                if ($posts) {
+                    foreach ($posts as &$post) {
+                        $media = $user->getPostMedia($followingId);
+                        $post['media'] = array_filter($media, function ($m) use ($post) {
+                            return $m['post_id'] == $post['post_id'];
+                        });
+                    }
+                    $allPosts = array_merge($allPosts, $posts);
+                }
+            }
+
+            usort($allPosts, function ($a, $b) {
+                return strtotime($b['created_at']) - strtotime($a['created_at']);
+            });
+
+            if (!empty($allPosts)) {
+                echo json_encode(['success' => true, 'posts' => $allPosts]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Aucun post trouvé']);
+            }
+        } else {
+            echo json_encode(['succes' => false, 'message' => 'Erreur lors de la récupération des followeur.']);
+        }
+    } else {
+        echo json_encode(['succes' => false, 'message' => 'Erreur lors de la création de l\'user.']);
+    }
+}
+
 /**
  * Handles the upload and processing of media files with associated post creation
  *
- * @param HomeController $homeController The home controller instance
  * @param array $mediaFile The uploaded file array from $_FILES
  * @param array $postData The post data array containing userId and content
  * @return bool Returns true if the upload and post creation was successful, false otherwise
  */
-function handleMediaUpload($mediaFile, $postData)
+function handleMediaUpload($mediaFile, $postData, $id)
 {
     $uploadedMedia = processMediaUpload($mediaFile);
+
     if ($uploadedMedia) {
-        $user = User::fetch($postData['userId']);
+        $user = User::fetch($id);
         $post = Post::create($user, $postData['content']);
 
         if ($post) {
