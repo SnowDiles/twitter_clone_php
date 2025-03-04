@@ -253,7 +253,7 @@ class TweetFeed {
         this.loadTweets();
     }
 
-    createTweetElement(tweet) {
+    async createTweetElement(tweet) {
         if (tweet.message) {
             return `
             <div class="p-4 max-w-xl">
@@ -263,11 +263,15 @@ class TweetFeed {
             </div>
             `;
         }
+
         const tweetContentMentions = tweet.content.slice(tweet.content.search('@'));
         const mentions = tweetContentMentions.match(/@[a-zA-Z0-9_]+/g);
-        if (mentions) {
+
+        const mentionResult = await this.checkMention(mentions);
+
+        if (mentionResult.success && mentionResult.userId) {
             const createLinkElement = document.createElement("a");
-            createLinkElement.href = `./UserController.php?userId=${mentions[0].trim().substring(1)}`;
+            createLinkElement.href = `./UserController.php?userId=${mentionResult.userId}`;
             createLinkElement.textContent = mentions[0];
             createLinkElement.classList.add('text-primary-500');
             tweet.content = tweet.content.replace(mentions[0], createLinkElement.outerHTML);
@@ -322,6 +326,27 @@ class TweetFeed {
         `;
     }
 
+    async checkMention(mention) {
+        const formData = new FormData();
+        formData.append('action', 'checkMention');
+        formData.append('mention', mention);
+        try {
+            const response = await fetch("../../src/Controllers/HomeController.php", {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            });
+            const responseData = await response.json();
+            return responseData;
+
+        } catch (error) {
+            console.error("Erreur lors de la verifaction de la menttion:", error);
+            alert("Une erreur est survenue lors de la vérification de la mention");
+        }
+    }
+
     async getPost(formData) {
         try {
             const response = await fetch("../../src/Controllers/HomeController.php", {
@@ -366,18 +391,18 @@ class TweetFeed {
         return `${Math.floor(diffSeconds / 604800)}sem`;
     }
 
-    insertTweetInContainers(tweet) {
+    async insertTweetInContainers(tweet) {
+        const tweetElement = await this.createTweetElement(tweet);
         if (this.desktopTweetsContainer) {
-            this.desktopTweetsContainer.insertAdjacentHTML('beforeend', this.createTweetElement(tweet));
+            this.desktopTweetsContainer.insertAdjacentHTML('beforeend', tweetElement);
         }
         if (this.mobileTweetsContainer) {
-            this.mobileTweetsContainer.insertAdjacentHTML('beforeend', this.createTweetElement(tweet));
+            this.mobileTweetsContainer.insertAdjacentHTML('beforeend', tweetElement);
         }
     }
 
     async loadTweets() {
         if (this.isLoading) return;
-
         this.isLoading = true;
         this.loadingElement.classList.remove('hidden');
 
@@ -387,7 +412,7 @@ class TweetFeed {
 
             const response = await this.getPost(formData);
             if (response.success && response.posts) {
-                response.posts.forEach(post => {
+                for (const post of response.posts) {
                     const tweet = {
                         username: post.username || "User",
                         handle: post.display_name?.toLowerCase() || "user",
@@ -398,16 +423,10 @@ class TweetFeed {
                         image_url: post.media?.[0]?.file_name || null,
                         user_id: post.user_id
                     };
-                    this.insertTweetInContainers(tweet);
-
-                });
-
+                    await this.insertTweetInContainers(tweet);
+                }
             } else if (response.message === "Pas de tweet") {
-                const tweet = {
-                    message: response.message
-                };
-                this.insertTweetInContainers(tweet);
-
+                await this.insertTweetInContainers({ message: response.message });
             }
         } catch (error) {
             console.error('Erreur lors du chargement des tweets:', error);
