@@ -53,7 +53,7 @@
                         <button id="upload-button-mobile" class="invert dark:invert-0 p-2 rounded-full">
                             <img src="../../assets/icons/image.png" alt="Ajouter une image" class="w-6 h-6">
                         </button>
-                        <input type="file" id="file-input-mobile" class="hidden">
+                        <input type="file" id="file-input-mobile" class="hidden" multiple accept="image/*" max="4">
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                                     <img src="../../assets/icons/image.png" alt="Ajouter une image" class="w-6 h-6">
                                 </button>
 
-                                <input type="file" id="file-input-desktop" class="hidden">
+                                <input type="file" id="file-input-desktop" class="hidden" multiple accept="image/*" max="4">
                             </div>
                         </div>
                     </div>

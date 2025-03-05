@@ -151,8 +151,11 @@ class TweetPost {
      */
     clearTextArea(view) {
         const textarea = view === 'mobile' ? this.mobileTweetContentTextarea : this.tweetContentTextarea;
+        const fileInput = view === 'mobile' ? this.mobileMediaFileInput : this.mediaFileInput;
+        
         textarea.value = '';
-
+        fileInput.value = '';
+    
         const existingImageContainer = document.querySelector(
             view === 'mobile' ? '#mobile-modal .image-preview-container' : '.image-preview-container'
         );
@@ -191,58 +194,88 @@ class TweetPost {
         fileInput.click();
     }
 
-    /**
-     * Handles media file selection and preview
-     * @param {Event} event - File input change event
-     * @private
-     */
     handleMediaSelection(event, view) {
-        const mediaFile = event.target.files[0];
-        if (mediaFile && mediaFile.type.startsWith('image/')) {
-            this.selectedMediaFile = mediaFile;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const previewImage = document.createElement('img');
-                previewImage.src = e.target.result;
-                previewImage.className = 'max-w-full h-auto rounded-lg mt-2 mb-2 max-h-[200px] object-contain';
+        const files = Array.from(event.target.files);
 
-                const existingImageContainer = document.querySelector(
-                    view === 'mobile' ? '#mobile-modal .image-preview-container' : '.image-preview-container'
-                );
-                if (existingImageContainer) {
-                    existingImageContainer.remove();
-                }
-
-                const imageContainer = document.createElement('div');
-                imageContainer.className = 'image-preview-container w-full flex justify-center items-center';
-                imageContainer.appendChild(previewImage);
-
-                if (view === 'mobile') {
-                    const mobileContainer = document.querySelector('#mobile-modal .flex-1');
-                    if (mobileContainer) {
-                        const textareaContainer = mobileContainer.querySelector('.flex.gap-4');
-                        if (textareaContainer) {
-                            mobileContainer.insertBefore(imageContainer, textareaContainer.nextSibling);
-                        }
-                    }
-                } else {
-                    const desktopContainer = this.tweetContentTextarea.closest('.flex-grow.flex.flex-col.gap-4') ||
-                        this.tweetContentTextarea.closest('.bg-white.dark\\:bg-gray-800');
-
-                    if (desktopContainer) {
-                        const insertBeforeElement = desktopContainer.querySelector('.flex.justify-between') ||
-                            desktopContainer.lastElementChild;
-                        desktopContainer.insertBefore(imageContainer, insertBeforeElement);
-                    }
-                }
-            };
-            reader.readAsDataURL(mediaFile);
-            this.updateSubmitButtonState(view);
-        } else {
-            alert("Veuillez sélectionner une image valide");
+        if (files.length > 4) {
+            alert("Vous ne pouvez pas télécharger plus de 4 images");
+            event.target.value = '';
+            return;
         }
+
+        if (!files.every(file => file.type.startsWith('image/'))) {
+            alert("Veuillez sélectionner uniquement des images");
+            event.target.value = '';
+            return;
+        }
+
+        const existingImageContainer = document.querySelector(
+            view === 'mobile' ? '#mobile-modal .image-preview-container' : '.image-preview-container'
+        );
+        if (existingImageContainer) {
+            existingImageContainer.remove();
+        }
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'image-preview-container w-full grid gap-2';
+        imageContainer.className += files.length > 1 ? ' grid-cols-2' : ' grid-cols-1';
+
+        const loadImages = files.map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const previewWrapper = document.createElement('div');
+                    previewWrapper.className = `relative ${files.length > 1 ? 'h-[150px]' : 'h-[300px]'}`;
+
+                    const previewImage = document.createElement('img');
+                    previewImage.src = e.target.result;
+                    previewImage.className = 'w-full h-full object-cover rounded-lg';
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
+                    deleteButton.innerHTML = 'x';
+                    deleteButton.onclick = (e) => {
+                        e.preventDefault();
+                        previewWrapper.remove();
+                        if (!imageContainer.children.length) {
+                            imageContainer.remove();
+                        }
+                    };
+
+                    previewWrapper.appendChild(previewImage);
+                    previewWrapper.appendChild(deleteButton);
+                    imageContainer.appendChild(previewWrapper);
+                    resolve();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        Promise.all(loadImages).then(() => {
+            if (view === 'mobile') {
+                const mobileContainer = document.querySelector('#mobile-modal .flex-1');
+                if (mobileContainer) {
+                    const textareaContainer = mobileContainer.querySelector('.flex.gap-4');
+                    if (textareaContainer) {
+                        mobileContainer.insertBefore(imageContainer, textareaContainer.nextSibling);
+                    }
+                }
+            } else {
+                const desktopContainer = this.tweetContentTextarea.closest('.flex-grow.flex.flex-col.gap-4') ||
+                    this.tweetContentTextarea.closest('.bg-white.dark\\:bg-gray-800');
+
+                if (desktopContainer) {
+                    const insertBeforeElement = desktopContainer.querySelector('.flex.justify-between') ||
+                        desktopContainer.lastElementChild;
+                    desktopContainer.insertBefore(imageContainer, insertBeforeElement);
+                }
+            }
+        });
+
+        this.updateSubmitButtonState(view);
     }
 }
+
 class TweetFeed {
     constructor() {
         this.isLoading = false;
@@ -286,43 +319,56 @@ class TweetFeed {
             tweet.content = tweet.content.replace(hashtags[0], createLinkElement.outerHTML);
         }
 
+        let imagesHtml = '';
+        if (tweet.image_url.length) {
+            let imageElements = '';
+            tweet.image_url.forEach(url => {
+                imageElements += `
+                <a href="${url}" class="block overflow-hidden ${tweet.image_url.length > 1 ? 'h-[150px]' : 'h-[300px]'}" target="_blank">
+                <img src="${url}" alt="Tweet media" class="h-[300px] w-[300px] object-cover rounded-lg">
+                </a>
+            `;
+            });
+
+            imagesHtml = `
+            <div class="mt-3 mb-3 grid gap-2 ${tweet.image_url.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}">
+                ${imageElements}
+            </div>
+            `;
+        }
+
         return `
-            <div class="p-4 max-w-xl">
+            <div class="p-4 max-w-xl border-b border-gray-500">
                 <div class="flex gap-3">
                     <div class="w-12 h-12">
                         <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-full h-full rounded-full">
                     </div>
                     <div>
-                    <div class="flex items-center gap-2">
-                        <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
-                        <a class="text-tertiary-500" href="./UserController.php?userId=${tweet.user_id}">@${tweet.handle}</a>
-                        <span class="text-xs">•</span>
-                        <span class="">${tweet.date}</span>
-                    </div>
-                    <div class="ml-0 mt-3">
-                        <div class="text-small text-xl">
-                            ${tweet.content}
+                        <div class="flex items-center gap-2">
+                            <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
+                            <a class="text-tertiary-500" href="./UserController.php?userId=${tweet.user_id}">@${tweet.handle}</a>
+                            <span class="text-xs">•</span>
+                            <span class="">${tweet.date}</span>
                         </div>
-                        ${tweet.image_url ? `
-                        <a href="${tweet.image_url}" class="mt-3 mb-3 block h-[300px] w-[300px] overflow-hidden" target="_blank">
-                        <img src="${tweet.image_url}" alt="Tweet media" class="w-full h-full object-cover rounded-lg">
-                        </a>
-                        ` : ''}
-                        <div class="flex items-center gap-4 mt-2">
-                        <button class="flex items-center">
-                        <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                        <span>${tweet.comments}</span>
-                        </button>
-                        <button class="flex items-center">
-                        <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
-                        <span>${tweet.reposts}</span>
-                        </button>
+                        <div class="ml-0 mt-3">
+                            <div class="text-small text-xl">
+                                ${tweet.content}
+                            </div>
+                            ${imagesHtml}
+                            <div class="flex items-center gap-4 mt-2">
+                                <button class="flex items-center">
+                                    <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
+                                    <span>${tweet.comments}</span>
+                                </button>
+                                <button class="flex items-center">
+                                    <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
+                                    <span>${tweet.reposts}</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
-            <hr class="border-t my-4">
         `;
     }
 
@@ -401,6 +447,12 @@ class TweetFeed {
         }
     }
 
+    getImageUrl(post) {
+        if (!post.media) return [];
+        return Object.values(post.media).map(media => media.file_name);
+    }
+
+
     async loadTweets() {
         if (this.isLoading) return;
         this.isLoading = true;
@@ -420,7 +472,7 @@ class TweetFeed {
                         content: post.content,
                         comments: post.comments_count || 0,
                         reposts: post.reposts_count || 0,
-                        image_url: post.media?.[0]?.file_name || null,
+                        image_url: this.getImageUrl(post),
                         user_id: post.user_id
                     };
                     await this.insertTweetInContainers(tweet);
