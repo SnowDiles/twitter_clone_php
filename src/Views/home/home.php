@@ -42,13 +42,10 @@
                                 placeholder="écrivez votre ressenti ici"
                                 class="w-full bg-transparent border-none focus:outline-none resize-none mb-4 text-xl dark:text-white h-32"></textarea>
                         </div>
-
-                        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
-                max-h-64 overflow-y-auto absolute mt-10 z-40" style="display:none" id="user-mobile">
-                            <ul class="space-y-2">
-                            </ul>
+                        <div class="bg-white border rounded-lg p-4 shadow-lg w-64 max-h-64 overflow-y-auto absolute mt-10 z-40"
+                            style="display:none" id="user-mobile">
+                            <ul class="space-y-2"></ul>
                         </div>
-
                     </div>
                 </div>
                 <div class="border-t dark:border-gray-700 p-4">
@@ -78,12 +75,10 @@
                                     class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none"></textarea>
                                 <button id="post-button-desktop" class="btn variant-filled" disabled=""> Post </button>
                             </div>
-                           
-                        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
-                max-h-64 overflow-y-auto absolute mt-10 z-40" style="display:none" id="user-desktop">
-                            <ul class="space-y-2">
-                            </ul>
-                        </div>
+                            <div class="bg-white border rounded-lg p-4 shadow-lg w-64 max-h-64 overflow-y-auto absolute mt-10 z-40"
+                                style="display:none" id="user-desktop">
+                                <ul class="space-y-2"></ul>
+                            </div>
 
                             <div class="flex justify-start items-center">
                                 <button id="upload-button-desktop" class="invert dark:invert-0 p-2 rounded-full">

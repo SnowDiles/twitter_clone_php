@@ -87,25 +87,6 @@ class Post
         return $result ? (int) $result['hashtag_id'] : null;
     }
 
-    public static function retrievePostWithHashtag(int $hashtag): array
-    {
-        $pdo = DB::connection();
-        $sqlQuery = "SELECT 
-        Posts.post_id, 
-        Posts.user_id, 
-        Posts.content, 
-        Posts.created_at AS post_created_at, 
-        Users.username, 
-        Users.display_name 
-     FROM `Posts` 
-     LEFT JOIN PostHashtag ON Posts.post_id = PostHashtag.post_id 
-     LEFT JOIN Users ON Posts.user_id = Users.user_id 
-     WHERE PostHashtag.hashtag_id = :hashtagId ORDER BY Posts.created_at DESC";
-        $stmt = $pdo->prepare($sqlQuery);
-        $stmt->execute([":hashtagId" => $hashtag]);
-        return $stmt->fetchAll();
-    }
-
 
     public static function attachMedia(Post $post, Media $media): bool
     {

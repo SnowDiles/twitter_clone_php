@@ -266,28 +266,24 @@ class TweetFeed {
 
         const tweetContentMentions = tweet.content.slice(tweet.content.search('@'));
         const mentions = tweetContentMentions.match(/@[a-zA-Z0-9_]+/g);
-        if (mentions) {
-            for (const mention of mentions) {
-                const mentionResult = await this.checkMention(mention);
-                if (mentionResult.success && mentionResult.userId) {
-                    const createLinkElement = document.createElement("a");
-                    createLinkElement.href = `./UserController.php?userId=${mentionResult.userId}`;
-                    createLinkElement.textContent = mention;
-                    createLinkElement.classList.add('text-primary-500');
-                    tweet.content = tweet.content.replace(mention, createLinkElement.outerHTML);
-                }
-            }
+
+        const mentionResult = await this.checkMention(mentions);
+
+        if (mentionResult.success && mentionResult.userId) {
+            const createLinkElement = document.createElement("a");
+            createLinkElement.href = `./UserController.php?userId=${mentionResult.userId}`;
+            createLinkElement.textContent = mentions[0];
+            createLinkElement.classList.add('text-primary-500');
+            tweet.content = tweet.content.replace(mentions[0], createLinkElement.outerHTML);
         }
         const tweetContentHashtag = tweet.content.slice(tweet.content.search('#'));
         const hashtags = tweetContentHashtag.match(/#[a-zA-Z0-9_]+/g);
         if (hashtags) {
-            hashtags.forEach((hashtag) => {
             const createLinkElement = document.createElement("a");
-            createLinkElement.href = `./SearchController.php?hashtag=${hashtag.trim().substring(1)}`;
-            createLinkElement.textContent = hashtag;
-            createLinkElement.classList.add("text-primary-500");
-            tweet.content = tweet.content.replace(hashtag, createLinkElement.outerHTML);
-            });
+            createLinkElement.href = `/explore/${hashtags[0].trim().substring(1)}`;
+            createLinkElement.textContent = hashtags[0];
+            createLinkElement.classList.add('text-primary-500');
+            tweet.content = tweet.content.replace(hashtags[0], createLinkElement.outerHTML);
         }
 
         return `

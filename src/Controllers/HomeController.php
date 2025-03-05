@@ -21,17 +21,15 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'addPosts':
-                $content = str_replace("'", "'", $_POST['content']);
+                $content = htmlspecialchars(string: $_POST['content']);
                 $post = createPost(content: $content);
-                preg_match_all('/#([\w]+)/', $content, $matches);
+                preg_match(pattern: '/#(\w+)/', subject: $content, matches: $matches);
                 if (!empty($matches[1])) {
-                    foreach ($matches[1] as $hashtag) {
-                        if (Post::checkExistingHashtag($hashtag) === false) {
-                            Post::insertHashtagIntoDatabase($hashtag);
-                        }
-                        $hashtagId = Post::getHashtagId($hashtag);
-                        Post::insertIntoPostHashtag($post, $hashtagId);
+                    if (Post::checkExistingHashtag(hashtag: $matches[1]) === false) {
+                        Post::insertHashtagIntoDatabase(hashtag: $matches[1]);
                     }
+                    $hashtagId = Post::getHashtagId(hashtag: $matches[1]);
+                    Post::insertIntoPostHashtag($post, $hashtagId);
                 }
                 break;
 

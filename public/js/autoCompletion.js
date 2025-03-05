@@ -68,7 +68,7 @@ export class handleAutoCompletion {
       userItems = items
         .map(
           (item) => `
-                    <div class="user-item cursor-pointer p-2 " data-username="${
+                    <div class="user-item cursor-pointer p-2 hover:bg-gray-100" data-username="${
                       this.symbol === "@" ? item.username : item.tag
                     }">
                         ${this.symbol}${
