@@ -10,6 +10,19 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
 
 use Model\User;
 
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+    if ($page === "following") {
+        $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
+        include_once("../Views/user/following.php");
+        exit;
+    } elseif ($page === "follower") {
+        $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
+        include_once("../Views/user/follower.php");
+        exit;
+    }
+}
+
 if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
     if ($id == $_SESSION['user_id']) {
