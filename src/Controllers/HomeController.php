@@ -34,7 +34,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 break;
 
             case 'addPostsMedia':
-                handleMediaUpload($_FILES['image'], $_POST, htmlspecialchars($_SESSION['user_id']));
+                handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
                 break;
 
             case 'autoCompletation':
@@ -125,44 +125,68 @@ function getAllPost($user)
  * @param array $postData The post data array containing userId and content
  * @return bool Returns true if the upload and post creation was successful, false otherwise
  */
-function handleMediaUpload($mediaFile, $postData, $id)
+function handleMediaUpload($mediaFiles, $postData, $id)
 {
-    $uploadedMedia = processMediaUpload($mediaFile);
+    if (count($mediaFiles['name']) > 4) {
+        echo json_encode(['success' => false, 'message' => 'Maximum 4 images autorisées']);
+        return false;
+    }
 
-    if ($uploadedMedia) {
-        $user = User::fetch($id);
-        $post = Post::create($user, $postData['content']);
+    $user = User::fetch($id);
+    $post = Post::create($user, $postData['content']);
 
-        if ($post) {
+    if (!$post) {
+        echo json_encode(['success' => false, 'message' => 'Échec de la création du post']);
+        return false;
+    }
+
+    $mediaResults = [];
+
+    for ($i = 0; $i < count($mediaFiles['name']); $i++) {
+        $singleMedia = [
+            'name' => $mediaFiles['name'][$i],
+            'type' => $mediaFiles['type'][$i],
+            'tmp_name' => $mediaFiles['tmp_name'][$i],
+            'error' => $mediaFiles['error'][$i],
+            'size' => $mediaFiles['size'][$i]
+        ];
+
+        $uploadedMedia = processMediaUpload($singleMedia);
+
+        if ($uploadedMedia) {
             $mediaPath = $uploadedMedia[0];
             $mediaShortCode = $uploadedMedia[1];
             $media = Media::create($mediaPath, $mediaShortCode);
 
             if ($media) {
                 $isLinked = Post::attachMedia($post, $media);
-
                 if ($isLinked) {
-                    echo json_encode([
-                        'success' => true,
-                        'post' => [
-                            'postId' => $post->getId(),
-                            'userId' => $post->getUserId(),
-                            'content' => $post->getContent(),
-                            'createdAt' => $post->getCreatedAt()->format('Y-m-d H:i:s')
-                        ],
-                        'media' => [
-                            'mediaId' => $media->getId(),
-                            'fileName' => $media->getFileName(),
-                            'shortUrl' => $media->getShortUrl(),
-                            'createdAt' => $media->getCreatedAt()->format('Y-m-d H:i:s')
-                        ]
-                    ]);
-                    return;
+                    $mediaResults[] = [
+                        'mediaId' => $media->getId(),
+                        'fileName' => $media->getFileName(),
+                        'shortUrl' => $media->getShortUrl(),
+                        'createdAt' => $media->getCreatedAt()->format('Y-m-d H:i:s')
+                    ];
                 }
             }
         }
     }
-    echo json_encode(['success' => false]);
+
+    if (!empty($mediaResults)) {
+        echo json_encode([
+            'success' => true,
+            'post' => [
+                'postId' => $post->getId(),
+                'userId' => $post->getUserId(),
+                'content' => $post->getContent(),
+                'createdAt' => $post->getCreatedAt()->format('Y-m-d H:i:s')
+            ],
+            'media' => $mediaResults
+        ]);
+        return true;
+    }
+
+    echo json_encode(['success' => false, 'message' => 'Échec du traitement des médias']);
     return false;
 }
 

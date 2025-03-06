@@ -81,14 +81,15 @@ class TweetPost {
         formData.append('content', tweetContent);
 
         if (this.isValidTweetLength(tweetContent)) {
-            const mediaFile = fileInput.files[0];
-            if (mediaFile) {
-                formData.append('image', mediaFile);
+            const mediaFiles = Array.from(fileInput.files);
+            if (mediaFiles.length) {
+                mediaFiles.forEach(file => {
+                    formData.append('images[]', file);
+                });
                 formData.append('action', 'addPostsMedia');
             } else {
                 formData.append('action', 'addPosts');
             }
-
             this.submitTweetMedia(formData, view);
         } else {
             alert("Message trop long");
@@ -152,10 +153,10 @@ class TweetPost {
     clearTextArea(view) {
         const textarea = view === 'mobile' ? this.mobileTweetContentTextarea : this.tweetContentTextarea;
         const fileInput = view === 'mobile' ? this.mobileMediaFileInput : this.mediaFileInput;
-        
+
         textarea.value = '';
         fileInput.value = '';
-    
+
         const existingImageContainer = document.querySelector(
             view === 'mobile' ? '#mobile-modal .image-preview-container' : '.image-preview-container'
         );
@@ -323,26 +324,26 @@ class TweetFeed {
         if (tweet.image_url.length) {
             let imageElements = '';
             tweet.image_url.forEach(url => {
-                imageElements += `
-                <a href="${url}" class="block overflow-hidden ${tweet.image_url.length > 1 ? 'h-[150px]' : 'h-[300px]'}" target="_blank">
-                <img src="${url}" alt="Tweet media" class="h-[300px] w-[300px] object-cover rounded-lg">
+            imageElements += `
+                <a href="${url}" class="flex justify-center items-center overflow-hidden ${tweet.image_url.length > 1 ? 'h-[150px]' : 'h-[300px]'}" target="_blank">
+                    <img src="${url}" alt="Tweet media" class="max-h-[300px] max-w-full object-contain rounded-lg">
                 </a>
             `;
             });
 
             imagesHtml = `
             <div class="mt-3 mb-3 grid gap-2 ${tweet.image_url.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}">
-                ${imageElements}
+            ${imageElements}
             </div>
             `;
         }
 
         return `
-            <div class="p-4 max-w-xl border-b border-gray-500">
-                <div class="flex gap-3">
-                    <div class="w-12 h-12">
-                        <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-full h-full rounded-full">
-                    </div>
+        <div class="p-4 max-w-xl border-b border-gray-500">
+            <div class="flex gap-3">
+                <div class="w-13 h-13 flex-shrink-0">
+                    <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
+                </div>
                     <div>
                         <div class="flex items-center gap-2">
                             <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
@@ -369,6 +370,7 @@ class TweetFeed {
                     </div>
                 </div>
             </div>
+        </div>
         `;
     }
 
