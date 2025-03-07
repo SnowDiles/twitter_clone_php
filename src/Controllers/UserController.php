@@ -14,119 +14,42 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
     exit;
 }
 
+
+
+
+
 if (isset($_GET['userId'])) {
+   
     $id = $_GET['userId'];
     if ($id == $_SESSION['user_id']) {
         $CurrentUser = User::fetch($_SESSION['user_id']);
-        //fetch($_SESSION['user_id']);
-
+        fetch($_SESSION['user_id']);
         include_once('../Views/user/currentProfile.php');
         exit;
     } else {
         $otherUser = User::fetch($id);
-        //fetch($id);
+        fetch($id);
         include_once('../Views/user/otherProfile.php');
         exit;
     }
 } else {
     $CurrentUser = User::fetch($_SESSION['user_id']);
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
-        header('Content-Type: application/json');
-
-        if (isset($_POST['action'])) {
-            switch ($_POST['action']) {
-               
-                case 'getAllPosts':
-                    getPostsById($_SESSION['user_id']);
-                    break;
-               
-                default:
-                    echo json_encode(['success' => false, 'message' => "Méthode non reconnu"]);
-            }
-        } else {
-            echo json_encode(['success' => false, 'message' => "Méthode non autorisée"]);
-            return;
-        }
-        exit;
-    }
+    fetch($_SESSION['user_id']);
     include_once('../Views/user/currentProfile.php');
     exit;
 }
 
-
-
-
-
-
-
-
-
-// function fetch($id){
-   
-//     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
-//         echo "je suis dedans";
-//         header('Content-Type: application/json');
-
-//         if (isset($_POST['action'])) {
-//             switch ($_POST['action']) {
-               
-//                 case 'getAllPosts':
-//                     getPostsById($id);
-//                     break;
-               
-//                 default:
-//                     echo json_encode(['success' => false, 'message' => "Méthode non reconnu"]);
-//             }
-//         } else {
-//             echo json_encode(['success' => false, 'message' => "Méthode non autorisée"]);
-//             return;
-//         }
-//         exit;
-//     }
-//     echo "je suis apres";
-
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function fetch($id){
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+        header('Content-Type: application/json');
+        if (isset($_POST['action']) && $_POST['action'] === 'getAllPosts') {
+            getPostsById($id);
+        } else {
+            echo json_encode(['success' => false, 'message' => "Méthode non autorisée ou non reconnue"]);
+        }
+        exit;
+    }
+}
 
 
 function getPostsById($id)
@@ -134,12 +57,11 @@ function getPostsById($id)
     if ($id) {
         $posts = Post::getAllPostsByIdUser($id);
         if ($posts) {
-            // Utiliser une référence pour modifier directement les éléments du tableau
             foreach ($posts as &$post) {
                 $media = Post::getPostMediaByPostId($post['post_id']);
-                $post['media'] = $media; // Ajouter les médias au post
+                $post['media'] = $media;
             }
-            unset($post); // Détruire la référence après la boucle pour éviter des effets secondaires
+            unset($post); 
 
             if (!empty($posts)) {
                 echo json_encode(['success' => true, 'posts' => $posts]);
