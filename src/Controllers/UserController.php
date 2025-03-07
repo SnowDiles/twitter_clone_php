@@ -29,7 +29,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 }
 
 if (isset($_GET['userId'])) {
-
     $id = $_GET['userId'];
     if ($id == $_SESSION['user_id']) {
         $CurrentUser = User::fetch($_SESSION['user_id']);
