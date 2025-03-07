@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
 
 use Model\User;
 
+// Routing preparation and for the future back
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
     if ($page === "following") {

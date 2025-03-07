@@ -1,19 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    function updateTabsStyle(page) {
+        const tabs = document.querySelectorAll(`a[href*="page=${page}"] span`);
+        tabs.forEach(tab => {
+            tab.classList.add('text-black', 'dark:text-white');
+        });
+    }
+
     const currentUrl = window.location.href;
-    const followerTabs = document.querySelectorAll('a[href*="page=follower"] span');
-    const followingTabs = document.querySelectorAll('a[href*="page=following"] span');
-
     if (currentUrl.includes('page=follower')) {
-        followerTabs.forEach(tab => {
-            tab.classList.add('text-black');
-            tab.classList.add('dark:text-white');
-
-        });
+        updateTabsStyle('follower');
     } else if (currentUrl.includes('page=following')) {
-        followingTabs.forEach(tab => {
-            tab.classList.add('text-black');
-            tab.classList.add('dark:text-white');
-
-        });
+        updateTabsStyle('following');
     }
 });
