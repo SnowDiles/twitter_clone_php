@@ -5,8 +5,14 @@ class TweetFeed {
     this.desktopTweetsContainer = document.getElementById("tweets-container");
     this.mobileTweetsContainer = document.querySelector(".feed.md\\:invisible");
     this.loadingElement = document.getElementById("loading");
+    this.userId = this.getUserIdFromURL();
 
     this.loadTweets();
+  }
+
+  getUserIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('userId');
   }
 
   async createTweetElement(tweet) {
@@ -149,6 +155,7 @@ class TweetFeed {
       }
 
       const responseData = await response.json();
+
       if (responseData.success) {
         return responseData;
       } else {
@@ -196,6 +203,9 @@ class TweetFeed {
     try {
       const formData = new FormData();
       formData.append("action", "getAllPosts");
+      if (this.userId) {
+        formData.append('userId', this.userId);
+      }
 
       const response = await this.getPost(formData);
       if (response.success && response.posts) {
