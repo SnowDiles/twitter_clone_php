@@ -21,22 +21,16 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'addPosts':
-                $content = htmlspecialchars(string: $_POST['content']);
+                $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
                 $post = createPost(content: $content);
-                preg_match(pattern: '/#(\w+)/', subject: $content, matches: $matches);
-                if (!empty($matches[1])) {
-                    if (Post::checkExistingHashtag(hashtag: $matches[1]) === false) {
-                        Post::insertHashtagIntoDatabase(hashtag: $matches[1]);
-                    }
-                    $hashtagId = Post::getHashtagId(hashtag: $matches[1]);
-                    Post::insertIntoPostHashtag($post, $hashtagId);
-                }
+                handleHashtag($post, $_POST);
                 break;
 
             case 'addPostsMedia':
-                handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
-                break;
 
+                $post = handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
+                handleHashtag($post->getId(), $_POST);
+                break;
             case 'autoCompletation':
                 if (isset($_POST['username'])) {
                     $username = htmlspecialchars($_POST['username']);
@@ -123,7 +117,7 @@ function getAllPost($user)
  *
  * @param array $mediaFile The uploaded file array from $_FILES
  * @param array $postData The post data array containing userId and content
- * @return bool Returns true if the upload and post creation was successful, false otherwise
+ * @return Post|bool Returns the created Post if successful, false otherwise
  */
 function handleMediaUpload($mediaFiles, $postData, $id)
 {
@@ -183,7 +177,7 @@ function handleMediaUpload($mediaFiles, $postData, $id)
             ],
             'media' => $mediaResults
         ]);
-        return true;
+        return $post;
     }
 
     echo json_encode(['success' => false, 'message' => 'Échec du traitement des médias']);
@@ -259,5 +253,19 @@ function createPost($content): int|null
     }
 }
 
+function handleHashtag($post, $postData): void
+{
+    $content = str_replace(search: "'", replace: "'", subject: $postData['content']);
+    preg_match_all('/#([\w]+)/', subject: $content, matches: $matches);
+    if (!empty($matches[1])) {
+        foreach ($matches[1] as $hashtag) {
+            if (Post::checkExistingHashtag(hashtag: $hashtag) === false) {
+                Post::insertHashtagIntoDatabase(hashtag: $hashtag);
+            }
+            $hashtagId = Post::getHashtagId(hashtag: $hashtag);
+            Post::insertIntoPostHashtag(postId: $post, hashtagId: $hashtagId);
+        }
+    }
+}
 
 include_once('../Views/home/home.php');
