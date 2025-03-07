@@ -12,7 +12,7 @@
 
         <div class="flex flex-[4]">
             <div class="flex flex-col w-full md:max-w-xl">
-                <div class="flex-1 pb-16 md:pb-0">
+                <div class="flex-1 pb-16 md:pb-0 border-r border-gray-500">
                     <div class="p-4 border-b border-gray-500 md:hidden">
                         <div>
                             <div class="text-center text-xl font-medium">
