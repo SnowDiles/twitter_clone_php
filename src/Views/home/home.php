@@ -4,7 +4,7 @@
     <?php include_once('../_partials/_head.php'); ?>
 </head>
 
-<body data-theme="my-custom-theme">
+<body data-theme="my-custom-theme" class="flex">
     <div class="md:hidden min-h-screen flex flex-col">
         <div class="flex-1 pb-16 md:pb-0">
             <div class="header relative flex items-center p-4 md:invisible">
@@ -58,12 +58,12 @@
                 </div>
             </div>
         </div>
-        <?php include_once('../_partials/_navbarMobile.php'); ?>
     </div>
-    <div class="hidden md:flex min-h-screen">
-        <?php include_once('../_partials/_navbar.php'); ?>
-        <div class="flex-1 flex flex-col">
-            <div class="hidden md:block sticky top-0 z-40 header-desktop border-y bg-[#d9d9d9] dark:bg-[#000000]">
+    <?php include_once('../_partials/_navbar.php'); ?>
+    
+    <div class="hidden md:flex min-h-screen w-full flex-[4]">
+        <div class="flex-1 flex flex-col md:max-w-xl border-r border-gray-500 bg-[#d9d9d9] dark:bg-[#000000]">
+            <div class="hidden md:block sticky top-0 z-40 header-desktop border-b border-gray-500 bg-[#d9d9d9] dark:bg-[#000000]">
                 <div class="max-w-xl mx-auto p-4">
                     <div class="flex gap-4">
                         <img src="../../assets/icons/profile.png" alt="profile"
