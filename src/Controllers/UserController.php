@@ -18,22 +18,37 @@ if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
     if ($id == $_SESSION['user_id']) {
         $CurrentUser = User::fetch($_SESSION['user_id']);
-        fetch($_SESSION['user_id']);
+        //fetch($_SESSION['user_id']);
 
         include_once('../Views/user/currentProfile.php');
         exit;
     } else {
         $otherUser = User::fetch($id);
-        fetch($id);
+        //fetch($id);
         include_once('../Views/user/otherProfile.php');
         exit;
     }
 } else {
-    echo "Je suis l'utilisateur actuel depuis navbar";
-    echo $id;
-
     $CurrentUser = User::fetch($_SESSION['user_id']);
-    fetch($_SESSION['user_id']);
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+        header('Content-Type: application/json');
+
+        if (isset($_POST['action'])) {
+            switch ($_POST['action']) {
+               
+                case 'getAllPosts':
+                    getPostsById($_SESSION['user_id']);
+                    break;
+               
+                default:
+                    echo json_encode(['success' => false, 'message' => "Méthode non reconnu"]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => "Méthode non autorisée"]);
+            return;
+        }
+        exit;
+    }
     include_once('../Views/user/currentProfile.php');
     exit;
 }
@@ -46,30 +61,31 @@ if (isset($_GET['userId'])) {
 
 
 
-function fetch($id){
+// function fetch($id){
+   
+//     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+//         echo "je suis dedans";
+//         header('Content-Type: application/json');
 
-    echo $id;
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
-        header('Content-Type: application/json');
-
-        if (isset($_POST['action'])) {
-            switch ($_POST['action']) {
+//         if (isset($_POST['action'])) {
+//             switch ($_POST['action']) {
                
-                case 'getAllPosts':
-                    getPostsById($id);
-                    break;
+//                 case 'getAllPosts':
+//                     getPostsById($id);
+//                     break;
                
-                default:
-                    echo json_encode(['success' => false, 'message' => "Méthode non reconnu"]);
-            }
-        } else {
-            echo json_encode(['success' => false, 'message' => "Méthode non autorisée"]);
-            return;
-        }
-        exit;
-    }
+//                 default:
+//                     echo json_encode(['success' => false, 'message' => "Méthode non reconnu"]);
+//             }
+//         } else {
+//             echo json_encode(['success' => false, 'message' => "Méthode non autorisée"]);
+//             return;
+//         }
+//         exit;
+//     }
+//     echo "je suis apres";
 
-}
+// }
 
 
 

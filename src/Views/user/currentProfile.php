@@ -98,6 +98,6 @@
         </div>
     </div>
 
-    <script type="module" src="../../public/js/user.js"></script>
+    <script src="../../public/js/user.js"></script>
 
 </body>
