@@ -237,6 +237,7 @@ class User
     }
 
 
+
     public function getId(): int
     {
         return $this->id;

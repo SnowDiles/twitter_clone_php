@@ -1,68 +1,29 @@
-<div class="navbar-desktop hidden fixed left-0 top-0 bottom-0 flex-col justify-start items-center bg-surface-100-800-token shadow-lg px-4 py-8 md:flex md:w-[88px] lg:w-[400px] z-50">
-    <!-- Logo -->
-    <div class="w-full text-center mb-8">
-        <img src="../../assets/icons/logo.png" alt="Logo" class="w-32 mb-8 invert dark:invert-0 mx-auto lg:flex md:hidden">
-        <img src="../../assets/icons/logo.png" alt="Logo" class="w-12 mb-8 invert dark:invert-0 mx-auto lg:hidden md:flex">
+<aside class="xl:px-[8em] md:px-[4em] md:pr-[6em] p-20 hidden md:block border-r border-gray-500 flex-1 justify-items-end">
+    <div>
+        <div><a href="../Controllers/HomeController.php"><img src="../../assets/icons/logo.png" alt="" class="h-[50px] w-[50px] mb-[40px] invert dark:invert-0"></a></div>
+        <nav class="flex flex-col gap-[22px] items-start">
+            <div><a href="../Controllers/HomeController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/home.png" alt="Navbar home icon" id="home-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Home</a></div>
+            <div><a href="../Controllers/SearchController.php" class="flex items-center text-xl"><img src="../../assets/icons/search.png" alt="Navbar search icon" class="h-[50px] mr-[12px] invert dark:invert-0">Search</a></div>
+            <div><a href="../Controllers/MessageController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/message.png" alt="Navbar message icon" id="message-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Message</a></div>
+            <div><a href="../Controllers/UserController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/account.png" alt="Navbar profile icon" id="user-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Profile</a></div>
+        </nav>
     </div>
-    <!-- Menu Items -->
-    <div class="flex flex-col space-y-4 w-full ">
-        <a href="../Controllers/HomeController.php" class="flex items-center lg:justify-start space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <div class="w-12 flex justify-center shrink-0">
-                <img id="home-icon" src="../../assets/icons/outline/home.png" alt="Home" class="w-12 h-12 invert dark:invert-0">
-            </div>
-            <span class="text-xl xl:flex sm:hidden lg:hidden">Home</span>
-            </a>
-        
-        <a href="../Controllers/SearchController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <div class="w-12 flex justify-center shrink-0">
-                <img src="../../assets/icons/search.png" alt="Search" class="w-12 h-12 invert dark:invert-0">
-            </div>
-            <span class="text-xl xl:flex sm:hidden lg:hidden">Explore</span>
+</aside>
+
+<nav class="w-full bg-surface-100-800-token shadow-lg fixed bottom-0 left-0 right-0 block md:hidden">
+    <div class="flex justify-between items-center px-4 py-3">
+        <a href="../Controllers/HomeController.php" class="flex items-center justify-center w-12 h-12">
+            <img src="../../assets/icons/outline/home.png" alt="Home" class="w-10 h-10 invert dark:invert-0">
         </a>
-        <a href="../Controllers/MessageController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <div class="w-12 flex justify-center shrink-0">
-                <img id="message-icon" src="../../assets/icons/outline/message.png" alt="Message" class="w-12 h-12 invert dark:invert-0">
-            </div>
-            <span class="text-xl xl:flex sm:hidden lg:hidden">Message</span>
+        <a href="../Controllers/SearchController.php" class="flex items-center justify-center w-12 h-12">
+            <img src="../../assets/icons/search.png" alt="Search" class="w-10 h-10 invert dark:invert-0">
         </a>
-        <a href="../Controllers/UserController.php" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <div class="w-12 flex justify-center shrink-0">
-                <img id="user-icon" src="../../assets/icons/outline/account.png" alt="Compte" class="w-12 h-12 invert dark:invert-0">
-            </div>
-            <span class="text-xl xl:flex sm:hidden lg:hidden">Profile</span>
+        <a href="../Controllers/MessageController.php" class="flex items-center justify-center w-12 h-12">
+            <img src="../../assets/icons/outline/message.png" alt="Message" class="w-10 h-10 invert dark:invert-0">
         </a>
     </div>
-</div>
+</nav>
 
-<style>
-    .navbar-desktop {
-        transition: width 0.3s ease;
-    }
-
-    @media (max-width: 1280px) and (min-width: 768px) {
-        .navbar-desktop {
-            width: 88px;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        .navbar-desktop .w-8 {
-            min-width: 2rem; 
-            min-height: 2rem;
-            margin: 0 auto;
-        }
-        
-        .navbar-desktop a {
-            padding: 0.75rem;
-        }
-        
-    }
-    @media (max-width: 1280px) {
-        .navbar-desktop .text-sm {
-            display: none;
-        }
-    }
-    
-</style>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const fullPath = window.location.pathname;

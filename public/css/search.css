@@ -6,8 +6,14 @@
 .feed-desktop {
     width: 100%;
     max-width: 600px;
-    margin: 0 auto;
+    margin-left: -17px;
     padding: 0 1rem;
+}
+
+#tweets-container{
+
+    border-right: 1px solid black;
+
 }
 
 @media (max-width: 1410px) {

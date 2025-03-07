@@ -21,22 +21,16 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'addPosts':
-                $content = htmlspecialchars(string: $_POST['content']);
+                $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
                 $post = createPost(content: $content);
-                preg_match(pattern: '/#(\w+)/', subject: $content, matches: $matches);
-                if (!empty($matches[1])) {
-                    if (Post::checkExistingHashtag(hashtag: $matches[1]) === false) {
-                        Post::insertHashtagIntoDatabase(hashtag: $matches[1]);
-                    }
-                    $hashtagId = Post::getHashtagId(hashtag: $matches[1]);
-                    Post::insertIntoPostHashtag($post, $hashtagId);
-                }
+                handleHashtag($post, $_POST);
                 break;
 
             case 'addPostsMedia':
-                handleMediaUpload($_FILES['image'], $_POST, htmlspecialchars($_SESSION['user_id']));
-                break;
 
+                $post = handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
+                handleHashtag($post->getId(), $_POST);
+                break;
             case 'autoCompletation':
                 if (isset($_POST['username'])) {
                     $username = htmlspecialchars($_POST['username']);
@@ -123,46 +117,70 @@ function getAllPost($user)
  *
  * @param array $mediaFile The uploaded file array from $_FILES
  * @param array $postData The post data array containing userId and content
- * @return bool Returns true if the upload and post creation was successful, false otherwise
+ * @return Post|bool Returns the created Post if successful, false otherwise
  */
-function handleMediaUpload($mediaFile, $postData, $id)
+function handleMediaUpload($mediaFiles, $postData, $id)
 {
-    $uploadedMedia = processMediaUpload($mediaFile);
+    if (count($mediaFiles['name']) > 4) {
+        echo json_encode(['success' => false, 'message' => 'Maximum 4 images autorisées']);
+        return false;
+    }
 
-    if ($uploadedMedia) {
-        $user = User::fetch($id);
-        $post = Post::create($user, $postData['content']);
+    $user = User::fetch($id);
+    $post = Post::create($user, $postData['content']);
 
-        if ($post) {
+    if (!$post) {
+        echo json_encode(['success' => false, 'message' => 'Échec de la création du post']);
+        return false;
+    }
+
+    $mediaResults = [];
+
+    for ($i = 0; $i < count($mediaFiles['name']); $i++) {
+        $singleMedia = [
+            'name' => $mediaFiles['name'][$i],
+            'type' => $mediaFiles['type'][$i],
+            'tmp_name' => $mediaFiles['tmp_name'][$i],
+            'error' => $mediaFiles['error'][$i],
+            'size' => $mediaFiles['size'][$i]
+        ];
+
+        $uploadedMedia = processMediaUpload($singleMedia);
+
+        if ($uploadedMedia) {
             $mediaPath = $uploadedMedia[0];
             $mediaShortCode = $uploadedMedia[1];
             $media = Media::create($mediaPath, $mediaShortCode);
 
             if ($media) {
                 $isLinked = Post::attachMedia($post, $media);
-
                 if ($isLinked) {
-                    echo json_encode([
-                        'success' => true,
-                        'post' => [
-                            'postId' => $post->getId(),
-                            'userId' => $post->getUserId(),
-                            'content' => $post->getContent(),
-                            'createdAt' => $post->getCreatedAt()->format('Y-m-d H:i:s')
-                        ],
-                        'media' => [
-                            'mediaId' => $media->getId(),
-                            'fileName' => $media->getFileName(),
-                            'shortUrl' => $media->getShortUrl(),
-                            'createdAt' => $media->getCreatedAt()->format('Y-m-d H:i:s')
-                        ]
-                    ]);
-                    return;
+                    $mediaResults[] = [
+                        'mediaId' => $media->getId(),
+                        'fileName' => $media->getFileName(),
+                        'shortUrl' => $media->getShortUrl(),
+                        'createdAt' => $media->getCreatedAt()->format('Y-m-d H:i:s')
+                    ];
                 }
             }
         }
     }
-    echo json_encode(['success' => false]);
+
+    if (!empty($mediaResults)) {
+        echo json_encode([
+            'success' => true,
+            'post' => [
+                'postId' => $post->getId(),
+                'userId' => $post->getUserId(),
+                'content' => $post->getContent(),
+                'createdAt' => $post->getCreatedAt()->format('Y-m-d H:i:s')
+            ],
+            'media' => $mediaResults
+        ]);
+        return $post;
+    }
+
+    echo json_encode(['success' => false, 'message' => 'Échec du traitement des médias']);
     return false;
 }
 
@@ -235,5 +253,19 @@ function createPost($content): int|null
     }
 }
 
+function handleHashtag($post, $postData): void
+{
+    $content = str_replace(search: "'", replace: "'", subject: $postData['content']);
+    preg_match_all('/#([\w]+)/', subject: $content, matches: $matches);
+    if (!empty($matches[1])) {
+        foreach ($matches[1] as $hashtag) {
+            if (Post::checkExistingHashtag(hashtag: $hashtag) === false) {
+                Post::insertHashtagIntoDatabase(hashtag: $hashtag);
+            }
+            $hashtagId = Post::getHashtagId(hashtag: $hashtag);
+            Post::insertIntoPostHashtag(postId: $post, hashtagId: $hashtagId);
+        }
+    }
+}
 
 include_once('../Views/home/home.php');

@@ -77,14 +77,88 @@ class Post
         return $stmt->fetch() !== false;
     }
 
-    public static function getHashtagId(string $hashtag): ?int
+    public static function getPostsByHashtag(string $hashtag): ?array
     {
         $pdo = DB::connection();
-        $sqlQuery = "SELECT hashtag_id FROM Hashtags WHERE tag = :tag";
-        $stmt = $pdo->prepare($sqlQuery);
-        $stmt->execute([":tag" => $hashtag]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ? (int) $result['hashtag_id'] : null;
+
+        $query = "SELECT
+                p.post_id,
+                p.content,
+                u.username,
+                u.display_name,
+                p.created_at,
+                u.user_id
+              FROM
+                Posts p
+              JOIN
+                Users u ON p.user_id = u.user_id
+              JOIN
+                PostHashtag ph ON p.post_id = ph.post_id
+              JOIN
+                Hashtags h ON ph.hashtag_id = h.hashtag_id
+              WHERE
+                h.tag = :hashtag
+              ORDER BY p.created_at DESC";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":hashtag" => $hashtag
+        ];
+
+        if (!$stmt->execute($params)) {
+            return null;
+        }
+
+        return $stmt->fetchAll();
+    }
+
+    public static function getHashtagId(string $hashtag): ?int
+    {
+      $pdo = DB::connection();
+      $sqlQuery = "SELECT hashtag_id FROM Hashtags WHERE tag = :tag";
+      $stmt = $pdo->prepare($sqlQuery);
+      $params = [
+        ":tag" => $hashtag
+      ];
+      $stmt->execute($params);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $result ? (int)$result['hashtag_id'] : null;
+    }
+    public static function getPostMediaByHashtag(string $hashtag): ?array
+    {
+        $pdo = DB::connection();
+        $query = "SELECT
+                p.post_id,
+                p.content,
+                m.media_id,
+                m.file_name,
+                m.short_url
+              FROM
+                Posts p
+              JOIN
+                PostMedia pm ON p.post_id = pm.post_id
+              JOIN
+                Media m ON pm.media_id = m.media_id
+              JOIN
+                PostHashtag ph ON p.post_id = ph.post_id
+              JOIN
+                Hashtags h ON ph.hashtag_id = h.hashtag_id
+              WHERE
+                h.tag = :hashtag
+              ORDER BY
+                p.created_at DESC";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":hashtag" => $hashtag
+        ];
+
+        if (!$stmt->execute($params)) {
+            return null;
+        }
+        return $stmt->fetchAll();
     }
 
 
@@ -93,12 +167,10 @@ class Post
         $pdo = DB::connection();
         $sqlQuery = "INSERT INTO PostMedia (post_id, media_id) VALUES (:postId, :mediaId)";
         $stmt = $pdo->prepare($sqlQuery);
-
         $params = [
             ":postId" => $post->getId(),
             ":mediaId" => $media->getId()
         ];
-
         return $stmt->execute($params);
     }
 
