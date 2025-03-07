@@ -48,13 +48,12 @@ if (isset($_GET['userId'])) {
 
 function fetch($id){
 
-
+    echo $id;
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
         header('Content-Type: application/json');
-    
+
         if (isset($_POST['action'])) {
             switch ($_POST['action']) {
-               
                
                 case 'getAllPosts':
                     getPostsById($id);
@@ -69,6 +68,7 @@ function fetch($id){
         }
         exit;
     }
+
 }
 
 
