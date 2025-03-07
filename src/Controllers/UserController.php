@@ -17,26 +17,23 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
 if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
     if ($id == $_SESSION['user_id']) {
-        echo "Je suis l'utilisateur actuel depuis home";
         $CurrentUser = User::fetch($_SESSION['user_id']);
         fetch($_SESSION['user_id']);
 
         include_once('../Views/user/currentProfile.php');
         exit;
     } else {
-        echo "Je suis autre user";
-        echo $_GET['userId'];
         $otherUser = User::fetch($id);
-        fetch($_GET['userId']);
-
+        fetch($id);
         include_once('../Views/user/otherProfile.php');
         exit;
     }
 } else {
     echo "Je suis l'utilisateur actuel depuis navbar";
+    echo $id;
 
     $CurrentUser = User::fetch($_SESSION['user_id']);
-    fetch(122);
+    fetch($_SESSION['user_id']);
     include_once('../Views/user/currentProfile.php');
     exit;
 }
