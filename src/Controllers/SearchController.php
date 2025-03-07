@@ -63,6 +63,7 @@ function getPostsByHashtag($hashtag)
                     return $m['post_id'] == $post['post_id'];
                 });
             }
+          
             if (!empty($posts)) {
                 echo json_encode(['success' => true, 'posts' => $posts]);
             } else {

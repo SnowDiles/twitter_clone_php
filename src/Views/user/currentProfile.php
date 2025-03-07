@@ -9,13 +9,12 @@
     <div class="flex min-h-screen">
         <?php
         include_once('../_partials/_navbar.php')
-        ?>
+            ?>
         <div class="flex flex-[4]">
             <main class="flex flex-col w-full md:max-w-xl">
                 <div class="h-[54px] px-4 items-center flex gap-5">
                     <a href="HomeController.php">
-                        <img src="../../assets/icons/arrow-back.png"
-                            alt="arrow back icon"
+                        <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
                             class="h-[24px] w-[24px] invert dark:invert-0">
                     </a>
                     <div class="flex flex-col">
@@ -41,19 +40,16 @@
                             </div>
                             <div class="flex">
                                 <?php if ($_SESSION['user_id'] == $CurrentUser->getId()) { ?>
-                                    <button
-                                        class="btn variant-ringed-secondary 
+                                    <button class="btn variant-ringed-secondary 
                                             mt-3 invert dark:invert-0 text-white dark:text-dark">
                                         Editer le profile
                                     </button>
                                 <?php } else { ?>
                                     <button class="btn-icon mt-3">
-                                        <img src="../../assets/icons/message.png"
-                                            alt="message icon"
+                                        <img src="../../assets/icons/message.png" alt="message icon"
                                             class="w-[25px] h-[25px] invert dark:invert-0">
                                     </button>
-                                    <button
-                                        class="btn variant-filled-secondary 
+                                    <button class="btn variant-filled-secondary 
                                                 mt-3 font-bold invert 
                                                 dark:invert-0">
                                         Suivre
@@ -83,7 +79,25 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="feed md:hidden">
+                    <div id="loading-mobile" class="text-center p-4 hidden">
+                        <span>Chargement...</span>
+                    </div>
+                </div>
+                <main class="flex-1 relative z-10">
+                    <div class="feed-desktop hidden md:block">
+                        <div id="tweets-container">
+                        </div>
+                        <div id="loading" class="text-center p-4 hidden">
+                            <span>Chargement...</span>
+                        </div>
+                    </div>
+                </main>
             </main>
         </div>
     </div>
+
+    <script type="module" src="../../public/js/user.js"></script>
+
 </body>
