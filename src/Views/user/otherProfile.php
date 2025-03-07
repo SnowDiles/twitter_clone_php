@@ -75,13 +75,9 @@
                     </div>
                 </div>
 
-                <div class="feed md:hidden">
-                    <div id="loading-mobile" class="text-center p-4 hidden">
-                        <span>Chargement...</span>
-                    </div>
-                </div>
+
                 <main class="flex-1 relative z-10">
-                    <div class="feed-desktop hidden md:block">
+                    <div class="feed-desktop">
                         <div id="tweets-container">
                         </div>
                         <div id="loading" class="text-center p-4 hidden">
