@@ -7,7 +7,7 @@
 <body data-theme="my-custom-theme" class="flex">
     <div class="md:hidden min-h-screen flex flex-col">
         <div class="flex-1 pb-16 md:pb-0">
-            <div class="header relative flex items-center p-4 md:invisible">
+            <div class="header relative flex items-center p-4 md:invisible border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
                 <a href="../Controllers/UserController.php" class="block w-12 h-12 absolute left-4">
                     <img src="../../assets/icons/profile.png" alt="profile"
                         class="invert dark:invert-0 w-full h-full rounded-full">
@@ -65,9 +65,9 @@
     <?php include_once('../_partials/_navbar.php'); ?>
     
     <div class="hidden md:flex min-h-screen w-full flex-[4] max-h-screen overflow-y-scroll">
-        <div class="flex-1 flex flex-col md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed bg-[#d9d9d9] dark:bg-[#000000]">
+        <div class="flex-1 flex flex-col md:max-w-xl bg-[#d9d9d9] dark:bg-[#000000]">
             <div class="hidden md:block sticky top-0 z-40 header-desktop border-b border-gray-500 bg-[#d9d9d9] dark:bg-[#000000]">
-                <div class="max-w-xl mx-auto p-4 border-b border-b-black dark:border-b-white border-b-solid">
+                <div class="max-w-xl mx-auto p-4 border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white ">
                     <div class="flex gap-4">
                         <img src="../../assets/icons/profile.png" alt="profile"
                             class="invert dark:invert-0 rounded-full w-12 h-12 object-cover">
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <main class="flex-1 relative z-10 border-r border-r-black dark:border-r-white border-r-dashed">
+            <main class="flex-1 relative z-10 ">
                 <div class="feed-desktop hidden md:block">
                     <div id="tweets-container">
                     </div>
