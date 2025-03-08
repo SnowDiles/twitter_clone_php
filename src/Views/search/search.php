@@ -25,7 +25,7 @@
                         </span>
                         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
                 max-h-64 overflow-y-auto absolute mt-10 z-40" style="display:none" id="hashtag-desktop">
-                            <ul class="space-y-2">
+                            <ul  class="space-y-2">
                             </ul>
                         </div>
                     </div>
