@@ -1,4 +1,3 @@
-
 class TweetFeed {
   constructor() {
     this.isLoading = false;
@@ -12,7 +11,7 @@ class TweetFeed {
 
   getUserIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('userId');
+    return urlParams.get("userId");
   }
 
   async createTweetElement(tweet) {
@@ -74,12 +73,12 @@ class TweetFeed {
       });
 
       imagesHtml = `
-            <div class="mt-3 mb-3 grid gap-2 ${
-              tweet.image_url.length > 1 ? "grid-cols-2" : "grid-cols-1"
-            }">
-            ${imageElements}
-            </div>
-            `;
+      <div class="mt-3 mb-3 grid gap-2 bg-gray-400 dark:bg-gray-900 p-2.5 rounded-[30px] mr-5 ${
+        tweet.image_url.length > 1 ? "grid-cols-2" : "grid-cols-1"
+      }">
+      ${imageElements}
+      </div>
+      `;
     }
 
     return `
@@ -204,7 +203,7 @@ class TweetFeed {
       const formData = new FormData();
       formData.append("action", "getAllPosts");
       if (this.userId) {
-        formData.append('userId', this.userId);
+        formData.append("userId", this.userId);
       }
 
       const response = await this.getPost(formData);
