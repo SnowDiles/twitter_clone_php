@@ -92,10 +92,10 @@ class Post
                 Posts p
               JOIN
                 Users u ON p.user_id = u.user_id
+                
               WHERE
                 p.user_id = :user_id
               ORDER BY p.created_at DESC";
-
     $stmt = $pdo->prepare($query);
 
     $params = [
@@ -104,6 +104,35 @@ class Post
 
     if (!$stmt->execute($params)) {
       return null;
+    }
+
+    return $stmt->fetchAll();
+  }
+
+  public static function getRepostByUserId(int $userId): ?array {
+    $pdo = DB::connection();
+    $query = "SELECT
+                p.post_id,
+                p.content,
+                u.username,
+                u.display_name,
+                p.created_at,
+                u.user_id
+              FROM 
+                Reposts r
+              JOIN
+                Posts p ON r.post_id = p.post_id
+              JOIN
+                Users u ON p.user_id = u.user_id
+              WHERE
+                r.user_id = :user_id";
+
+    $stmt = $pdo->prepare($query);
+
+    $params = [":user_id" => $userId];
+
+    if (!$stmt->execute($params)) {
+        return null;
     }
 
     return $stmt->fetchAll();
@@ -162,19 +191,44 @@ class Post
 
   public static function repost(int $idUser, int $idPosts): bool
   {
-      $pdo = DB::connection();
-  
-      $query = "INSERT INTO Reposts (post_id, user_id, created_at) VALUES (:postId, :userId, current_timestamp())";
-  
-      $stmt = $pdo->prepare($query);
-  
-      $params = [
+      try {
+          $pdo = DB::connection();
+      
+          $query = "INSERT INTO Reposts (post_id, user_id, created_at) VALUES (:postId, :userId, current_timestamp())";
+      
+          $stmt = $pdo->prepare($query);
+      
+          $params = [
           ":postId" => $idPosts,
           ":userId" => $idUser
-      ];
-  
-      return $stmt->execute($params);
+          ];
+      
+          return $stmt->execute($params);
+      } catch (\PDOException $e) {
+          return false;
+      }
   }
+
+  public static function deleteRepost(int $idUser, int $idPosts): bool
+  {
+      try {
+          $pdo = DB::connection();
+      
+          $query = "DELETE FROM Reposts WHERE post_id = :postId AND user_id = :userId";
+      
+          $stmt = $pdo->prepare($query);
+      
+          $params = [
+          ":postId" => $idPosts,
+          ":userId" => $idUser
+          ];
+      
+          return $stmt->execute($params);
+      } catch (\PDOException $e) {
+          return false;
+      }
+  }
+
 
   public static function getPostsByHashtag(string $hashtag): ?array
   {

@@ -49,7 +49,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 getAllPost($user);
                 break;
             case 'retweet':
-                Post::repost( idUser: $_SESSION["id_user"],  idPosts: $_POST['retweet']);
+                if(Post::repost( idUser: $_SESSION["user_id"],  idPosts: $_POST['postId']) == false){
+                    Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
+                }
                 break;
             case 'checkMention':
                 if (isset($_POST['mention']) && !empty($_POST['mention'])) {
@@ -89,7 +91,7 @@ function getAllPost($user)
 
         $allPosts = [];
         foreach ($followingIds as $followingId) {
-            $posts = $user->getAllPosts($followingId);
+            $posts = $user->getAllPosts($followingId) ;
             if ($posts) {
                 foreach ($posts as &$post) {
                     $media = $user->getPostMedia($followingId);

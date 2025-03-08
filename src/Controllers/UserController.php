@@ -49,12 +49,25 @@ function getPostsById($id)
 {
     if ($id) {
         $posts = Post::getAllPostsByIdUser($id);
+        $reposts = Post::getRepostByUserId($id);
+        
+        foreach ($reposts as &$repost) {
+            $repost['repost'] = 'vous avez retweete';
+        }
+        unset($repost);
+        
+        $posts = array_merge($posts, $reposts);
+        
         if ($posts) {
             foreach ($posts as &$post) {
                 $media = Post::getPostMediaByPostId($post['post_id']);
                 $post['media'] = $media;
             }
             unset($post);
+
+            usort($posts, function($a, $b) {
+                return strtotime($b['created_at']) - strtotime($a['created_at']);
+            });
 
             if (!empty($posts)) {
                 echo json_encode(['success' => true, 'posts' => $posts]);

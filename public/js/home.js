@@ -404,6 +404,7 @@ class TweetFeed {
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
+
                 </div>
                     <div>
                         <div class="flex items-center gap-2">
@@ -507,31 +508,31 @@ class TweetFeed {
   }
 
   loadRetweetListener() {
-    document.addEventListener("click", function (event) {
+    document.addEventListener("click", (event) => {
       if (event.target.closest(".repost-button")) {
         const button = event.target.closest(".repost-button");
         const postId = button.getAttribute("data-post-id");
-        console.log("Repost cliqué pour le post ID:", postId);
         this.fetchRetweet(postId);
+        this.desktopTweetsContainer.innerHTML = "";
+        this.mobileTweetsContainer.innerHTML = "";
+        this.loadTweets();
       }
     });
   }
 
-  async fetchRetweet() {
-    if (this.isLoading) return;
-    this.isLoading = true;
-    this.loadingElement.classList.remove("hidden");
-
+  async fetchRetweet(postId) {
+    const formData = new FormData();
+    formData.append("action", "retweet");
+    formData.append("postId", postId);
     try {
-      const formData = new FormData();
-      formData.append("action", "retweet");
-    } catch (error) {
-      console.error("Erreur lors du chargement des tweets:", error);
-      this.loadingElement.textContent = "Erreur lors du chargement";
-    } finally {
-      this.isLoading = false;
-      this.loadingElement.classList.add("hidden");
-    }
+      const response = await fetch("../../src/Controllers/HomeController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+    } catch (error) {}
   }
 
   getImageUrl(post) {
@@ -561,6 +562,7 @@ class TweetFeed {
             user_id: post.user_id,
             nbr_retweet: post.nbr_retweet,
             post_id: post.post_id,
+            repost: post.repost,
           };
           await this.insertTweetInContainers(tweet);
         }

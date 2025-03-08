@@ -88,11 +88,15 @@ class TweetFeed {
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
                 </div>
                     <div>
+
                         <div class="flex items-center gap-2">
+
                             <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
                             <a class="text-tertiary-500" href="./UserController.php?userId=${tweet.user_id}">@${tweet.handle}</a>
                             <span class="text-xs">•</span>
                             <span class="">${tweet.date}</span>
+                            <span>${tweet.repost}<span>
+
                         </div>
                         <div class="ml-0 mt-3">
                             <div class="text-small text-xl">
@@ -218,6 +222,8 @@ class TweetFeed {
             reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
+            
+            repost: post.repost,
           };
           await this.insertTweetInContainers(tweet);
         }
