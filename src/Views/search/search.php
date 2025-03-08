@@ -12,9 +12,9 @@
         <?php
         require_once '../_partials/_navbar.php';
         ?>
-        <div class="md:border-r border-gray-500 flex-[4]">
+        <div class="md:border-r border-gray-500 flex-[4] ">
             <div class="flex">
-                <div class="flex gap-4 p-4 items-center max-w-xl justify-self-center w-full mr-[6em] ml-[3em]">
+                <div class="flex gap-4 p-4 items-center max-w-xl justify-self-center w-full mr-[6em] ml-[3em] border-r border-r-black dark:border-r-white border-r-dashed">
                     <div class="md:invisible">
                         <img src="../../assets/pptest.jpg" alt="profile picture icon" class="h-12 w-12 rounded-full">
                     </div>
@@ -41,8 +41,8 @@
                     <span>Chargement...</span>
                 </div>
             </div>
-            <main class="flex-1 relative z-10">
-                <div class="feed-desktop hidden md:block">
+            <main class="flex-1 relative z-10 ">
+                <div class="feed-desktop hidden md:block border-r border-r-black dark:border-r-white border-r-dashed">
                     <div id="tweets-container">
                     </div>
                     <div id="loading" class="text-center p-4 hidden">

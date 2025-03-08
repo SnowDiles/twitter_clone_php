@@ -40,7 +40,7 @@
                         <div class="flex-1">
                             <textarea id="post-text-area-mobile" maxlength="140"
                                 placeholder="écrivez votre ressenti ici"
-                                class="w-full bg-transparent border-none focus:outline-none resize-none mb-4 text-xl dark:text-white h-32"></textarea>
+                                class="w-full bg-transparent border-none focus:outline-none resize-none mb-4 text-xl dark:text-white h-32 "></textarea>
                         </div>
 
                         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
@@ -64,10 +64,10 @@
     </div>
     <?php include_once('../_partials/_navbar.php'); ?>
     
-    <div class="hidden md:flex min-h-screen w-full flex-[4]">
-        <div class="flex-1 flex flex-col md:max-w-xl border-r border-gray-500 bg-[#d9d9d9] dark:bg-[#000000]">
+    <div class="hidden md:flex min-h-screen w-full flex-[4] max-h-screen overflow-y-scroll">
+        <div class="flex-1 flex flex-col md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed bg-[#d9d9d9] dark:bg-[#000000]">
             <div class="hidden md:block sticky top-0 z-40 header-desktop border-b border-gray-500 bg-[#d9d9d9] dark:bg-[#000000]">
-                <div class="max-w-xl mx-auto p-4">
+                <div class="max-w-xl mx-auto p-4 border-b border-b-black dark:border-b-white border-b-solid">
                     <div class="flex gap-4">
                         <img src="../../assets/icons/profile.png" alt="profile"
                             class="invert dark:invert-0 rounded-full w-12 h-12 object-cover">
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <main class="flex-1 relative z-10">
+            <main class="flex-1 relative z-10 border-r border-r-black dark:border-r-white border-r-dashed">
                 <div class="feed-desktop hidden md:block">
                     <div id="tweets-container">
                     </div>

@@ -12,8 +12,8 @@
         <?php
         include_once('../_partials/_navbar.php')
             ?>
-        <div class="flex flex-[4]">
-            <main class="flex flex-col w-full md:max-w-xl">
+        <div class="flex flex-[4] " >
+            <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed">
                 <div class="h-[54px] px-4 items-center flex gap-5">
                     <a href="HomeController.php">
                         <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
@@ -24,7 +24,7 @@
                         <span class="text-xs text-tertiary-500">12 posts</span>
                     </div>
                 </div>
-                <div class="border-b border-white">
+                <div class="border-b border-white dark:border-black">
                     <div>
                         <img src="../../assets/userid_1500x500.png" alt="profile banner" class="w-full">
                     </div>
@@ -33,7 +33,7 @@
                         <div class="flex items-center justify-between px-3">
                             <div class="relative">
                                 <div class="absolute">
-                                    <div class="rounded-full w-max absolute border border-black top-1/2 transform 
+                                    <div class="rounded-full w-max absolute border border-black dark:border-white top-1/2 transform 
                                 translate-x-0 -translate-y-[85%]">
                                         <img src="../../assets/pptest.jpg" alt="profile picture"
                                             class="w-20 h-20 rounded-full">

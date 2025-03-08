@@ -390,7 +390,7 @@ class TweetFeed {
       });
 
       imagesHtml = `
-            <div class="mt-3 mb-3 grid gap-2 ${
+            <div class="mt-3 mb-3 grid gap-2 bg-gray-400 dark:bg-gray-900 p-2.5 rounded-[30px] mr-5 ${
               tweet.image_url.length > 1 ? "grid-cols-2" : "grid-cols-1"
             }">
             ${imageElements}
@@ -399,7 +399,7 @@ class TweetFeed {
     }
 
     return `
-        <div class="p-4 max-w-xl border-b border-gray-500">
+        <div class="p-4 max-w-xl border-b border-b-black dark:border-b-white border-b-solid">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">

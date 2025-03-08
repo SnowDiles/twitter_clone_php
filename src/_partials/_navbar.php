@@ -1,4 +1,4 @@
-<aside class="xl:px-[8em] md:px-[4em] md:pr-[6em] p-20 hidden md:block border-r border-gray-500 flex-1 justify-items-end">
+<aside class="xl:px-[8em] md:px-[4em] md:pr-[6em] p-20 hidden md:block border-r border-r-black dark:border-r-white border-r-dashed flex-1 justify-items-end">
     <div>
         <div><a href="../Controllers/HomeController.php"><img src="../../assets/icons/logo.png" alt="" class="h-[50px] w-[50px] mb-[40px] invert dark:invert-0"></a></div>
         <nav class="flex flex-col gap-[22px] items-start">
