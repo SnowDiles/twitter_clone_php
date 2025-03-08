@@ -548,6 +548,23 @@ class TweetFeed {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const backToTopButton = document.getElementById('back-to-top');
+    const scrollableContainer = document.getElementById('tweet-contain'); 
+    backToTopButton.style.display = 'none';
+    scrollableContainer.addEventListener('scroll', function () {
+        if (scrollableContainer.scrollTop > 5000) { 
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+    backToTopButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        scrollableContainer.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
   const tweetFeed = new TweetFeed();
   const tweetPostHandler = new TweetPost();
   const textareaDesktop = document.getElementById("post-text-area-desktop");
@@ -563,4 +580,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "@"
   );
   autoComplete.init();
+  
 });
+
