@@ -143,6 +143,39 @@ class Post
     return $stmt->fetchAll();
   }
 
+  public static function getRetweetPosts($idPosts): ?array
+  {
+      $pdo = DB::connection();
+  
+      $query = "SELECT * FROM Reposts r WHERE r.post_id = ?";
+  
+      $stmt = $pdo->prepare($query);
+  
+      $params = [$idPosts];
+  
+      if (!$stmt->execute($params)) {
+          return null;
+      }
+  
+      return $stmt->fetchAll();
+  }
+
+  public static function repost(int $idUser, int $idPosts): bool
+  {
+      $pdo = DB::connection();
+  
+      $query = "INSERT INTO Reposts (post_id, user_id, created_at) VALUES (:postId, :userId, current_timestamp())";
+  
+      $stmt = $pdo->prepare($query);
+  
+      $params = [
+          ":postId" => $idPosts,
+          ":userId" => $idUser
+      ];
+  
+      return $stmt->execute($params);
+  }
+
   public static function getPostsByHashtag(string $hashtag): ?array
   {
     $pdo = DB::connection();

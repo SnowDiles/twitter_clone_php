@@ -329,6 +329,7 @@ class TweetFeed {
     this.loadingElement = document.getElementById("loading");
 
     this.loadTweets();
+    this.loadRetweetListener();
   }
 
   async createTweetElement(tweet) {
@@ -419,11 +420,11 @@ class TweetFeed {
                             <div class="flex items-center gap-4 mt-2">
                                 <button class="flex items-center">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                    <span>${tweet.comments}</span>
+                                    <span>${tweet.post_id}</span>
                                 </button>
-                                <button class="flex items-center">
+                                <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
-                                    <span>${tweet.reposts}</span>
+                                    <span>${tweet.nbr_retweet}</span>
                                 </button>
                             </div>
                         </div>
@@ -505,6 +506,34 @@ class TweetFeed {
     }
   }
 
+  loadRetweetListener() {
+    document.addEventListener("click", function (event) {
+      if (event.target.closest(".repost-button")) {
+        const button = event.target.closest(".repost-button");
+        const postId = button.getAttribute("data-post-id");
+        console.log("Repost cliqué pour le post ID:", postId);
+        this.fetchRetweet(postId);
+      }
+    });
+  }
+
+  async fetchRetweet() {
+    if (this.isLoading) return;
+    this.isLoading = true;
+    this.loadingElement.classList.remove("hidden");
+
+    try {
+      const formData = new FormData();
+      formData.append("action", "retweet");
+    } catch (error) {
+      console.error("Erreur lors du chargement des tweets:", error);
+      this.loadingElement.textContent = "Erreur lors du chargement";
+    } finally {
+      this.isLoading = false;
+      this.loadingElement.classList.add("hidden");
+    }
+  }
+
   getImageUrl(post) {
     if (!post.media) return [];
     return Object.values(post.media).map((media) => media.file_name);
@@ -528,9 +557,10 @@ class TweetFeed {
             date: this.calculateRelativeTime(post.created_at) || "now",
             content: post.content,
             comments: post.comments_count || 0,
-            reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
+            nbr_retweet: post.nbr_retweet,
+            post_id: post.post_id,
           };
           await this.insertTweetInContainers(tweet);
         }
@@ -548,23 +578,23 @@ class TweetFeed {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const backToTopButton = document.getElementById('back-to-top');
-    const scrollableContainer = document.getElementById('tweet-contain'); 
-    backToTopButton.style.display = 'none';
-    scrollableContainer.addEventListener('scroll', function () {
-        if (scrollableContainer.scrollTop > 5000) { 
-            backToTopButton.style.display = 'block';
-        } else {
-            backToTopButton.style.display = 'none';
-        }
+  const backToTopButton = document.getElementById("back-to-top");
+  const scrollableContainer = document.getElementById("tweet-contain");
+  backToTopButton.style.display = "none";
+  scrollableContainer.addEventListener("scroll", function () {
+    if (scrollableContainer.scrollTop > 5000) {
+      backToTopButton.style.display = "block";
+    } else {
+      backToTopButton.style.display = "none";
+    }
+  });
+  backToTopButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    scrollableContainer.scrollTo({
+      top: 0,
+      behavior: "smooth",
     });
-    backToTopButton.addEventListener('click', function (e) {
-        e.preventDefault();
-        scrollableContainer.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
+  });
   const tweetFeed = new TweetFeed();
   const tweetPostHandler = new TweetPost();
   const textareaDesktop = document.getElementById("post-text-area-desktop");
@@ -580,6 +610,4 @@ document.addEventListener("DOMContentLoaded", () => {
     "@"
   );
   autoComplete.init();
-  
 });
-

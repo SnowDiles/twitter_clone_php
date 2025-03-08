@@ -48,6 +48,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
                 getAllPost($user);
                 break;
+            case 'retweet':
+                Post::repost( idUser: $_SESSION["id_user"],  idPosts: $_POST['retweet']);
+                break;
             case 'checkMention':
                 if (isset($_POST['mention']) && !empty($_POST['mention'])) {
                     $mention = ltrim($_POST['mention'], '@');
@@ -93,6 +96,7 @@ function getAllPost($user)
                     $post['media'] = array_filter($media, function ($m) use ($post) {
                         return $m['post_id'] == $post['post_id'];
                     });
+                    $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
                 }
                 $allPosts = array_merge($allPosts, $posts);
             }
