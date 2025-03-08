@@ -25,8 +25,9 @@
                         <span class="text-xs text-tertiary-500">12 posts</span>
                     </div>
                 </div>
-                <div class="border-b border-white">
-                    <div>
+
+                <div class="border-b border-b-black dark:border-b-white border-t border-t-black dark:border-t-white">
+                <div>
                         <img src="../../assets/userid_1500x500.png" alt="profile banner" class="w-full">
                     </div>
 
