@@ -7,6 +7,7 @@ class TweetFeed {
     this.userId = this.getUserIdFromURL();
 
     this.loadTweets();
+    this.loadRetweetListener();
   }
 
   getUserIdFromURL() {
@@ -133,43 +134,41 @@ class TweetFeed {
     }
 
     return `
-        <div class="p-4 max-w-xl border-b border-b-black dark:border-b-white border-b-dashed">
-            <div class="flex gap-3">
-                <div class="w-13 h-13 flex-shrink-0">
-                    <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
-                </div>
-                    <div>
+    <div class="p-4 max-w-xl border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
+        <div class="flex gap-3">
+            <div class="w-13 h-13 flex-shrink-0">
+                <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
 
-                        <div class="flex items-center gap-2">
+            </div>
+                <div>
+                                                <span>${tweet.repost}</span>
 
-                            <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
-                            <a class="text-tertiary-500" href="./UserController.php?userId=${tweet.user_id}">@${tweet.handle}</a>
-                            <span class="text-xs">•</span>
-                            <span class="">${tweet.date}</span>
-                            <span>${tweet.repost}<span>
-
+                    <div class="flex items-center gap-2">
+                        <a class="text-xl" href="./UserController.php?userId=${tweet.user_id}">${tweet.username}</a>
+                        <a class="text-tertiary-500" href="./UserController.php?userId=${tweet.user_id}">@${tweet.handle}</a>
+                        <span class="text-xs">•</span>
+                        <span class="">${tweet.date}</span>
+                    </div>
+                    <div class="ml-0 mt-3">
+                        <div class="text-small text-xl">
+                            ${tweet.content}
                         </div>
-                        <div class="ml-0 mt-3">
-                            <div class="text-small text-xl">
-                                ${tweet.content}
-                            </div>
-                            ${imagesHtml}
-                            <div class="flex items-center gap-4 mt-2">
-                                <button class="flex items-center">
-                                    <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                    <span>${tweet.comments}</span>
-                                </button>
-                                <button class="flex items-center">
-                                    <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
-                                    <span>${tweet.reposts}</span>
-                                </button>
-                            </div>
+                        ${imagesHtml}
+                        <div class="flex items-center gap-4 mt-2">
+                            <button class="flex items-center">
+                                <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
+                            </button>
+                            <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
+                                <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
+                                <span>${tweet.nbr_retweet}</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        `;
+    </div>
+    `;
   }
 
   async checkMention(mention) {
@@ -270,9 +269,10 @@ class TweetFeed {
             date: this.calculateRelativeTime(post.created_at) || "now",
             content: post.content,
             comments: post.comments_count || 0,
-            reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
+            nbr_retweet: post.nbr_retweet,
+            post_id: post.post_id,
             repost: post.repost || "",
           };
           await this.insertTweetInContainers(tweet);

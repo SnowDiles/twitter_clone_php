@@ -37,6 +37,11 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 }
                 break;
 
+            case 'retweet':
+                if (Post::repost(idUser: $_SESSION["user_id"], idPosts: $_POST['postId']) == false) {
+                    Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
+                }
+                break;
             case 'getRetweetCount':
                 if (isset($_POST['postId'])) {
                     $postId = intval($_POST['postId']);
@@ -88,6 +93,8 @@ function getPostsById($id)
 
         if ($posts) {
             foreach ($posts as &$post) {
+                $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
+
                 $media = Post::getPostMediaByPostId($post['post_id']);
                 $post['media'] = $media;
             }
