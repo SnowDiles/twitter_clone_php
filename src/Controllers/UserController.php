@@ -16,25 +16,42 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
 
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     header('Content-Type: application/json');
-    if (isset($_POST['action']) && $_POST['action'] === 'getAllPosts') {
-        if (isset($_POST['userId'])) {
-            getPostsById($_POST['userId']);
-        } else {
-            getPostsById($_SESSION['user_id']);
-        }
-    }else if(isset($_POST['action']) && $_POST['action'] === 'checkMention'){
-        if (isset($_POST['mention']) && !empty($_POST['mention'])) {
-            $mention = ltrim($_POST['mention'], '@');
-            $userId = User::retrieveIdWithUsername($mention);
-            if ($userId) {
-                echo json_encode(['success' => true, 'userId' => $userId]);
-            } else {
-                echo json_encode(['success' => false, 'userId' => null]);
-            }
-        }
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'getAllPosts':
+                if (isset($_POST['userId'])) {
+                    getPostsById($_POST['userId']);
+                } else {
+                    getPostsById($_SESSION['user_id']);
+                }
+                break;
+            case 'checkMention':
+                if (isset($_POST['mention']) && !empty($_POST['mention'])) {
+                    $mention = ltrim($_POST['mention'], '@');
+                    $userId = User::retrieveIdWithUsername($mention);
+                    if ($userId) {
+                        echo json_encode(['success' => true, 'userId' => $userId]);
+                    } else {
+                        echo json_encode(['success' => false, 'userId' => null]);
+                    }
+                }
+                break;
 
+            case 'getRetweetCount':
+                if (isset($_POST['postId'])) {
+                    $postId = intval($_POST['postId']);
+                    $retweetCount = count(Post::getRetweetPosts($postId));
+                    echo json_encode(['success' => true, 'retweetCount' => $retweetCount]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Post ID manquant']);
+                }
+                break;
+            default:
+                echo json_encode(['success' => false, 'message' => "Méthode non autorisée ou non reconnue"]);
+                break;
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => "Méthode non autorisée ou non reconnue"]);
+        echo json_encode(['success' => false, 'message' => "Action non spécifiée"]);
     }
     exit;
 }
@@ -61,14 +78,14 @@ function getPostsById($id)
     if ($id) {
         $posts = Post::getAllPostsByIdUser($id);
         $reposts = Post::getRepostByUserId($id);
-        
+
         foreach ($reposts as &$repost) {
             $repost['repost'] = 'vous avez retweete';
         }
         unset($repost);
-        
+
         $posts = array_merge($posts, $reposts);
-        
+
         if ($posts) {
             foreach ($posts as &$post) {
                 $media = Post::getPostMediaByPostId($post['post_id']);
@@ -76,7 +93,7 @@ function getPostsById($id)
             }
             unset($post);
 
-            usort($posts, function($a, $b) {
+            usort($posts, function ($a, $b) {
                 return strtotime($b['created_at']) - strtotime($a['created_at']);
             });
 
