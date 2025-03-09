@@ -27,9 +27,17 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 break;
 
             case 'addPostsMedia':
-
                 $post = handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
                 handleHashtag($post->getId(), $_POST);
+                break;
+            case 'getRetweetCount':
+                if (isset($_POST['postId'])) {
+                    $postId = intval($_POST['postId']);
+                    $retweetCount = count(Post::getRetweetPosts($postId));
+                    echo json_encode(['success' => true, 'retweetCount' => $retweetCount]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Post ID manquant']);
+                }
                 break;
             case 'autoCompletation':
                 if (isset($_POST['username'])) {
@@ -49,7 +57,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 getAllPost($user);
                 break;
             case 'retweet':
-                if(Post::repost( idUser: $_SESSION["user_id"],  idPosts: $_POST['postId']) == false){
+                if (Post::repost(idUser: $_SESSION["user_id"], idPosts: $_POST['postId']) == false) {
                     Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
                 }
                 break;
@@ -91,7 +99,7 @@ function getAllPost($user)
 
         $allPosts = [];
         foreach ($followingIds as $followingId) {
-            $posts = $user->getAllPosts($followingId) ;
+            $posts = $user->getAllPosts($followingId);
             if ($posts) {
                 foreach ($posts as &$post) {
                     $media = $user->getPostMedia($followingId);

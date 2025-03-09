@@ -511,12 +511,35 @@ class TweetFeed {
       if (event.target.closest(".repost-button")) {
         const button = event.target.closest(".repost-button");
         const postId = button.getAttribute("data-post-id");
-        this.fetchRetweet(postId);
-        this.desktopTweetsContainer.innerHTML = "";
-        this.mobileTweetsContainer.innerHTML = "";
-        this.loadTweets();
+        this.fetchRetweet(postId).then(() => {
+          this.updateRetweetCount(postId, button);
+        });
       }
     });
+  }
+
+  async updateRetweetCount(postId, button) {
+    const formData = new FormData();
+    formData.append("action", "getRetweetCount");
+    formData.append("postId", postId);
+    try {
+      const response = await fetch("../../src/Controllers/HomeController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+      const responseData = await response.json();
+      if (responseData.success) {
+        const retweetCountSpan = button.querySelector("span");
+        if (retweetCountSpan) {
+          retweetCountSpan.textContent = responseData.retweetCount;
+        }
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du nombre de retweets:", error);
+    }
   }
 
   async fetchRetweet(postId) {
