@@ -104,6 +104,7 @@ class SearchFeed {
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
+
                 </div>
                     <div>
                         <div class="flex items-center gap-2">
@@ -120,11 +121,10 @@ class SearchFeed {
                             <div class="flex items-center gap-4 mt-2">
                                 <button class="flex items-center">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                    <span>${tweet.comments}</span>
                                 </button>
-                                <button class="flex items-center">
+                                <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
-                                    <span>${tweet.reposts}</span>
+                                    <span>${tweet.nbr_retweet}</span>
                                 </button>
                             </div>
                         </div>
@@ -213,6 +213,34 @@ class SearchFeed {
     return Object.values(post.media).map((media) => media.file_name);
   }
 
+  loadRetweetListener() {
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".repost-button")) {
+        
+        const button = event.target.closest(".repost-button");
+        const postId = button.getAttribute("data-post-id");
+        this.fetchRetweet(postId);
+        this.desktopTweetsContainer.innerHTML = "";
+        this.mobileTweetsContainer.innerHTML = "";
+        this.loadTweets();
+      }
+    });
+  }
+
+  async fetchRetweet(postId) {
+    const formData = new FormData();
+    formData.append("action", "retweet");
+    formData.append("postId", postId);
+    try {
+      const response = await fetch("../../src/Controllers/SearchController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+    } catch (error) {}
+  }
   async loadTweets(hashtag) {
     if (this.isLoading) return;
     this.isLoading = true;
@@ -236,9 +264,11 @@ class SearchFeed {
             date: this.calculateRelativeTime(post.created_at) || "now",
             content: post.content,
             comments: post.comments_count || 0,
-            reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
+            nbr_retweet: post.nbr_retweet,
+            post_id: post.post_id,
+            repost: post.repost,
           };
           await this.insertTweetInContainers(tweet);
         }

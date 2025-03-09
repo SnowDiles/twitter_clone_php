@@ -222,7 +222,6 @@ class TweetFeed {
             reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
-            
             repost: post.repost,
           };
           await this.insertTweetInContainers(tweet);
