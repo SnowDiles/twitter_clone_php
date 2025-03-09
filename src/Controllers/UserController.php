@@ -22,6 +22,17 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         } else {
             getPostsById($_SESSION['user_id']);
         }
+    }else if(isset($_POST['action']) && $_POST['action'] === 'checkMention'){
+        if (isset($_POST['mention']) && !empty($_POST['mention'])) {
+            $mention = ltrim($_POST['mention'], '@');
+            $userId = User::retrieveIdWithUsername($mention);
+            if ($userId) {
+                echo json_encode(['success' => true, 'userId' => $userId]);
+            } else {
+                echo json_encode(['success' => false, 'userId' => null]);
+            }
+        }
+
     } else {
         echo json_encode(['success' => false, 'message' => "Méthode non autorisée ou non reconnue"]);
     }

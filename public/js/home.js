@@ -421,7 +421,6 @@ class TweetFeed {
                             <div class="flex items-center gap-4 mt-2">
                                 <button class="flex items-center">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                    <span>${tweet.post_id}</span>
                                 </button>
                                 <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
