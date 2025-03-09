@@ -10,16 +10,25 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
 
 use Model\User;
 
-// Routing preparation and for the future back
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
-    if ($page === "following") {
+    if ($page === "following" || $page === "follower") {
         $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
-        include_once("../Views/user/following.php");
-        exit;
-    } elseif ($page === "follower") {
-        $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
-        include_once("../Views/user/follower.php");
+        
+        $connections = [
+            [
+                'displayName' => 'John Doe',
+                'username' => 'johndoe',
+                'isFollowing' => true
+            ],
+            [
+                'displayName' => 'Toto Doe',
+                'username' => 'oui',
+                'isFollowing' => false
+            ],
+        ];
+        
+        include_once("../Views/user/connections.php");
         exit;
     }
 }
