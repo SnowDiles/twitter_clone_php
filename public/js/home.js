@@ -391,7 +391,7 @@ class TweetFeed {
       });
 
       imagesHtml = `
-            <div class="mt-3 mb-3 grid gap-2 bg-gray-400 dark:bg-gray-900 p-2.5 rounded-[30px] mr-5 ${
+            <div class="mt-3 mb-3 grid gap-2 bg-gray-300 dark:bg-gray-900 p-2.5 rounded-[30px] mr-5 ${
               tweet.image_url.length > 1 ? "grid-cols-2" : "grid-cols-1"
             }">
             ${imageElements}
