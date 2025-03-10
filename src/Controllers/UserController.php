@@ -10,10 +10,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
 
 use Model\User;
 
+
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+    header('Content-Type: application/json');
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'getConnections':
+
+                connections($_POST['userId']);
+                break;
+        }
+    }
+}
+
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
     if ($page === "following" || $page === "follower") {
         $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
+        
         
         $connections = [
             [
@@ -27,7 +41,6 @@ if (isset($_GET['page'])) {
                 'isFollowing' => false
             ],
         ];
-        
         include_once("../Views/user/connections.php");
         exit;
     }
@@ -47,5 +60,15 @@ if (isset($_GET['userId'])) {
 } else {
     $CurrentUser = User::fetch($_SESSION['user_id']);
     include_once('../Views/user/currentProfile.php');
+    exit;
+}
+
+
+function connections($userId)
+{
+    $CurrentUser = User::fetch($userId ?? $_SESSION['user_id']);
+    $connections = $CurrentUser->getFollows($CurrentUser->getId());
+
+    echo json_encode(['success' => true, 'data' => ['connection' => $connections]]);
     exit;
 }

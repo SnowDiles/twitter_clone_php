@@ -57,25 +57,7 @@
                     </div>
 
                     <!-- User List -->
-                    <div class="px-4 md:hidden">
-                        <?php foreach ($connections as $user): ?>
-                            <div class="flex items-center justify-between py-4">
-                                <div class="flex items-center">
-                                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                                    <div class="ml-3">
-                                        <div class="font-medium"><?= $user['displayName'] ?></div>
-                                        <div class="text-gray-500">@<?= $user['username'] ?></div>
-                                    </div>
-                                </div>
-                                <button class="px-4 py-1 <?= $user['isFollowing'] ? 'border border-gray-400' : 'bg-white text-black' ?> rounded-full text-sm font-medium">
-                                    <?= $user['isFollowing'] ? 'Abonné' : ($page === 'follower' ? 'Suivre en retour' : 'Suivre') ?>
-                                </button>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <!-- Desktop User List -->
-                    <div class="px-4 w-full hidden md:block">
+                    <div class="px-4 w-full">
                         <?php foreach ($connections as $user): ?>
                             <div class="flex items-center justify-between py-4">
                                 <div class="flex items-center">
@@ -95,5 +77,6 @@
             </div>
         </div>
     </div>
+    <script src="../../public/js/profile.js"></script>
 
 </body>

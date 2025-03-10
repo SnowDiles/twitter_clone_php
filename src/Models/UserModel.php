@@ -236,7 +236,32 @@ class User
         return $stmt->fetchAll();
     }
 
+    public function getFollows($userId)
+    {
+        $pdo = DB::connection();
 
+        $query = " SELECT
+                        U.username,
+                        U.display_name
+                    FROM
+                        Follows F
+                    JOIN
+                        Users U ON F.following_id = U.user_id
+                    WHERE
+                        F.follower_id = :user_id";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":user_id" => $userId
+        ];
+
+        if (!$stmt->execute($params)) {
+            return null;
+        }
+
+        return $stmt->fetchAll();
+    }
 
     public function getId(): int
     {
