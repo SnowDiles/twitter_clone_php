@@ -37,21 +37,16 @@
                     <!-- Navigation Tabs -->
                     <div class="flex border-b border-gray-500">
                         <div class="w-1/2 text-center py-3 relative">
-                            <a class="<?= $page === 'follower' ? 'text-black' : 'text-gray-400' ?>"
+                            <a class="<?= $page === 'follower' ? 'text-black dark:text-white' : 'text-gray-500' ?>"
                                 href="./UserController.php?page=follower&userId=<?= $CurrentUser->getId() ?>">
                                 <span>Abonnés</span>
-                                <?php if ($page === 'follower'): ?>
-                                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary-500"></div>
-                                <?php endif; ?>
+
                             </a>
                         </div>
                         <div class="w-1/2 text-center py-3 relative">
-                            <a class="<?= $page === 'following' ? 'text-black' : 'text-gray-400' ?>"
+                            <a class="<?= $page === 'following' ? 'text-black dark:text-white' : 'text-gray-500' ?>"
                                 href="./UserController.php?page=following&userId=<?= $CurrentUser->getId() ?>">
                                 <span>Abonnement</span>
-                                <?php if ($page === 'following'): ?>
-                                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-primary-500"></div>
-                                <?php endif; ?>
                             </a>
                         </div>
                     </div>

@@ -45,22 +45,42 @@ function displayConnections(connections) {
     userListContainer.innerHTML = '';
 
     connections.forEach(user => {
+        const buttonText = user.isFollowing ? 'Abonné' : 'Suivre';
+        const buttonClass = user.isFollowing 
+            ? 'bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900 hover:text-red-600 dark:hover:text-red-400' 
+            : 'bg-primary-500 dark:bg-primary-600 text-white hover:bg-primary-600 dark:hover:bg-primary-700';
+
         const userElement = `
             <div class="flex items-center justify-between py-4">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                    <div class="ml-3">
-                        <div class="font-medium">${user.display_name}</div>
-                        <div class="text-gray-500">@${user.username}</div>
-                    </div>
+            <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-gray-300"></div>
+                <div class="ml-3">
+                <div class="font-medium">${user.display_name}</div>
+                <div class="text-gray-500">@${user.username}</div>
                 </div>
-                <button 
-                    class="px-4 py-1 border border-gray-400 bg-transparent rounded-full text-sm font-medium follow-button"
-                    data-username="${user.username}">
-                    Abonné
-                </button>
+            </div>
+            <button 
+                class="px-4 py-1 rounded-full text-sm font-medium follow-button ${buttonClass}"
+                data-user-id="${user.user_id}"
+                data-following="${user.isFollowing}"
+                data-default-text="${buttonText}"
+                data-hover-text="${user.isFollowing ? 'Se désabonner' : buttonText}">
+                ${buttonText}
+            </button>
             </div>
         `;
+
+        setTimeout(() => {
+            const button = userListContainer.querySelector(`[data-user-id="${user.user_id}"]`);
+            if (button) {
+            button.addEventListener('mouseenter', function() {
+                this.textContent = this.dataset.hoverText;
+            });
+            button.addEventListener('mouseleave', function() {
+                this.textContent = this.dataset.defaultText;
+            });
+            }
+        }, 0);
         userListContainer.insertAdjacentHTML('beforeend', userElement);
     });
 }

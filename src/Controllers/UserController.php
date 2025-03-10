@@ -28,19 +28,6 @@ if (isset($_GET['page'])) {
     if ($page === "following" || $page === "follower") {
         $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
         
-        
-        $connections = [
-            [
-                'displayName' => 'John Doe',
-                'username' => 'johndoe',
-                'isFollowing' => true
-            ],
-            [
-                'displayName' => 'Toto Doe',
-                'username' => 'oui',
-                'isFollowing' => false
-            ],
-        ];
         include_once("../Views/user/connections.php");
         exit;
     }
