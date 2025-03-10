@@ -304,7 +304,41 @@ class User
         ]);
 
         return (bool) $stmt->fetchColumn();
-    }   
+    }
+
+    public function getFollowersCount($userId): int
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT COUNT(*) 
+              FROM Follows 
+              WHERE following_id = :user_id";
+
+        $stmt = $pdo->prepare($query);
+
+        if (!$stmt->execute([':user_id' => $userId])) {
+            return 0;
+        }
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function getFollowingCount($userId): int
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT COUNT(*) 
+              FROM Follows 
+              WHERE follower_id = :user_id";
+
+        $stmt = $pdo->prepare($query);
+
+        if (!$stmt->execute([':user_id' => $userId])) {
+            return 0;
+        }
+
+        return (int) $stmt->fetchColumn();
+    }
 
     public function getId(): int
     {
