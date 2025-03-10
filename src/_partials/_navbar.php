@@ -2,7 +2,7 @@
     <div>
         <div><a href="../Controllers/HomeController.php"><img src="../../assets/icons/logo.png" alt="" class="h-[50px] w-[50px] mb-[40px] invert dark:invert-0"></a></div>
         <nav class="flex flex-col gap-[22px] items-start">
-            <div><a href="../Controllers/HomeController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/home.png" alt="Navbar home icon" id="home-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Home</a></div>
+            <div><a href="../Controllers/HomeController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/home.png" alt="Navbar home icon" id="home-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Menu</a></div>
             <div><a href="../Controllers/SearchController.php" class="flex items-center text-xl"><img src="../../assets/icons/search.png" alt="Navbar search icon" class="h-[50px] mr-[12px] invert dark:invert-0">Search</a></div>
             <div><a href="../Controllers/MessageController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/message.png" alt="Navbar message icon" id="message-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Message</a></div>
             <div><a href="../Controllers/UserController.php" class="flex items-center text-xl"><img src="../../assets/icons/outline/account.png" alt="Navbar profile icon" id="user-icon" class="h-[50px] mr-[12px] invert dark:invert-0">Profile</a></div>
