@@ -138,18 +138,18 @@ class TweetPost {
         },
         body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new TypeError("La réponse n'est pas au format JSON!");
       }
-
+  
       const responseData = await response.json();
-
+  
       if (responseData.success) {
         this.clearTextArea(view);
         if (view === "mobile") {
@@ -159,7 +159,10 @@ class TweetPost {
         const mobileContainer = document.querySelector(".feed.md\\:invisible");
         if (desktopContainer) desktopContainer.innerHTML = "";
         if (mobileContainer) mobileContainer.innerHTML = "";
-
+  
+        // Reload the page after successful tweet submission
+        window.location.reload();
+  
         new TweetFeed();
       } else {
         console.error("Erreur serveur:", responseData.message);
