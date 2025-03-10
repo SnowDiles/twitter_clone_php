@@ -4,7 +4,7 @@
 </head>
 
 <body data-theme="my-custom-theme" class="flex">
-    <div class="md:hidden min-h-screen flex flex-col" >
+    <div class="md:hidden min-h-screen flex flex-col w-full" >
         <div class="flex-1 pb-16 md:pb-0" id="top">
             <div
                 class="header relative flex items-center p-4 md:invisible border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">

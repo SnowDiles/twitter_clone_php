@@ -8,7 +8,7 @@
 </head>
 
 <body data-theme="my-custom-theme">
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen w-full">
         <?php
         include_once('../_partials/_navbar.php')
             ?>

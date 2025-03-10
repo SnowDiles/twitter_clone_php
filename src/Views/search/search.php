@@ -6,7 +6,7 @@
 </head>
 
 <body data-theme="my-custom-theme">
-    <div class="flex ">
+    <div class="flex w-full">
         <?php
         require_once '../_partials/_navbar.php';
         ?>
