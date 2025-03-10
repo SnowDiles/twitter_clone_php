@@ -25,8 +25,6 @@ async function getConnections() {
 
         const responseData = await response.json();
 
-        console.log(responseData);
-
         if (responseData.success) {
             return responseData;
         } else {
