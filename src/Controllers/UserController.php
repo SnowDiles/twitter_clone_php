@@ -61,11 +61,7 @@ function connections($userId)
 
     $type = $_POST['type'] ?? 'following';
     
-    if ($type === 'follower') {
-        $connections = $CurrentUser->getFollowers($CurrentUser->getId());
-    } else {
-        $connections = $CurrentUser->getFollowing($CurrentUser->getId());
-    }
+    $connections = $CurrentUser->getConnections($CurrentUser->getId(), $type);
 
     if ($connections) {
         $currentUserId = $_SESSION['user_id'];
