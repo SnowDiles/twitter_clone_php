@@ -59,7 +59,7 @@ function handleConnectionsRequest(int $userId): void
 
     $type = $_POST['type'] ?? 'following';
     $currentUserId = $_SESSION['user_id'];
-    
+
     $connections = $targetUser->getConnections($targetUser->getId(), $type);
     $processedConnections = processConnections($connections, $targetUser, $currentUserId);
 
@@ -96,10 +96,10 @@ function determineButtonVisibility(int $connectionUserId, User $targetUser, int 
     if ($connectionUserId === $currentUserId) {
         return false;
     }
-    
+
     if ($targetUser->getId() === $currentUserId) {
         return true;
     }
-    
+
     return !$targetUser->isFollowing($currentUserId, $targetUser->getId());
 }
