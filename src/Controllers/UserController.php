@@ -16,8 +16,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'getConnections':
-
-                connections($_POST['userId']);
+                handleConnectionsRequest($_POST['userId']);
                 break;
         }
     }
@@ -27,7 +26,7 @@ if (isset($_GET['page'])) {
     $page = $_GET['page'];
     if ($page === "following" || $page === "follower") {
         $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
-        
+
         include_once("../Views/user/connections.php");
         exit;
     }
@@ -50,32 +49,57 @@ if (isset($_GET['userId'])) {
     exit;
 }
 
-
-function connections($userId)
+function handleConnectionsRequest(int $userId): void
 {
-    $CurrentUser = User::fetch($userId ?? $_SESSION['user_id']);
-    if (!$CurrentUser) {
+    $targetUser = User::fetch($userId ?? $_SESSION['user_id']);
+    if (!$targetUser) {
         echo json_encode(['success' => false, 'message' => 'Utilisateur non trouvé']);
         exit;
     }
 
     $type = $_POST['type'] ?? 'following';
+    $currentUserId = $_SESSION['user_id'];
     
-    $connections = $CurrentUser->getConnections($CurrentUser->getId(), $type);
-
-    if ($connections) {
-        $currentUserId = $_SESSION['user_id'];
-        foreach ($connections as &$connection) {
-            $connection['isFollowing'] = $CurrentUser->isFollowing($currentUserId, $connection['user_id']);
-        }
-    }
+    $connections = $targetUser->getConnections($targetUser->getId(), $type);
+    $processedConnections = processConnections($connections, $targetUser, $currentUserId);
 
     echo json_encode([
-        'success' => true, 
+        'success' => true,
         'data' => [
-            'connection' => $connections ?? [],
+            'connection' => $processedConnections,
             'type' => $type
         ]
     ]);
     exit;
+}
+
+function processConnections(?array $connections, User $targetUser, int $currentUserId): array
+{
+    if (!$connections) {
+        return [];
+    }
+
+    foreach ($connections as &$connection) {
+        $connection['showButton'] = determineButtonVisibility(
+            $connection['user_id'],
+            $targetUser,
+            $currentUserId
+        );
+        $connection['isFollowing'] = $targetUser->isFollowing($currentUserId, $connection['user_id']);
+    }
+
+    return $connections;
+}
+
+function determineButtonVisibility(int $connectionUserId, User $targetUser, int $currentUserId): bool
+{
+    if ($connectionUserId === $currentUserId) {
+        return false;
+    }
+    
+    if ($targetUser->getId() === $currentUserId) {
+        return true;
+    }
+    
+    return !$targetUser->isFollowing($currentUserId, $targetUser->getId());
 }
