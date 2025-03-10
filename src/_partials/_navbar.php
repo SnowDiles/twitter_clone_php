@@ -10,7 +10,7 @@
     </div>
 </aside>
 
-<nav class="w-full bg-surface-100-800-token shadow-lg fixed bottom-0 left-0 right-0 block md:hidden z-20">
+<nav class="w-full bg-surface-100-800-token shadow-lg fixed bottom-0 left-0 right-0 block md:hidden z-40">
     <div class="flex justify-between items-center px-4 py-3">
         <a href="../Controllers/HomeController.php" class="flex items-center justify-center w-12 h-12">
             <img src="../../assets/icons/outline/home.png" alt="Home" class="w-10 h-10 invert dark:invert-0">

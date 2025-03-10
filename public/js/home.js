@@ -162,7 +162,6 @@ class TweetPost {
         if (desktopContainer) desktopContainer.innerHTML = "";
         if (mobileContainer) mobileContainer.innerHTML = "";
   
-        // Reload the page after successful tweet submission
         window.location.reload();
   
         new TweetFeed();
