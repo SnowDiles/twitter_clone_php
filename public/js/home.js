@@ -533,16 +533,14 @@ class TweetFeed {
       const responseData = await response.json();
       if (responseData.success) {
         const retweetCountSpan = button.querySelector("span");
-        if (retweetCountSpan) {
           retweetCountSpan.textContent = responseData.retweetCount;
-        }
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour du nombre de retweets:", error);
     }
   }
 
-  async fetchRetweet(postId) {
+  async createRetweet(postId) {
     const formData = new FormData();
     formData.append("action", "retweet");
     formData.append("postId", postId);
