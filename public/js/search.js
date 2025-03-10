@@ -220,7 +220,7 @@ class SearchFeed {
       if (event.target.closest(".repost-button")) {
         const button = event.target.closest(".repost-button");
         const postId = button.getAttribute("data-post-id");
-        this.fetchRetweet(postId).then(() => {
+        this.createRetweet(postId).then(() => {
           this.updateRetweetCount(postId, button);
         });
       }
