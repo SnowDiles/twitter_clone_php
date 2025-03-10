@@ -5,7 +5,7 @@
     ?>
 </head>
 
-<body data-theme="my-custom-theme" class="flex">
+<body data-theme="my-custom-theme"   class="flex">
     <div class="flex min-h-screen w-full">
         <?php include_once('../_partials/_navbar.php'); ?>
 
@@ -37,16 +37,17 @@
                     <!-- Navigation Tabs -->
                     <div class="flex border-b border-gray-500">
                         <div class="w-1/2 text-center py-3 relative">
+                            <a class="<?= $page === 'following' ? 'text-black dark:text-white' : 'text-gray-500' ?>"
+                                href="./UserController.php?page=following&userId=<?= $CurrentUser->getId() ?>">
+                                <span>Abonnement</span>
+                            </a>
+
+                        </div>
+                        <div class="w-1/2 text-center py-3 relative">
                             <a class="<?= $page === 'follower' ? 'text-black dark:text-white' : 'text-gray-500' ?>"
                                 href="./UserController.php?page=follower&userId=<?= $CurrentUser->getId() ?>">
                                 <span>Abonnés</span>
 
-                            </a>
-                        </div>
-                        <div class="w-1/2 text-center py-3 relative">
-                            <a class="<?= $page === 'following' ? 'text-black dark:text-white' : 'text-gray-500' ?>"
-                                href="./UserController.php?page=following&userId=<?= $CurrentUser->getId() ?>">
-                                <span>Abonnement</span>
                             </a>
                         </div>
                     </div>

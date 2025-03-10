@@ -356,7 +356,7 @@ class User
     }
 
     public function getDateOfBirth(): DateTime
-    {
+    {   
         return $this->dateOfBirth;
     }
 

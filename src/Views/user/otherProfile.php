@@ -66,11 +66,11 @@
 
                         <div class="mx-3 flex gap-[6px] mb-3">
                             <a href="./UserController.php?page=following&userId=<?= $otherUser->getId() ?>">
-                                <span class="mr-1">21</span>
+                                <span class="mr-1"><?= $otherUser->getFollowingCount($otherUser->getId()) ?></span>
                                 <span class="text-tertiary-500">Abonnements</span>
                             </a>
                             <a href="./UserController.php?page=follower&userId=<?= $otherUser->getId() ?>">
-                                <span class="mr-1">45</span>
+                                <span class="mr-1"><?= $otherUser->getFollowersCount($otherUser->getId()) ?></span>
                                 <span class="text-tertiary-500">Abonnés</span>
                             </a>
                         </div>
