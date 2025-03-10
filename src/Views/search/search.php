@@ -12,7 +12,7 @@
         ?>
         <div class=" flex-[4] min-h-screen max-h-screen overflow-y-scroll">
             <div class="flex">
-                <div class="flex gap-10 p-4 items-center max-w-xl justify-self-center w-full border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
+                <div class="flex gap-10 p-4 items-center w-full justify-self-center md:max-w-xl border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
                     <div class="md:invisible">
                         <img src="../../assets/pptest.jpg" alt="profile picture icon" class="h-12 w-12 rounded-full">
                     </div>

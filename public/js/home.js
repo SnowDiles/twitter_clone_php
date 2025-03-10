@@ -404,7 +404,7 @@ class TweetFeed {
     }
 
     return `
-        <div class="p-4 max-w-xl border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
+        <div class="p-4 w-full border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
