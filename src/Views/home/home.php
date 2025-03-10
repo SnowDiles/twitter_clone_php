@@ -69,7 +69,7 @@
             <div
                 class="hidden md:block sticky top-0 z-40 header-desktop border-b border-gray-500 bg-[#d9d9d9] dark:bg-[#000000]">
                 <div
-                    class="max-w-xl mx-auto p-4 border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white ">
+                    class="max-w-xl mx-auto p-4 border-b dark:border-b-white border-r border-r-black dark:border-r-white ">
                     <div class="flex gap-4">
                         <img src="../../assets/icons/profile.png" alt="profile"
                             class="invert dark:invert-0 rounded-full w-12 h-12 object-cover">

@@ -333,6 +333,7 @@ class TweetFeed {
   }
 
   async createTweetElement(tweet) {
+
     if (tweet.message) {
       return `
             <div class="p-4 max-w-xl">
@@ -561,6 +562,7 @@ class TweetFeed {
   }
 
   async loadTweets() {
+
     if (this.isLoading) return;
     this.isLoading = true;
     this.loadingElement.classList.remove("hidden");
