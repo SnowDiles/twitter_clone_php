@@ -67,8 +67,32 @@ if (isset($_GET['userId'])) {
 function connections($userId)
 {
     $CurrentUser = User::fetch($userId ?? $_SESSION['user_id']);
-    $connections = $CurrentUser->getFollows($CurrentUser->getId());
+    if (!$CurrentUser) {
+        echo json_encode(['success' => false, 'message' => 'Utilisateur non trouvé']);
+        exit;
+    }
 
-    echo json_encode(['success' => true, 'data' => ['connection' => $connections]]);
+    $type = $_POST['type'] ?? 'following';
+    
+    if ($type === 'follower') {
+        $connections = $CurrentUser->getFollowers($CurrentUser->getId());
+    } else {
+        $connections = $CurrentUser->getFollowing($CurrentUser->getId());
+    }
+
+    if ($connections) {
+        $currentUserId = $_SESSION['user_id'];
+        foreach ($connections as &$connection) {
+            $connection['isFollowing'] = $CurrentUser->isFollowing($currentUserId, $connection['user_id']);
+        }
+    }
+
+    echo json_encode([
+        'success' => true, 
+        'data' => [
+            'connection' => $connections ?? [],
+            'type' => $type
+        ]
+    ]);
     exit;
 }

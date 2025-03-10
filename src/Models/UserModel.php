@@ -236,32 +236,75 @@ class User
         return $stmt->fetchAll();
     }
 
-    public function getFollows($userId)
+    public function getFollowers($userId): ?array
     {
         $pdo = DB::connection();
 
-        $query = " SELECT
-                        U.username,
-                        U.display_name
-                    FROM
-                        Follows F
-                    JOIN
-                        Users U ON F.following_id = U.user_id
-                    WHERE
-                        F.follower_id = :user_id";
+        $query = "SELECT 
+                    U.user_id,
+                    U.username,
+                    U.display_name
+                FROM 
+                    Users U
+                INNER JOIN 
+                    Follows F ON U.user_id = F.follower_id
+                WHERE 
+                    F.following_id = :user_id
+                ORDER BY 
+                    F.followed_at DESC";
 
         $stmt = $pdo->prepare($query);
 
-        $params = [
-            ":user_id" => $userId
-        ];
-
-        if (!$stmt->execute($params)) {
+        if (!$stmt->execute([':user_id' => $userId])) {
             return null;
         }
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getFollowing($userId): ?array
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT 
+                    U.user_id,
+                    U.username,
+                    U.display_name
+                FROM 
+                    Users U
+                INNER JOIN 
+                    Follows F ON U.user_id = F.following_id
+                WHERE 
+                    F.follower_id = :user_id
+                ORDER BY 
+                    F.followed_at DESC";
+
+        $stmt = $pdo->prepare($query);
+
+        if (!$stmt->execute([':user_id' => $userId])) {
+            return null;
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function isFollowing($followerId, $followingId): bool
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT COUNT(*) 
+              FROM Follows 
+              WHERE follower_id = :follower_id 
+              AND following_id = :following_id";
+
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([
+            ':follower_id' => $followerId,
+            ':following_id' => $followingId
+        ]);
+
+        return (bool) $stmt->fetchColumn();
+    }   
 
     public function getId(): int
     {
