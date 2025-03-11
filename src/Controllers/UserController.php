@@ -65,18 +65,15 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     exit;
 }
 
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+    if ($page === "following" || $page === "follower") {
+        $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
 
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
-    header('Content-Type: application/json');
-    if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'getConnections':
-                handleConnectionsRequest($_POST['userId']);
-                break;
-        }
+        include_once("../Views/user/connections.php");
+        exit;
     }
 }
-
 
 if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
