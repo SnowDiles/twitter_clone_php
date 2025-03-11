@@ -72,12 +72,12 @@
                         </div>
 
                         <div class="mx-3 flex gap-[6px] mb-3">
-                            <a href="[link to the associated page]">
-                                <span class="mr-1">21</span>
+                            <a href="./UserController.php?page=following&userId=<?= $CurrentUser->getId() ?>">
+                                <span class="mr-1"><?= $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'following') ?></span>
                                 <span class="text-tertiary-500">Abonnements</span>
                             </a>
-                            <a href="[link to the associated page]">
-                                <span class="mr-1">45</span>
+                            <a href="./UserController.php?page=follower&userId=<?= $CurrentUser->getId() ?>">
+                                <span class="mr-1"><?= $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'follower') ?></span>
                                 <span class="text-tertiary-500">Abonnés</span>
                             </a>
                         </div>
