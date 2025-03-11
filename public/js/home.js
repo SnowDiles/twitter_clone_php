@@ -419,7 +419,7 @@ class TweetFeed {
                             <span class="">${tweet.date}</span>
                         </div>
                         <div class="ml-0 mt-3">
-                            <div class="text-small text-xl">
+                            <div class="text-small text-xl break-all max-w-full">
                                 ${tweet.content}
                             </div>
                             ${imagesHtml}

@@ -42,7 +42,7 @@ class TweetFeed {
       const responseData = await response.json();
       if (responseData.success) {
         const retweetCountSpan = button.querySelector("span");
-          retweetCountSpan.textContent = responseData.retweetCount;
+        retweetCountSpan.textContent = responseData.retweetCount;
       }
     } catch (error) {
       console.error(
@@ -151,8 +151,8 @@ class TweetFeed {
                         <span class="">${tweet.date}</span>
                     </div>
                     <div class="ml-0 mt-3">
-                        <div class="text-small text-xl">
-                            ${tweet.content}
+                        <div class="text-small text-xl break-all max-w-full">
+                                ${tweet.content}
                         </div>
                         ${imagesHtml}
                         <div class="flex items-center gap-4 mt-2">
