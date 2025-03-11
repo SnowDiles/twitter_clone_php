@@ -485,7 +485,6 @@ class TweetFeed {
       }
     } catch (error) {
       console.error("Erreur lors du chargement des posts:", error);
-      alert("Une erreur est survenue lors du chargement des posts");
     }
   }
 
