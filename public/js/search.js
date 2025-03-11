@@ -9,6 +9,8 @@ class SearchFeed {
     this.loadingElement = document.getElementById("loading");
     this.autoCompleteContainer = document.getElementById("hashtag-desktop");
     this.initializeEventListeners();
+    this.loadRetweetListener();
+
   }
   initializeEventListeners() {
     this.searchBar.addEventListener("keypress", (event) => {
@@ -92,7 +94,7 @@ class SearchFeed {
       });
 
       imagesHtml = `
-            <div class="mt-3 mb-3 grid gap-2 ${
+            <div class="mt-3 mb-3 grid gap-2  p-2.5 rounded-[30px] mr-5 ${
               tweet.image_url.length > 1 ? "grid-cols-2" : "grid-cols-1"
             }">
             ${imageElements}
@@ -100,10 +102,11 @@ class SearchFeed {
             `;
     }
     return `
-        <div class="p-4 max-w-xl border-b border-gray-500">
+        <div class="p-4 w-full md:max-w-xl border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
+
                 </div>
                     <div>
                         <div class="flex items-center gap-2">
@@ -120,11 +123,10 @@ class SearchFeed {
                             <div class="flex items-center gap-4 mt-2">
                                 <button class="flex items-center">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                    <span>${tweet.comments}</span>
                                 </button>
-                                <button class="flex items-center">
+                                <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
-                                    <span>${tweet.reposts}</span>
+                                    <span>${tweet.nbr_retweet}</span>
                                 </button>
                             </div>
                         </div>
@@ -213,6 +215,54 @@ class SearchFeed {
     return Object.values(post.media).map((media) => media.file_name);
   }
 
+  loadRetweetListener() {
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".repost-button")) {
+        const button = event.target.closest(".repost-button");
+        const postId = button.getAttribute("data-post-id");
+        this.createRetweet(postId).then(() => {
+          this.updateRetweetCount(postId, button);
+        });
+      }
+    });
+  }
+
+  async updateRetweetCount(postId, button) {
+    const formData = new FormData();
+    formData.append("action", "getRetweetCount");
+    formData.append("postId", postId);
+    try {
+      const response = await fetch("../../src/Controllers/SearchController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+      const responseData = await response.json();
+      if (responseData.success) {
+        const retweetCountSpan = button.querySelector("span");
+          retweetCountSpan.textContent = responseData.retweetCount;
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du nombre de retweets:", error);
+    }
+  }
+
+  async createRetweet(postId) {
+    const formData = new FormData();
+    formData.append("action", "retweet");
+    formData.append("postId", postId);
+    try {
+      const response = await fetch("../../src/Controllers/SearchController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+    } catch (error) {}
+  }
   async loadTweets(hashtag) {
     if (this.isLoading) return;
     this.isLoading = true;
@@ -236,9 +286,11 @@ class SearchFeed {
             date: this.calculateRelativeTime(post.created_at) || "now",
             content: post.content,
             comments: post.comments_count || 0,
-            reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
+            nbr_retweet: post.nbr_retweet,
+            post_id: post.post_id,
+            repost: post.repost,
           };
           await this.insertTweetInContainers(tweet);
         }

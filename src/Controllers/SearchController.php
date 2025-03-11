@@ -31,6 +31,21 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             case 'getAllPosts':
                 getPostsByHashtag($_POST['hashtag']);
                 break;
+
+            case 'getRetweetCount':
+                if (isset($_POST['postId'])) {
+                    $postId = intval($_POST['postId']);
+                    $retweetCount = count(Post::getRetweetPosts($postId));
+                    echo json_encode(['success' => true, 'retweetCount' => $retweetCount]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Post ID manquant']);
+                }
+                break;
+            case 'retweet':
+                if (Post::repost(idUser: $_SESSION["user_id"], idPosts: $_POST['postId']) == false) {
+                    Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
+                }
+                break;
             case 'checkMention':
                 if (isset($_POST['mention']) && !empty($_POST['mention'])) {
                     $mention = ltrim($_POST['mention'], '@');
@@ -59,8 +74,10 @@ function getPostsByHashtag($hashtag)
         if ($posts) {
             $media = Post::getPostMediaByHashtag($hashtag);
             foreach ($posts as &$post) {
+                $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
                 $post['media'] = array_filter($media, function ($m) use ($post) {
                     return $m['post_id'] == $post['post_id'];
+
                 });
             }
             if (!empty($posts)) {

@@ -1,4 +1,3 @@
-
 import { CustomThemeConfig } from '@skeletonlabs/tw-plugin';
 
 export const myCustomTheme = {

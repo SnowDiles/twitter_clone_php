@@ -27,9 +27,17 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 break;
 
             case 'addPostsMedia':
-
                 $post = handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
                 handleHashtag($post->getId(), $_POST);
+                break;
+            case 'getRetweetCount':
+                if (isset($_POST['postId'])) {
+                    $postId = intval($_POST['postId']);
+                    $retweetCount = count(Post::getRetweetPosts($postId));
+                    echo json_encode(['success' => true, 'retweetCount' => $retweetCount]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Post ID manquant']);
+                }
                 break;
             case 'autoCompletation':
                 if (isset($_POST['username'])) {
@@ -47,6 +55,11 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             case 'getAllPosts':
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
                 getAllPost($user);
+                break;
+            case 'retweet':
+                if (Post::repost(idUser: $_SESSION["user_id"], idPosts: $_POST['postId']) == false) {
+                    Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
+                }
                 break;
             case 'checkMention':
                 if (isset($_POST['mention']) && !empty($_POST['mention'])) {
@@ -93,6 +106,7 @@ function getAllPost($user)
                     $post['media'] = array_filter($media, function ($m) use ($post) {
                         return $m['post_id'] == $post['post_id'];
                     });
+                    $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
                 }
                 $allPosts = array_merge($allPosts, $posts);
             }

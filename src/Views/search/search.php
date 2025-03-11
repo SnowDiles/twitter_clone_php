@@ -1,35 +1,32 @@
 <head>
     <title>Y - Recherche</title>
-    <link rel="stylesheet" href="../../public/css/search.css">
-
     <?php
     require_once '../_partials/_head.php';
     ?>
 </head>
 
 <body data-theme="my-custom-theme">
-    <div class="flex">
+    <div class="flex w-full">
         <?php
         require_once '../_partials/_navbar.php';
         ?>
-        <div class="md:border-r border-gray-500 flex-[4]">
+        <div class=" flex-[4] min-h-screen max-h-screen overflow-y-scroll">
             <div class="flex">
-                <div class="flex gap-4 p-4 items-center max-w-xl justify-self-center w-full mr-[6em] ml-[3em]">
+                <div class="flex gap-10 p-4 items-center w-full justify-self-center md:max-w-xl border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
                     <div class="md:invisible">
                         <img src="../../assets/pptest.jpg" alt="profile picture icon" class="h-12 w-12 rounded-full">
                     </div>
                     <div class="relative w-full">
-                        <input type="search" name="search" id="search" placeholder="Rechercher" class="rounded-full p-2 h-[34px] w-[300px] 
+                        <input type="search" name="search" id="search" placeholder="Rechercher" class="rounded-full p-2 h-[34px] w-[230px] md:w-[400px]
                             bg-tertiary dark:variant-filled-tertiary dark:invert text-center md:pl-10 md:text-left ">
-                        <span class="hidden md:block absolute left-3 top-1/2 transform -translate-y-1/2">
+                        <span class=" absolute left-3 top-1/2 transform -translate-y-1/2">
                             <img src="../../assets/icons/search.png" alt="search icon"
-                                class="h-[24px] w-[24px] hidden md:block invert dark:invert-0">
+                                class="h-[24px] w-[24px]  invert dark:invert-0">
                         </span>
-                        <div class="bg-white border 
-                                rounded-lg p-4 shadow-lg 
-                                w-64 max-h-64 overflow-y-auto absolute mt-4 z-40" style="display:none"
-                            id="hashtag-desktop">
-                            <ul class="space-y-2"> </ul>
+                        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
+                max-h-64 overflow-y-auto absolute mt-2 z-40" style="display:none" id="hashtag-desktop">
+                            <ul  class="space-y-2">
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -41,7 +38,7 @@
                     <span>Chargement...</span>
                 </div>
             </div>
-            <main class="flex-1 relative z-10">
+            <main class="flex-1 relative z-10 ">
                 <div class="feed-desktop hidden md:block">
                     <div id="tweets-container">
                     </div>

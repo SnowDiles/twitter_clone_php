@@ -1,4 +1,6 @@
 import { handleAutoCompletion } from "./autoCompletion.js";
+import { backToTop } from "./backToTop.js";
+
 /**
  * Class representing a tweet posting functionality
  * @class
@@ -138,18 +140,18 @@ class TweetPost {
         },
         body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new TypeError("La réponse n'est pas au format JSON!");
       }
-
+  
       const responseData = await response.json();
-
+  
       if (responseData.success) {
         this.clearTextArea(view);
         if (view === "mobile") {
@@ -159,7 +161,9 @@ class TweetPost {
         const mobileContainer = document.querySelector(".feed.md\\:invisible");
         if (desktopContainer) desktopContainer.innerHTML = "";
         if (mobileContainer) mobileContainer.innerHTML = "";
-
+  
+        window.location.reload();
+  
         new TweetFeed();
       } else {
         console.error("Erreur serveur:", responseData.message);
@@ -329,9 +333,11 @@ class TweetFeed {
     this.loadingElement = document.getElementById("loading");
 
     this.loadTweets();
+    this.loadRetweetListener();
   }
 
   async createTweetElement(tweet) {
+
     if (tweet.message) {
       return `
             <div class="p-4 max-w-xl">
@@ -390,7 +396,7 @@ class TweetFeed {
       });
 
       imagesHtml = `
-            <div class="mt-3 mb-3 grid gap-2 ${
+            <div class="mt-3 mb-3 grid gap-2 p-2.5 rounded-[30px] mr-5 ${
               tweet.image_url.length > 1 ? "grid-cols-2" : "grid-cols-1"
             }">
             ${imageElements}
@@ -399,10 +405,11 @@ class TweetFeed {
     }
 
     return `
-        <div class="p-4 max-w-xl border-b border-gray-500">
+        <div class="p-4 w-full border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
+
                 </div>
                     <div>
                         <div class="flex items-center gap-2">
@@ -419,11 +426,10 @@ class TweetFeed {
                             <div class="flex items-center gap-4 mt-2">
                                 <button class="flex items-center">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                    <span>${tweet.comments}</span>
                                 </button>
-                                <button class="flex items-center">
+                                <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
-                                    <span>${tweet.reposts}</span>
+                                    <span>${tweet.nbr_retweet}</span>
                                 </button>
                             </div>
                         </div>
@@ -479,7 +485,6 @@ class TweetFeed {
       }
     } catch (error) {
       console.error("Erreur lors du chargement des posts:", error);
-      alert("Une erreur est survenue lors du chargement des posts");
     }
   }
 
@@ -505,12 +510,62 @@ class TweetFeed {
     }
   }
 
+  loadRetweetListener() {
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".repost-button")) {
+        const button = event.target.closest(".repost-button");
+        const postId = button.getAttribute("data-post-id");
+        this.createRetweet(postId).then(() => {
+          this.updateRetweetCount(postId, button);
+        });
+      }
+    });
+  }
+
+  async updateRetweetCount(postId, button) {
+    const formData = new FormData();
+    formData.append("action", "getRetweetCount");
+    formData.append("postId", postId);
+    try {
+      const response = await fetch("../../src/Controllers/HomeController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+      const responseData = await response.json();
+      if (responseData.success) {
+        const retweetCountSpan = button.querySelector("span");
+        retweetCountSpan.textContent = responseData.retweetCount;
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du nombre de retweets:", error);
+    }
+  }
+
+  async createRetweet(postId) {
+    const formData = new FormData();
+    formData.append("action", "retweet");
+    formData.append("postId", postId);
+    try {
+      const response = await fetch("../../src/Controllers/HomeController.php", {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+    } catch (error) {}
+  }
+
   getImageUrl(post) {
     if (!post.media) return [];
     return Object.values(post.media).map((media) => media.file_name);
   }
 
   async loadTweets() {
+
     if (this.isLoading) return;
     this.isLoading = true;
     this.loadingElement.classList.remove("hidden");
@@ -528,9 +583,11 @@ class TweetFeed {
             date: this.calculateRelativeTime(post.created_at) || "now",
             content: post.content,
             comments: post.comments_count || 0,
-            reposts: post.reposts_count || 0,
             image_url: this.getImageUrl(post),
             user_id: post.user_id,
+            nbr_retweet: post.nbr_retweet,
+            post_id: post.post_id,
+            repost: post.repost,
           };
           await this.insertTweetInContainers(tweet);
         }
@@ -548,6 +605,15 @@ class TweetFeed {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const backToTopInstance = new backToTop(
+    "back-to-top",
+    "tweet-contain"
+  );
+  backToTopInstance.init();
+
+
+
+
   const tweetFeed = new TweetFeed();
   const tweetPostHandler = new TweetPost();
   const textareaDesktop = document.getElementById("post-text-area-desktop");

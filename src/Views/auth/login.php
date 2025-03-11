@@ -43,13 +43,13 @@
                 Inscrivez-vous !
             </h2>
             <form method="POST" class="space-y-4">
-                <input type="text" name="nom" placeholder="Nom" id="name-input"
+                <input type="text" name="nom" placeholder="Nom" id="name-input" maxlength="10"
                     class="w-full bg-black border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                     required />
                 <input type="email" name="email" placeholder="Email"
                     class="w-full bg-black border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                     required />
-                    <input type="text" name="username" placeholder="@pseudo" id="username-input"
+                <input type="text" name="username" placeholder="@pseudo" id="username-input" maxlength="10"
                     class="w-full bg-black border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                     required />
                 <input type="password" name="password" placeholder="Mot de passe "
