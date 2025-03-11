@@ -236,7 +236,78 @@ class User
         return $stmt->fetchAll();
     }
 
+    public function getConnections($userId, string $type = 'following'): ?array
+    {
+        $pdo = DB::connection();
+    
+        $whereCondition = $type === 'follower' 
+            ? 'F.following_id = :user_id' 
+            : 'F.follower_id = :user_id';
+        
+        $joinCondition = $type === 'follower'
+            ? 'F.follower_id = U.user_id'
+            : 'F.following_id = U.user_id';
+    
+        $query = "SELECT 
+                    U.user_id,
+                    U.username,
+                    U.display_name
+                FROM 
+                    Users U
+                INNER JOIN 
+                    Follows F ON {$joinCondition}
+                WHERE 
+                    {$whereCondition}
+                ORDER BY 
+                    F.followed_at DESC";
+    
+        $stmt = $pdo->prepare($query);
+    
+        if (!$stmt->execute([':user_id' => $userId])) {
+            return null;
+        }
+    
+        return $stmt->fetchAll();
+    }
 
+    public function isFollowing($followerId, $followingId): bool
+    {
+        $pdo = DB::connection();
+
+        $query = "SELECT COUNT(*) 
+              FROM Follows 
+              WHERE follower_id = :follower_id 
+              AND following_id = :following_id";
+
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([
+            ':follower_id' => $followerId,
+            ':following_id' => $followingId
+        ]);
+
+        return (bool) $stmt->fetchColumn();
+    }
+
+    public function getConnectionsCount($userId, string $type = 'following'): int
+    {
+        $pdo = DB::connection();
+    
+        $whereCondition = $type === 'follower' 
+            ? 'following_id = :user_id' 
+            : 'follower_id = :user_id';
+    
+        $query = "SELECT COUNT(*) 
+                  FROM Follows 
+                  WHERE {$whereCondition}";
+    
+        $stmt = $pdo->prepare($query);
+    
+        if (!$stmt->execute([':user_id' => $userId])) {
+            return 0;
+        }
+    
+        return (int) $stmt->fetchColumn();
+    }
 
     public function getId(): int
     {
@@ -254,7 +325,7 @@ class User
     }
 
     public function getDateOfBirth(): DateTime
-    {
+    {   
         return $this->dateOfBirth;
     }
 
