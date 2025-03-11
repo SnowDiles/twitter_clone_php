@@ -17,7 +17,7 @@ class Auth
     public function __construct(string $password, ?string $email, ?string $username)
     {
         $this->email = $email;
-        $this->username =  preg_replace('/\s+/', '_', $username);
+        $this->username = $username;
         $this->passwordHash = hash("ripemd160", $password . Env::get()->passwordSalt);
     }
     public function requestId(): int|false
