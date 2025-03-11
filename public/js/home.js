@@ -375,8 +375,9 @@ class TweetFeed {
           .substring(1)}`;
         createLinkElement.textContent = hashtag;
         createLinkElement.classList.add("text-primary-500");
+        const hashtagRegex = new RegExp(hashtag, 'g');
         tweet.content = tweet.content.replace(
-          hashtag,
+          hashtagRegex,
           createLinkElement.outerHTML
         );
       });

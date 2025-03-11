@@ -272,8 +272,9 @@ function handleHashtag($post, $postData): void
     $content = str_replace(search: "'", replace: "'", subject: $postData['content']);
     preg_match_all('/#([\w]+)/', subject: $content, matches: $matches);
     if (!empty($matches[1])) {
-        foreach ($matches[1] as $hashtag) {
-            if (Post::checkExistingHashtag(hashtag: $hashtag) === false) {
+        $uniqueHashtags = array_unique($matches[1]);
+        foreach ($uniqueHashtags as $hashtag) {
+            if (Post::checkExistingHashtag(hashtag: $hashtag) == false) {
                 Post::insertHashtagIntoDatabase(hashtag: $hashtag);
             }
             $hashtagId = Post::getHashtagId(hashtag: $hashtag);
