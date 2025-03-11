@@ -37,6 +37,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 }
                 break;
 
+            case 'getConnections':
+                handleConnectionsRequest($_POST['userId']);
+                break;
+
             case 'retweet':
                 if (Post::repost(idUser: $_SESSION["user_id"], idPosts: $_POST['postId']) == false) {
                     Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
@@ -73,15 +77,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     }
 }
 
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-    if ($page === "following" || $page === "follower") {
-        $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
-
-        include_once("../Views/user/connections.php");
-        exit;
-    }
-}
 
 if (isset($_GET['userId'])) {
     $id = $_GET['userId'];
@@ -99,6 +94,7 @@ if (isset($_GET['userId'])) {
     include_once('../Views/user/currentProfile.php');
     exit;
 }
+
 function getPostsById($id)
 {
     if ($id) {
@@ -136,10 +132,8 @@ function getPostsById($id)
     } else {
         echo json_encode(['success' => false, 'message' => 'ID utilisateur non spécifié']);
     }
-
-    }  
-    
-    function handleConnectionsRequest(int $userId): void
+}
+function handleConnectionsRequest(int $userId): void
 {
     $targetUser = User::fetch($userId ?? $_SESSION['user_id']);
     if (!$targetUser) {
@@ -192,5 +186,4 @@ function determineButtonVisibility(int $connectionUserId, User $targetUser, int 
     }
 
     return !$targetUser->isFollowing($currentUserId, $targetUser->getId());
->>>>>>> origin/main
 }
