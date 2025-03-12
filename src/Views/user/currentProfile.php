@@ -13,7 +13,7 @@
         include_once('../_partials/_navbar.php')
         ?>
         <div class="flex flex-[4] min-h-screen max-h-screen overflow-y-scroll">
-            <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed">
+            <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed h-full overflow-y-scroll">
                 <div class="h-[54px] px-4 items-center flex gap-5 my-2">
                     <a href="HomeController.php">
                         <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
@@ -24,7 +24,7 @@
                         <span class="text-xs text-tertiary-500">12 posts</span>
                     </div>
                 </div>
-                <div class="border-b border-b-black dark:border-b-white border-t border-t-black dark:border-t-white">
+                <div class="border-b border-b-black dark:border-b-white  dark:bg-black border-t border-t-black dark:border-t-white">
                     <div>
                         <img src="../../assets/userid_1500x500.png" alt="profile banner" class="w-full">
                     </div>

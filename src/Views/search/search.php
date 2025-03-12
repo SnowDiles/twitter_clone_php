@@ -34,7 +34,7 @@
             </div>
 
 
-            <div class="feed md:hidden">
+            <div class="feed md:hidden border-r border-r-black dark:border-r-white min-h-screen">
                 <div id="loading-mobile" class="text-center p-4 hidden">
                     <span>Chargement...</span>
                 </div>
