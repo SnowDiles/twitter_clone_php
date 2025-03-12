@@ -140,18 +140,18 @@ class TweetPost {
         },
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         throw new TypeError("La réponse n'est pas au format JSON!");
       }
-  
+
       const responseData = await response.json();
-  
+
       if (responseData.success) {
         this.clearTextArea(view);
         if (view === "mobile") {
@@ -161,9 +161,9 @@ class TweetPost {
         const mobileContainer = document.querySelector(".feed.md\\:invisible");
         if (desktopContainer) desktopContainer.innerHTML = "";
         if (mobileContainer) mobileContainer.innerHTML = "";
-  
+
         window.location.reload();
-  
+
         new TweetFeed();
       } else {
         console.error("Erreur serveur:", responseData.message);
@@ -337,7 +337,6 @@ class TweetFeed {
   }
 
   async createTweetElement(tweet) {
-
     if (tweet.message) {
       return `
             <div class="p-4 max-w-xl">
@@ -375,7 +374,7 @@ class TweetFeed {
           .substring(1)}`;
         createLinkElement.textContent = hashtag;
         createLinkElement.classList.add("text-primary-500");
-        const hashtagRegex = new RegExp(hashtag, 'g');
+        const hashtagRegex = new RegExp(hashtag, "g");
         tweet.content = tweet.content.replace(
           hashtagRegex,
           createLinkElement.outerHTML
@@ -404,7 +403,7 @@ class TweetFeed {
     }
 
     return `
-        <div class="p-4 w-full border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
+        <div class="p-4 w-full border-b border-b-black dark:border-b-white">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
@@ -539,7 +538,10 @@ class TweetFeed {
         retweetCountSpan.textContent = responseData.retweetCount;
       }
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du nombre de retweets:", error);
+      console.error(
+        "Erreur lors de la mise à jour du nombre de retweets:",
+        error
+      );
     }
   }
 
@@ -564,7 +566,6 @@ class TweetFeed {
   }
 
   async loadTweets() {
-
     if (this.isLoading) return;
     this.isLoading = true;
     this.loadingElement.classList.remove("hidden");
@@ -604,14 +605,8 @@ class TweetFeed {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const backToTopInstance = new backToTop(
-    "back-to-top",
-    "tweet-contain"
-  );
+  const backToTopInstance = new backToTop("back-to-top", "tweet-contain");
   backToTopInstance.init();
-
-
-
 
   const tweetFeed = new TweetFeed();
   const tweetPostHandler = new TweetPost();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr" class="light">
 
 <head>
     <meta charset="UTF-8">
