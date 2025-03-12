@@ -578,8 +578,8 @@ class TweetFeed {
       if (response.success && response.posts) {
         for (const post of response.posts) {
           const tweet = {
-            username: post.username || "User",
-            handle: post.display_name?.toLowerCase() || "user",
+            username: post.display_name || "User",
+            handle: post.username || "user",
             date: this.calculateRelativeTime(post.created_at) || "now",
             content: post.content,
             comments: post.comments_count || 0,
