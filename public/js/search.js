@@ -86,10 +86,8 @@ class SearchFeed {
       let imageElements = "";
       tweet.image_url.forEach((url) => {
         imageElements += `
-                <a href="${url}" class="flex justify-center items-center overflow-hidden ${
-          tweet.image_url.length > 1 ? "h-[150px]" : "h-[300px]"
-        }" target="_blank">
-                    <img src="${url}" alt="Tweet media" class="max-h-[300px] max-w-full object-contain rounded-lg">
+                <a href="${url}" class="flex justify-center items-center overflow-hidden target="_blank">
+                    <img src="${url}" alt="Tweet media" class="max-w-full object-contain rounded-lg">
                 </a>
             `;
       });
