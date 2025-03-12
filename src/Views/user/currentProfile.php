@@ -11,10 +11,10 @@
     <div class="flex min-h-screen w-full">
         <?php
         include_once('../_partials/_navbar.php')
-            ?>
-        <div class="flex flex-[4] " >
+        ?>
+        <div class="flex flex-[4] min-h-screen max-h-screen overflow-y-scroll">
             <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed">
-                <div class="h-[54px] px-4 items-center flex gap-5">
+                <div class="h-[54px] px-4 items-center flex gap-5 my-2">
                     <a href="HomeController.php">
                         <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
                             class="h-[24px] w-[24px] invert dark:invert-0">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
 
-                
+
                 <main class="flex-1 relative z-10">
                     <div class="feed-desktop ">
                         <div id="tweets-container">
