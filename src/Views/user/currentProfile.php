@@ -12,8 +12,8 @@
         <?php
         include_once('../_partials/_navbar.php')
         ?>
-        <div class="flex flex-[4] min-h-screen max-h-screen overflow-y-scroll">
-            <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed h-full overflow-y-scroll">
+           <div class="flex flex-[4] min-h-screen max-h-screen h-full overflow-y-scroll">
+           <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed h-full">
                 <div class="h-[54px] px-4 items-center flex gap-5 my-2">
                     <a href="HomeController.php">
                         <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
