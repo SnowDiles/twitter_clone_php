@@ -10,7 +10,6 @@ class SearchFeed {
     this.autoCompleteContainer = document.getElementById("hashtag-desktop");
     this.initializeEventListeners();
     this.loadRetweetListener();
-
   }
   initializeEventListeners() {
     this.searchBar.addEventListener("keypress", (event) => {
@@ -74,7 +73,7 @@ class SearchFeed {
           .substring(1)}`;
         createLinkElement.textContent = hashtag;
         createLinkElement.classList.add("text-primary-500");
-        const hashtagRegex = new RegExp(hashtag, 'g');
+        const hashtagRegex = new RegExp(hashtag, "g");
         tweet.content = tweet.content.replace(
           hashtagRegex,
           createLinkElement.outerHTML
@@ -101,7 +100,7 @@ class SearchFeed {
             `;
     }
     return `
-        <div class="p-4 w-full md:max-w-xl border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
+        <div class="p-4 w-full md:max-w-xl border-b border-b-black dark:border-b-white">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
@@ -231,20 +230,26 @@ class SearchFeed {
     formData.append("action", "getRetweetCount");
     formData.append("postId", postId);
     try {
-      const response = await fetch("../../src/Controllers/SearchController.php", {
-        method: "POST",
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "../../src/Controllers/SearchController.php",
+        {
+          method: "POST",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          body: formData,
+        }
+      );
       const responseData = await response.json();
       if (responseData.success) {
         const retweetCountSpan = button.querySelector("span");
-          retweetCountSpan.textContent = responseData.retweetCount;
+        retweetCountSpan.textContent = responseData.retweetCount;
       }
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du nombre de retweets:", error);
+      console.error(
+        "Erreur lors de la mise à jour du nombre de retweets:",
+        error
+      );
     }
   }
 
@@ -253,13 +258,16 @@ class SearchFeed {
     formData.append("action", "retweet");
     formData.append("postId", postId);
     try {
-      const response = await fetch("../../src/Controllers/SearchController.php", {
-        method: "POST",
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "../../src/Controllers/SearchController.php",
+        {
+          method: "POST",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          body: formData,
+        }
+      );
     } catch (error) {}
   }
   async loadTweets(hashtag) {

@@ -12,7 +12,8 @@
         ?>
         <div class=" flex-[4] min-h-screen max-h-screen overflow-y-scroll">
             <div class="flex">
-                <div class="flex gap-10 p-4 items-center w-full justify-self-center md:max-w-xl border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
+                <div
+                    class="flex gap-10 p-4 items-center w-full justify-self-center md:max-w-xl border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
                     <div class="md:invisible">
                         <img src="../../assets/pptest.jpg" alt="profile picture icon" class="h-12 w-12 rounded-full">
                     </div>
@@ -25,7 +26,7 @@
                         </span>
                         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
                 max-h-64 overflow-y-auto absolute mt-2 z-40" style="display:none" id="hashtag-desktop">
-                            <ul  class="space-y-2">
+                            <ul class="space-y-2">
                             </ul>
                         </div>
                     </div>
@@ -39,7 +40,8 @@
                 </div>
             </div>
             <main class="flex-1 relative z-10 ">
-                <div class="feed-desktop hidden md:block">
+                <div
+                    class="feed-desktop hidden md:block w-full md:max-w-xl md:min-w-xl h-fit-content min-h-full border-r border-r-black dark:border-r-white">
                     <div id="tweets-container">
                     </div>
                     <div id="loading" class="text-center p-4 hidden">

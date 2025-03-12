@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <main class="flex-1 relative z-10 ">
+            <main class="flex-1 relative z-10 border-r border-black dark:border-white">
                 <div class="feed-desktop hidden md:block">
                     <div id="tweets-container">
                     </div>
