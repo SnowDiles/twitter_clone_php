@@ -2,6 +2,7 @@ import { skeleton } from '@skeletonlabs/tw-plugin';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { myCustomTheme } from './my-custom-theme'
+import forms from '@tailwindcss/forms';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -17,6 +18,7 @@ export default {
     extend: {},
   },
   plugins: [
+    forms,
     skeleton({
       themes: {
         custom: [

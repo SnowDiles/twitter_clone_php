@@ -6,6 +6,7 @@ require_once('../Models/UserModel.php');
 
 use Model\Post;
 use Model\User;
+use Model\Auth;
 
 session_start();
 
@@ -54,6 +55,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 } else {
                     echo json_encode(['success' => false, 'message' => 'Post ID manquant']);
                 }
+                break;
+            case 'userEditProfile':
+                $userData = json_decode($_POST['data']);
+                updateUserData($userData);
                 break;
             default:
                 echo json_encode(['success' => false, 'message' => "Méthode non autorisée ou non reconnue"]);
@@ -183,4 +188,59 @@ function determineButtonVisibility(int $connectionUserId, User $targetUser, int 
     }
 
     return !$targetUser->isFollowing($currentUserId, $targetUser->getId());
+}
+
+function updateUserData($userData)
+{
+    $userId = $_SESSION['user_id'];
+    $params = [];
+    $setQueryParams = [];
+    $paramsToBind = [':user_id' => $userId];
+
+    foreach ($userData as $key => $value) {
+        if (!empty($value)) {
+            $params[$key] = $value;
+        }
+    }
+
+    foreach ($params as $key => $value) {
+        if ($key === 'name') {
+            $setQueryParams[] = "`display_name` = :display_name";
+        }
+        if ($key === 'bio') {
+            $setQueryParams[] = "`bio` = :bio";
+        }
+        if ($key === 'email') {
+            $setQueryParams[] = "`email` = :email";
+        }
+        if ($key === 'newPassword') {
+            $setQueryParams[] = "`password_hash` = :new_password";
+        }
+    }
+
+    if (isset($params['newPassword'])) {
+        $auth = new Auth(htmlspecialchars($params['newPassword']), null, null);
+    }
+
+    if (isset($params['name'])) {
+        $paramsToBind[':display_name'] = $params['name'];
+    }
+    if (isset($params['bio'])) {
+        $paramsToBind[':bio'] = $params['bio'];
+    }
+    if (isset($params['email'])) {
+        $paramsToBind[':email'] = $params['email'];
+    }
+    if (isset($params['newPassword'])) {
+        $paramsToBind[':new_password'] = $auth->getPasswordHash();
+    }
+
+    $result = User::updateInformations($setQueryParams, $paramsToBind);
+
+    if ($result) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error',
+        'message' => 'There has been an issue while trying to update your informations']);
+    }
 }

@@ -15,6 +15,7 @@ class User
     private int $id;
     private string $username;
     private string $displayName;
+    private string $email;
     private DateTime $dateOfBirth;
     private ?string $bio;
     private int $theme = 1;
@@ -24,6 +25,7 @@ class User
         int $id,
         string $username,
         string $displayName,
+        string $email,
         DateTime $dateOfBirth,
         ?string $bio = null,
         int $theme = 0,
@@ -32,6 +34,7 @@ class User
         $this->id = $id;
         $this->username = $username;
         $this->displayName = $displayName;
+        $this->email = $email;
         $this->dateOfBirth = $dateOfBirth;
         $this->bio = $bio;
         $this->createdAt = $createdAt;
@@ -119,7 +122,7 @@ class User
         }
 
         $id = $pdo->lastInsertId();
-        return new User($id, $auth->getUsername(), $displayName, $dateOfBirth);
+        return new User($id, $auth->getUsername(), $displayName, $auth->getEmail(), $dateOfBirth);
     }
 
     public static function fetch(int $id): ?User
@@ -143,6 +146,7 @@ class User
             $id,
             $result["username"],
             $result["display_name"],
+            $result["email"],
             new DateTime($result["date_of_birth"]),
             $result["bio"],
             $result["theme_id"],
@@ -239,15 +243,15 @@ class User
     public function getConnections($userId, string $type = 'following'): ?array
     {
         $pdo = DB::connection();
-    
-        $whereCondition = $type === 'follower' 
-            ? 'F.following_id = :user_id' 
+
+        $whereCondition = $type === 'follower'
+            ? 'F.following_id = :user_id'
             : 'F.follower_id = :user_id';
-        
+
         $joinCondition = $type === 'follower'
             ? 'F.follower_id = U.user_id'
             : 'F.following_id = U.user_id';
-    
+
         $query = "SELECT 
                     U.user_id,
                     U.username,
@@ -260,13 +264,13 @@ class User
                     {$whereCondition}
                 ORDER BY 
                     F.followed_at DESC";
-    
+
         $stmt = $pdo->prepare($query);
-    
+
         if (!$stmt->execute([':user_id' => $userId])) {
             return null;
         }
-    
+
         return $stmt->fetchAll();
     }
 
@@ -291,22 +295,48 @@ class User
     public function getConnectionsCount($userId, string $type = 'following'): int
     {
         $pdo = DB::connection();
-    
-        $whereCondition = $type === 'follower' 
-            ? 'following_id = :user_id' 
+
+        $whereCondition = $type === 'follower'
+            ? 'following_id = :user_id'
             : 'follower_id = :user_id';
-    
+
         $query = "SELECT COUNT(*) 
                   FROM Follows 
                   WHERE {$whereCondition}";
-    
+
         $stmt = $pdo->prepare($query);
-    
+
         if (!$stmt->execute([':user_id' => $userId])) {
             return 0;
         }
-    
+
         return (int) $stmt->fetchColumn();
+    }
+
+    public static function updateInformations($setQueryParams, $paramsToBind): bool
+    {
+        $pdo = DB::connection();
+
+        $query = "UPDATE `Users` SET ";
+        $query .= implode(', ', $setQueryParams);
+        $query .= " WHERE `Users`.`user_id` = :user_id;";
+
+        $stmt = $pdo->prepare($query);
+        return $stmt->execute($paramsToBind);
+    }
+
+    public static function getPasswordHash(int $userId): ?string
+    {
+        $pdo = DB::connection();
+        $query = "SELECT password_hash FROM Users WHERE user_id = :user_id LIMIT 1";
+        $stmt = $pdo->prepare($query);
+
+        if (!$stmt->execute([':user_id' => $userId])) {
+            return null;
+        }
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['password_hash'] : null;
     }
 
     public function getId(): int
@@ -325,12 +355,17 @@ class User
     }
 
     public function getDateOfBirth(): DateTime
-    {   
+    {
         return $this->dateOfBirth;
     }
 
     public function getBio(): ?string
     {
         return $this->bio;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 }

@@ -12,9 +12,6 @@
     "watch:php": "nodemon --watch src --ext php --exec 'echo \"PHP files changed\"'",
     "dev": "concurrently \"npm run watch:css\" \"npm run watch:php\"",
     "build:css": "postcss ./public/css/style.css -o dist/styles.css",
-    "watch:css": "postcss ./public/css/style.css -o dist/styles.css --watch",
-    "watch:php": "nodemon --watch src --ext php --exec 'echo \"PHP files changed\"'",
-    "dev": "concurrently \"npm run watch:css\" \"npm run watch:php\"",
     "lint:php": "./vendor/bin/phpcs --standard=PSR12",
     "sniff:src": "./vendor/bin/phpcs --standard=PSR12 src",
     "sniff:controllers": "./vendor/bin/phpcs --standard=PSR12 src/Controllers",
@@ -39,6 +36,7 @@
     "@skeletonlabs/tw-plugin": "^0.4.1"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
     "autoprefixer": "^10.4.16",
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.9",

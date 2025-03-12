@@ -1,5 +1,5 @@
 <head>
-    <title><?= $CurrentUser->getDisplayName() ?> (@<?= $CurrentUser->getUsername() ?>)</title>
+    <title><?php echo $CurrentUser->getDisplayName() ?> (@<?php echo $CurrentUser->getUsername() ?>)</title>
     <?php
     include_once('../_partials/_head.php');
     ?>
@@ -20,7 +20,7 @@
                             class="h-[24px] w-[24px] invert dark:invert-0">
                     </a>
                     <div class="flex flex-col">
-                        <span><?= $CurrentUser->getDisplayName() ?></span>
+                        <span><?php echo $CurrentUser->getDisplayName() ?></span>
                         <span class="text-xs text-tertiary-500">12 posts</span>
                     </div>
                 </div>
@@ -33,7 +33,8 @@
                         <div class="flex items-center justify-between px-3">
                             <div class="relative">
                                 <div class="absolute">
-                                    <div class="rounded-full w-max absolute border border-black dark:border-white top-1/2 transform 
+                                    <div class="rounded-full w-max absolute border 
+                                    border-black dark:border-white top-1/2 transform 
                                 translate-x-0 -translate-y-[85%]">
                                         <img src="../../assets/pptest.jpg" alt="profile picture"
                                             class="w-20 h-20 rounded-full">
@@ -43,7 +44,7 @@
                             <div class="flex">
                                 <?php if ($_SESSION['user_id'] == $CurrentUser->getId()) { ?>
                                     <button class="btn variant-ringed-secondary 
-                                            mt-3 invert dark:invert-0 text-white dark:text-dark">
+                                            mt-3 invert dark:invert-0 text-white dark:text-dark" onclick="openModal()">
                                         Editer le profile
                                     </button>
                                 <?php } else { ?>
@@ -61,21 +62,25 @@
                         </div>
 
                         <div class="px-3 flex flex-col mb-3">
-                            <span class="font-bold"><?= $CurrentUser->getDisplayName() ?></span>
-                            <span class="text-xs text-tertiary-500">@<?= $CurrentUser->getUsername() ?></span>
+                            <span class="font-bold"><?php echo $CurrentUser->getDisplayName() ?></span>
+                            <span class="text-xs text-tertiary-500">@<?php echo $CurrentUser->getUsername() ?></span>
                         </div>
 
                         <div class="mx-3 mb-3">
-                            <p><?= $CurrentUser->getBio() ?></p>
+                            <p><?php echo $CurrentUser->getBio() ?></p>
                         </div>
 
                         <div class="mx-3 flex gap-[6px] mb-3">
-                            <a href="./UserController.php?page=following&userId=<?= $CurrentUser->getId() ?>">
-                                <span class="mr-1"><?= $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'following') ?></span>
+                            <a href="./UserController.php?page=following&userId=<?php echo $CurrentUser->getId() ?>">
+                                <span class="mr-1">
+                                    <?php echo $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'following') ?>
+                                </span>
                                 <span class="text-tertiary-500">Abonnements</span>
                             </a>
-                            <a href="./UserController.php?page=follower&userId=<?= $CurrentUser->getId() ?>">
-                                <span class="mr-1"><?= $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'follower') ?></span>
+                            <a href="./UserController.php?page=follower&userId=<?php echo $CurrentUser->getId() ?>">
+                                <span class="mr-1">
+                                    <?php echo $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'follower') ?>
+                                </span>
                                 <span class="text-tertiary-500">Abonnés</span>
                             </a>
                         </div>
@@ -95,4 +100,89 @@
             </main>
         </div>
     </div>
+
+    <div>
+        <div class="bg-black bg-opacity-50 w-full 
+                    h-full fixed top-0 left-0 flex items-center 
+                    justify-center hidden z-[10]" 
+            id="edit-profile-modal">
+            <div class="h-[700px] w-[560px] card p-4 text-token space-y-4 max-w-[560px]">
+                <div class="flex justify-between items-center">
+                    <button onclick="closeModal()">
+                        <img src="../../assets/icons/close.png" alt="close icon" class="h-[30px] w-[30px] invert dark:invert-0">
+                    </button>
+                    <span class="text-xl md:text-3xl font-bold mr-[4em]">Edit profile</span>
+                    <button type="button" class="btn variant-filled" onclick="saveChanges()">Sauvegarder</button>
+                </div>
+    
+                <div class="h-[150px] w-full bg-[#f0f0f0]">
+                    <div 
+                        class="relative w-full h-full opacity-75" 
+                        style="background-image: url('../../assets/userid_1500x500.png'); 
+                                background-size: cover; background-position: center;">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <img src="../../assets/icons/edit-picture.png" alt="edit icon" class="w-10 h-10">
+                        </div>
+                    </div>
+                    <div 
+                        class="absolute border border-black top-1/2 
+                            rounded-full transform translate-x-[3em] -translate-y-[15em] bg-cover 
+                            bg-center w-20 h-20 flex items-center justify-center opacity-75" 
+                        style="background-image: url('../../assets/pptest.jpg');">
+                        <img src="../../assets/icons/edit-picture.png" alt="edit icon" class="w-[30px]">
+                    </div>
+                </div>
+    
+                <div class="flex flex-col">
+                    <span class="self-center mb-2 text-xl">Modifier mes informations</span>
+                    <form action="" class="flex flex-col gap-4" id="user-edit-profile">
+                        <input 
+                            class="input" 
+                            type="text"
+                            placeholder="<?php echo $CurrentUser->getDisplayName() ?>" 
+                            name="name" />
+                        <?php if ($CurrentUser->getBio() && strlen($CurrentUser->getBio()) > 0) {
+                            $bio = $CurrentUser->getBio();
+                        } else {
+                            $bio = "Bio...";
+                        }
+                        ?>
+                        <textarea 
+                            class="textarea h-[58px] resize-none" 
+                            maxlength="160" placeholder="<?php echo $bio ?>" name="bio"></textarea>
+                        <input class="input" type="password" name="oldPassword" placeholder="Ancien mot de passe" />
+                        <input class="input" type="password" name="newPassword" placeholder="Nouveau mot de passe" />
+                        <input 
+                            class="input" 
+                            type="email" 
+                            name="email" 
+                            placeholder="<?php echo $CurrentUser->getEmail() ?>" 
+                        />
+                        <div class="flex justify-evenly">
+                            <div 
+                                onclick="selectTheme('light')" 
+                                class="bg-white text-black 
+                                p-2 flex items-center flex-row-reverse gap-3 h-[40px] cursor-pointe"
+                            >
+                                <div role="radio"></div>
+                                <div><span>Light</span></div>
+                                <input type="radio" name="themeLight" value="light">
+                            </div>
+                            <div 
+                                onclick="selectTheme('dark')" 
+                                class="bg-black text-white p-2 flex 
+                                items-center flex-row-reverse gap-3 h-[40px] cursor-pointer"
+                            >
+                                <div role="radio"></div>
+                                <div><span>Dark</span></div>
+                                <input type="radio" name="themeDark" value="dark">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    <script src="../../public/js/editProfile.js"></script>
 </body>
