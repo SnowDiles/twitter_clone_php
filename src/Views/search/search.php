@@ -41,8 +41,8 @@
             </div>
             <main class="flex-1 relative z-10 ">
                 <div
-                    class="feed-desktop hidden md:block w-full md:max-w-xl md:min-w-xl h-fit-content min-h-full border-r border-r-black dark:border-r-white">
-                    <div id="tweets-container">
+                class="feed-desktop hidden md:flex min-h-screen w-full flex-[4] max-h-screen">
+                    <div id="tweets-container" class="flex-1 h-full min-h-screen flex flex-col md:max-w-xl border-r border-r-black">
                     </div>
                     <div id="loading" class="text-center p-4 hidden">
                         <span>Chargement...</span>
