@@ -4,3 +4,4 @@ assets/upload/
 /dist
 /vendor/
 test/
+.vscode/
