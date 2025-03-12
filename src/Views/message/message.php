@@ -43,11 +43,12 @@
                     </svg>
                 </button>
                 <span>Nouveau message</span>
-                <button class="btn variant-filled-primary ml-auto">Envoyer</button>
+                <button id="send-button" class="btn variant-filled-primary ml-auto">Envoyer</button>
             </div>
             <form class="flex flex-col gap-4">
-                <input class="input p-2 w-full" placeholder="À:">
-                <textarea class="textarea p-2 w-full min-h-32 max-h-64" placeholder="Votre message"></textarea>
+                <input id="receiver-field" class="input p-2 w-full" placeholder="À:">
+                <textarea id="message-content-field" class="textarea p-2 w-full min-h-32 max-h-64"
+                placeholder="Votre message"></textarea>
             </form>
         </div>
     </div>

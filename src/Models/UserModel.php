@@ -74,7 +74,7 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function retrieveIdWithUsername($username): ?int
+    public static function retrieveIdWithUsername(string $username): ?int
     {
         $pdo = DB::connection();
         $query = "SELECT user_id FROM Users WHERE username = ? LIMIT 1";
