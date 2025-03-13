@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="<?= isset($_SESSION['theme']) ? $_SESSION['theme'] : 'light' ?>">
+<html lang="fr" class="<?= isset($_SESSION['theme']) ? $_SESSION['theme'] : 'dark' ?>">
 
 <head>
     <meta charset="UTF-8">
