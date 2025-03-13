@@ -35,7 +35,8 @@
 
     <div id="prompt-background"
         class="absolute w-screen h-screen bg-slate-100 bg-opacity-60 flex justify-center items-center hidden bg-li">
-        <div class="flex flex-col gap-4 p-4 rounded-lg h-full w-full md:max-w-2xl md:w-4/6 md:h-auto card max-md:rounded-none">
+        <div class="flex flex-col gap-4 p-4 rounded-lg h-full w-full 
+        md:max-w-2xl md:w-4/6 md:h-auto card max-md:rounded-none">
             <div class="flex items-center w-full gap-4">
                 <button id="close-button">
                     <svg class="w-[24] h-[24] lucide lucide-x" xmlns="http://www.w3.org/2000/svg"
