@@ -9,7 +9,7 @@
 
     <div class="flex w-full md:w-[400px] border-r border-black dark:border-white">
         <div class="flex flex-col items-center w-full">
-            <div id="message-header" class="w-full h-[54px] p-4 items-center flex gap-5 border-b border-gray-500">
+            <div id="message-header" class="w-full h-[54px] p-4 items-center flex gap-5 border-b border-black dark:border-white">
                 <a href="HomeController.php">
                     <img src="../../assets/icons/arrow-back.png"
                         alt="arrow back icon"
