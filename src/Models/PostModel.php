@@ -109,14 +109,14 @@ class Post
     return $stmt->fetchAll();
   }
 
-  public static function getRepostByUserId(int $userId): ?array {
+ public static function getRepostByUserId(int $userId): ?array {
     $pdo = DB::connection();
     $query = "SELECT
                 p.post_id,
                 p.content,
                 u.username,
                 u.display_name,
-                p.created_at,
+                r.created_at AS repost_created_at, 
                 u.user_id
               FROM 
                 Reposts r
@@ -136,8 +136,7 @@ class Post
     }
 
     return $stmt->fetchAll();
-  }
-
+}
   public static function getPostMediaByPostId(int $postId): ?array
   {
     $pdo = DB::connection();
