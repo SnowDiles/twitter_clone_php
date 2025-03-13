@@ -12,10 +12,9 @@
         <?php
         include_once('../_partials/_navbar.php')
         ?>
-           <div class="flex flex-[4] min-h-screen max-h-screen h-full overflow-y-scroll">
-           <main class="flex flex-col 
-           w-full md:max-w-xl border-r 
-           border-r-black dark:border-r-white border-r-dashed h-full">
+        <div class="flex flex-[4] min-h-screen max-h-screen h-full overflow-y-scroll">
+            <main class="flex flex-col w-full md:max-w-xl border-r
+             border-r-black dark:border-r-white border-r-dashed h-full">
                 <div class="h-[54px] px-4 items-center flex gap-5 my-2">
                     <a href="HomeController.php">
                         <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
@@ -122,32 +121,32 @@
                     <span class="text-xl md:text-3xl font-bold mr-[4em]">Edit profile</span>
                     <button type="button" class="btn variant-filled" onclick="saveChanges()">Sauvegarder</button>
                 </div>
-    
+
                 <div class="h-[150px] w-full bg-[#f0f0f0]">
-                    <div 
-                        class="relative w-full h-full opacity-75" 
+                    <div
+                        class="relative w-full h-full opacity-75"
                         style="background-image: url('../../assets/userid_1500x500.png'); 
                                 background-size: cover; background-position: center;">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <img src="../../assets/icons/edit-picture.png" alt="edit icon" class="w-10 h-10">
                         </div>
                     </div>
-                    <div 
+                    <div
                         class="absolute border border-black top-1/2 
                             rounded-full transform translate-x-[3em] -translate-y-[15em] bg-cover 
-                            bg-center w-20 h-20 flex items-center justify-center opacity-75" 
+                            bg-center w-20 h-20 flex items-center justify-center opacity-75"
                         style="background-image: url('../../assets/pptest.jpg');">
                         <img src="../../assets/icons/edit-picture.png" alt="edit icon" class="w-[30px]">
                     </div>
                 </div>
-    
+
                 <div class="flex flex-col">
                     <span class="self-center mb-2 text-xl">Modifier mes informations</span>
                     <form action="" class="flex flex-col gap-4" id="user-edit-profile">
                         <input 
                             class="input dark:border dark:!border-white" 
                             type="text"
-                            placeholder="<?php echo $CurrentUser->getDisplayName() ?>" 
+                            placeholder="<?php echo $CurrentUser->getDisplayName() ?>"
                             name="name" />
                         <?php if ($CurrentUser->getBio() && strlen($CurrentUser->getBio()) > 0) {
                             $bio = $CurrentUser->getBio();
@@ -212,9 +211,14 @@
                                 <div><span>Dark</span></div>
                             </div>
                         </div>
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="Logout.php" class="underline text-tertiary-500 hover:text-tertiary-700">
+                                Voulez-vous vous déconnecter
+                            </a>
+                            <img src="../../assets/icons/logout.png" alt="logout icon" class="w-[20px] h-[20px">
+                        </div>
                     </form>
                 </div>
-    
             </div>
         </div>
     </div>

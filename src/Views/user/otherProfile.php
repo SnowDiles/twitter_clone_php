@@ -3,7 +3,7 @@
     <?php
     include_once('../_partials/_head.php');
     ?>
-        <script src="../../public/js/user.js"></script>
+    <script src="../../public/js/user.js"></script>
 
 </head>
 
@@ -13,7 +13,7 @@
         include_once('../_partials/_navbar.php')
         ?>
         <div class="flex flex-[4]">
-        <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed">
+            <main class="flex flex-col w-full md:max-w-xl border-r border-r-black dark:border-r-white border-r-dashed">
 
                 <div class="h-[54px] px-4 items-center flex gap-5">
                     <a href="HomeController.php">
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="border-b border-b-black dark:border-b-white border-t border-t-black dark:border-t-white">
-                <div>
+                    <div>
                         <img src="../../assets/userid_1500x500.png" alt="profile banner" class="w-full">
                     </div>
 
@@ -66,11 +66,15 @@
 
                         <div class="mx-3 flex gap-[6px] mb-3">
                             <a href="./UserController.php?page=following&userId=<?= $otherUser->getId() ?>">
-                                <span class="mr-1"><?= $otherUser->getConnectionsCount($otherUser->getId(), 'following') ?></span>
+                                <span class="mr-1">
+                                    <?= $otherUser->getConnectionsCount($otherUser->getId(), 'following') ?>
+                                </span>
                                 <span class="text-tertiary-500">Abonnements</span>
                             </a>
                             <a href="./UserController.php?page=follower&userId=<?= $otherUser->getId() ?>">
-                                <span class="mr-1"><?= $otherUser->getConnectionsCount($otherUser->getId(), 'follower') ?></span>
+                                <span class="mr-1">
+                                    <?= $otherUser->getConnectionsCount($otherUser->getId(), 'follower') ?>
+                                </span>
                                 <span class="text-tertiary-500">Abonnés</span>
                             </a>
                         </div>
