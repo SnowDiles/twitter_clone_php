@@ -8,6 +8,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let confirmPassword = document.getElementById("confirm-password");
     let loginBtn = document.getElementById("login-button");
     let alreadyBtn = document.getElementById("existing-account-button");
+    const modalForm = document.getElementById("modal-form");
+
+    const createHiddenTheme = document.createElement("input");
+    createHiddenTheme.type = "hidden";
+    createHiddenTheme.name = "theme";
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        createHiddenTheme.value = "dark";
+    } else {
+        createHiddenTheme.value = "light";
+    }
 
     document.getElementById("register-open-modal").addEventListener('click', function() {
         modalContainer.style.display = "";
@@ -20,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alreadyBtn.innerHTML = "Déjà un compte ?";
         confirmPassword.style.visibility = "";
         confirmPassword.required = true;
+        modalForm.appendChild(createHiddenTheme);
     });
 
     document.getElementById("login-open-modal").addEventListener('click', function() {

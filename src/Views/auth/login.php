@@ -1,6 +1,3 @@
-<!doctype html>
-<html class="dark">
-
 <head>
     <title>Y - login</title>
     <?php include_once("../_partials/_head.php") ?>
@@ -42,8 +39,8 @@
             <h2 class="text-white text-2xl font-medium text-center mb-8" id="modal-title">
                 Inscrivez-vous !
             </h2>
-            <form method="POST" class="space-y-4">
-                <input type="text" name="nom" placeholder="Nom" id="name-input" maxlength="10"
+            <form method="POST" class="space-y-4" id="modal-form">
+                <input type="text" name="nom" placeholder="Nom" id="name-input"
                     class="w-full bg-black border border-gray-700 rounded px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                     required />
                 <input type="email" name="email" placeholder="Email"
@@ -76,5 +73,3 @@
 
     <script src="../../public/js/login.js"></script>
 </body>
-
-</html>

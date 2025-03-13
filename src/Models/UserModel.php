@@ -28,7 +28,7 @@ class User
         string $email,
         DateTime $dateOfBirth,
         ?string $bio = null,
-        int $theme = 0,
+        int $theme = 1,
         DateTime $createdAt = new DateTime()
     ) {
         $this->id = $id;
@@ -89,7 +89,8 @@ class User
     public static function signUp(
         Auth $auth,
         string $displayName,
-        DateTime $dateOfBirth
+        DateTime $dateOfBirth,
+        int $theme = 1
     ): ?User {
         $pdo = DB::connection();
 
@@ -104,8 +105,8 @@ class User
             return null;
         }
 
-        $query = "INSERT INTO Users (username, display_name, password_hash, email, date_of_birth)
-        VALUES (:username, :display_name, :password_hash, :email, :date_of_birth);";
+        $query = "INSERT INTO Users (username, display_name, password_hash, email, date_of_birth, theme_id)
+        VALUES (:username, :display_name, :password_hash, :email, :date_of_birth, :theme_id);";
 
         $stmt = $pdo->prepare($query);
 
@@ -115,6 +116,7 @@ class User
             ":password_hash" => $auth->getPasswordHash(),
             ":email" => $auth->getEmail(),
             ":date_of_birth" => $dateOfBirth->format("Y-m-d"),
+            ":theme_id" => $theme,
         ];
 
         if (!$stmt->execute($params)) {
@@ -339,6 +341,15 @@ class User
         return $result ? $result['password_hash'] : null;
     }
 
+    public static function updateTheme(int $userId, string $theme): bool
+    {
+        $pdo = DB::connection();
+        $query = "UPDATE Users 
+        SET theme_id = (SELECT theme_id FROM Themes WHERE theme_name = :theme) WHERE user_id = :user_id";
+        $stmt = $pdo->prepare($query);
+        return $stmt->execute([':user_id' => $userId, ':theme' => $theme]);
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -362,6 +373,11 @@ class User
     public function getBio(): ?string
     {
         return $this->bio;
+    }
+
+    public function getTheme(): int
+    {
+        return $this->theme;
     }
 
     public function getEmail(): string

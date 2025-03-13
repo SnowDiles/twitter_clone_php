@@ -72,6 +72,12 @@ if ($method) {
                         exit();
                     }
 
+                    if (htmlspecialchars($formData['theme']) === 'dark') {
+                        $theme = 1;
+                    } else {
+                        $theme = 2;
+                    }
+
                     $dateOfBirth = !empty($formData['date_of_birth'])
                         ? new DateTime($formData['date_of_birth'])
                         : new DateTime();
@@ -85,11 +91,15 @@ if ($method) {
                     $user = User::signUp(
                         $auth,
                         htmlspecialchars($formData['nom']),
-                        $dateOfBirth
+                        $dateOfBirth,
+                        $theme
                     );
 
                     if ($user) {
                         $_SESSION['user_id'] = $user->getId();
+                        $theme = $user->getTheme() === 1 ? 'dark' : 'light';
+                        $_SESSION['theme'] = $theme;
+                        
                         header('Location: ./HomeController.php');
                         exit();
                     }

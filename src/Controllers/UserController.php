@@ -60,6 +60,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 $userData = json_decode($_POST['data']);
                 updateUserData($userData);
                 break;
+            case 'updateUserTheme':
+                $theme = $_POST['data'];
+                updateUserTheme($theme);
+                break;
             default:
                 echo json_encode(['success' => false, 'message' => "Méthode non autorisée ou non reconnue"]);
                 break;
@@ -223,13 +227,13 @@ function updateUserData($userData)
     }
 
     if (isset($params['name'])) {
-        $paramsToBind[':display_name'] = $params['name'];
+        $paramsToBind[':display_name'] = htmlspecialchars($params['name']);
     }
     if (isset($params['bio'])) {
-        $paramsToBind[':bio'] = $params['bio'];
+        $paramsToBind[':bio'] = htmlspecialchars($params['bio']);
     }
     if (isset($params['email'])) {
-        $paramsToBind[':email'] = $params['email'];
+        $paramsToBind[':email'] = htmlspecialchars($params['email']);
     }
     if (isset($params['newPassword'])) {
         $paramsToBind[':new_password'] = $auth->getPasswordHash();
@@ -242,5 +246,19 @@ function updateUserData($userData)
     } else {
         echo json_encode(['status' => 'error',
         'message' => 'There has been an issue while trying to update your informations']);
+    }
+}
+
+function updateUserTheme($theme)
+{
+    $userId = $_SESSION['user_id'];
+    $result = User::updateTheme($userId, htmlspecialchars($theme));
+
+    if ($result) {
+        $_SESSION['theme'] = $theme;
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error',
+        'message' => 'There has been an issue while trying to update your theme']);
     }
 }

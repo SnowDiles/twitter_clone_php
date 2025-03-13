@@ -18,6 +18,11 @@ const selectTheme = (theme) => {
   document.querySelectorAll('input[name="theme"]').forEach((input) => {
     input.checked = input.value === theme;
   });
+  const header = document.querySelector("html");
+  header.classList.remove("light", "dark");
+  header.classList.add(theme);
+
+  updateUserTheme(theme);
 };
 
 const userFormData = async () => {
@@ -80,6 +85,30 @@ const saveChanges = async () => {
     } catch (error) {
       console.error("Error : ", error);
     }
+  }
+};
+
+const updateUserTheme = (theme) => {
+  const formData = new FormData();
+  formData.append("action", "updateUserTheme");
+  formData.append("data", theme);
+
+  try {
+    fetch("../../src/Controllers/UserController.php", {
+      method: "POST",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status !== "success") {
+          alert(data.message);
+        }
+      });
+  } catch (error) {
+    console.error("Error : ", error);
   }
 };
 
