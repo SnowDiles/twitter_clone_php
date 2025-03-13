@@ -60,3 +60,6 @@ const sendMessage = async (receiver, content) => {
         console.error("Error while sending message:", error);
       }
 }
+
+// Conversation
+
