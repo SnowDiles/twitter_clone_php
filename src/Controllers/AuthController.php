@@ -57,6 +57,9 @@ if ($method) {
 
                     if ($id) {
                         $_SESSION['user_id'] = $id;
+                        $user = User::fetch($id);
+                        $theme = $user->getTheme() === 1 ? 'dark' : 'light';
+                        $_SESSION['theme'] = $theme;
                         header('Location: ./HomeController.php');
                         exit();
                     }
@@ -99,7 +102,7 @@ if ($method) {
                         $_SESSION['user_id'] = $user->getId();
                         $theme = $user->getTheme() === 1 ? 'dark' : 'light';
                         $_SESSION['theme'] = $theme;
-                        
+
                         header('Location: ./HomeController.php');
                         exit();
                     }
