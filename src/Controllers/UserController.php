@@ -109,23 +109,24 @@ function getPostsById($id)
 
         foreach ($reposts as &$repost) {
             $repost['repost'] = 'vous avez retweete';
+            $repost['created_at'] = $repost['repost_created_at'];
         }
         unset($repost);
 
-        $posts = array_merge($posts, $reposts);
+        $posts = array_merge($reposts, $posts);
+
+        usort($posts, function ($a, $b) {
+            return strtotime($b['created_at']) - strtotime($a['created_at']);
+        });
 
         if ($posts) {
             foreach ($posts as &$post) {
                 $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
-
                 $media = Post::getPostMediaByPostId($post['post_id']);
                 $post['media'] = $media;
             }
             unset($post);
 
-            usort($posts, function ($a, $b) {
-                return strtotime($b['created_at']) - strtotime($a['created_at']);
-            });
 
             if (!empty($posts)) {
                 echo json_encode(['success' => true, 'posts' => $posts]);
@@ -244,8 +245,10 @@ function updateUserData($userData)
     if ($result) {
         echo json_encode(['status' => 'success']);
     } else {
-        echo json_encode(['status' => 'error',
-        'message' => 'There has been an issue while trying to update your informations']);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'There has been an issue while trying to update your informations'
+        ]);
     }
 }
 
@@ -258,7 +261,9 @@ function updateUserTheme($theme)
         $_SESSION['theme'] = $theme;
         echo json_encode(['status' => 'success']);
     } else {
-        echo json_encode(['status' => 'error',
-        'message' => 'There has been an issue while trying to update your theme']);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'There has been an issue while trying to update your theme'
+        ]);
     }
 }
