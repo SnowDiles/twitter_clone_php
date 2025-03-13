@@ -345,8 +345,10 @@ class User
     {
         $pdo = DB::connection();
         $query = "UPDATE Users 
-        SET theme_id = (SELECT theme_id FROM Themes WHERE theme_name = :theme) WHERE user_id = :user_id";
+        SET theme_id = COALESCE((SELECT theme_id FROM Themes WHERE theme_name = :theme), 1)  WHERE user_id = :user_id";
+
         $stmt = $pdo->prepare($query);
+
         return $stmt->execute([':user_id' => $userId, ':theme' => $theme]);
     }
 
