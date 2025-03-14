@@ -100,7 +100,7 @@ const createConversationElement = (conversation) => {
     const timeDisplay = calculateRelativeTime(conversation.last_message_time);
 
     return `
-        <button id="conversation-toggle" class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg" data-user-id="${conversation.user_id}">
+        <button id="conversation-toggle" class="w-full text-left truncate hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg" data-user-id="${conversation.user_id}">
             <div class="flex items-start space-x-3 mb-4 w-full">
                 <img src="../../assets/icons/profile.png" alt="Profile" class="w-12 h-12 rounded-full flex-shrink-0 object-cover invert dark:invert-0">
                 <div class="flex-1">
