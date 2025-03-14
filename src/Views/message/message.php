@@ -9,7 +9,7 @@
         <?php require_once('../_partials/_navbar.php') ?>
     </div>
 
-    <div id="conversation-section" class="md:flex w-full md:w-[400px] md:border-r border-black dark:border-white">
+    <div id="conversation-section" class="md:flex hidden w-full md:w-[400px] md:border-r border-black dark:border-white">
         <div class="flex flex-col items-center w-full">
             <div id="message-header"
                 class="w-full h-[54px] p-4 items-center flex gap-5 border-b border-black dark:border-white">
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col flex-[3] p-4 gap-4 max-md:pb-24 min-h-screen" id="message-feed-container">
+    <div class="flex flex-col flex-[3] p-4 gap-4 max-md:pb-24 min-h-screen max-w-xl border-r border-r-black dark:border-r-white" id="message-feed-container">
         <div class="flex-grow overflow-hidden">
             <div id="message-feed" class="overflow-y-auto h-full">
                 <a href="HomeController.php" id="toggle">
@@ -58,7 +58,7 @@
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                     </button>
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
                         <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
