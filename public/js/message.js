@@ -84,13 +84,20 @@ const sendMessage = async (receiver, content) => {
     }
 }
 
-const createConversationElement = (conversation) => {
-    const timestamp = new Date(conversation.last_message_time);
+const calculateRelativeTime = (dateString) => {
+    const postDate = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now - timestamp);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffSeconds = Math.floor((now - postDate) / 1000);
 
-    const timeDisplay = diffDays === 1 ? "1j" : `${diffDays}j`;
+    if (diffSeconds < 60) return "à l'instant";
+    if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)}m`;
+    if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)}h`;
+    if (diffSeconds < 604800) return `${Math.floor(diffSeconds / 86400)}j`;
+    return `${Math.floor(diffSeconds / 604800)}sem`;
+}
+
+const createConversationElement = (conversation) => {
+    const timeDisplay = calculateRelativeTime(conversation.last_message_time);
 
     return `
         <button class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg" data-user-id="${conversation.user_id}">
@@ -142,7 +149,7 @@ const renderConversations = (conversations) => {
         button.addEventListener('click', () => {
             feed.innerHTML = '';
             const userId = button.getAttribute('data-user-id');
-            setCurrentReceiver(userId); 
+            setCurrentReceiver(userId);
             getMessages(userId);
         });
     });
@@ -150,12 +157,12 @@ const renderConversations = (conversations) => {
 
 const handleSendMessage = async () => {
     const content = messageInput.value.trim();
-    
+
     if (!content) {
         alert("Le message ne peut pas être vide");
         return;
     }
-    
+
     if (!currentReceiverId) {
         alert("Veuillez sélectionner un destinataire");
         return;
