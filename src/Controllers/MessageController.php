@@ -39,6 +39,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             case 'getConversations':
                 getConversations();
                 break;
+            case 'getMessages':
+                $otherId = htmlspecialchars($_POST['otherId']);
+                getMessages($otherId);
+                die();
             default:
                 echo json_encode(['success' => false, 'message' => "Méthode non reconnue"]);
         }
@@ -50,6 +54,34 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 }
 
 require_once('../Views/message/message.php');
+
+function getMessages($otherId)
+{
+    $currentUserId = $_SESSION['user_id'];
+
+    $messages = Message::getConversationMessages($currentUserId, $otherId);
+
+    if ($messages) {
+        echo json_encode([
+            'success' => true, 
+            'messages' => array_map(function($message) use ($currentUserId) {
+                return [
+                    'id' => $message['message_id'],
+                    'content' => $message['content'],
+                    'timestamp' => $message['sent_at'],
+                    'isSelf' => $message['sender_id'] == $currentUserId,
+                    'username' => $message['sender_id'] == $currentUserId ? 
+                        'Moi' : $message['sender_username']
+                ];
+            }, $messages)
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => "Aucun message trouvé"
+        ]);
+    }
+}
 
 function getConversations()
 {

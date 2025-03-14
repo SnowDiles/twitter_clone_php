@@ -110,7 +110,6 @@ const createNewMessageButton = () => {
     return button;
 };
 
-
 const renderConversations = (conversations) => {
     if (!conversations || !conversations.length) {
         conversationsContainer.innerHTML = '<p class="text-center text-gray-500">Aucune conversation</p>';
@@ -120,6 +119,14 @@ const renderConversations = (conversations) => {
     conversationsContainer.innerHTML = conversations
         .map(conv => createConversationElement(conv))
         .join('');
+
+    document.querySelectorAll('[data-user-id]').forEach(button => {
+        button.addEventListener('click', () => {
+            feed.innerHTML = '';
+            const userId = button.getAttribute('data-user-id');
+            getMessages(userId);
+        });
+    });
 };
 
 const updateHeader = (hasConversations) => {
@@ -157,23 +164,39 @@ const getConversations = async () => {
 
 const displayConversations = () => {
     getConversations();
-};
+};  
 
+const getMessages = async (otherId) => {
+    const formData = new FormData();
+    formData.append("otherId", otherId);
+    formData.append("action", "getMessages");
 
-document.addEventListener('DOMContentLoaded', () => {
-    displayConversations();
-    const textareaDesktop = document.getElementById("receiver-field");
-    const userListDivDesktop = document.getElementById("user-desktop");
-    const autoComplete = new handleAutoCompletion(
-      textareaDesktop,
-      textareaDesktop,
-      userListDivDesktop,
-      userListDivDesktop,
-      "../../src/Controllers/MessageController.php",
-      "@"
-    );
-    autoComplete.init();
-});
+    try {
+        const response = await fetch("../../src/Controllers/MessageController.php", {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: formData,
+        });
+        const responseData = await response.json();
+
+        if (responseData.success) {
+            responseData.messages.forEach(message => {
+                displayMessage(
+                    message.isSelf,
+                    message.content,
+                    message.username,
+                    message.timestamp
+                );
+            });
+        } else {
+            alert(responseData.message);
+        }
+    } catch (error) {
+        console.error("Error while fetching messages:", error);
+    }
+}
 
 const displayMessage = (isSelf, content, username = '', timestamp = '2025-03-12 15:45:13') => {
     const messageContainer = document.createElement("div");
@@ -210,5 +233,17 @@ const displayMessage = (isSelf, content, username = '', timestamp = '2025-03-12 
     feed.appendChild(messageContainer);
 }
 
-displayMessage(true, "It's my message");
-displayMessage(false, "It's their message", "John Doe");
+document.addEventListener('DOMContentLoaded', () => {
+    displayConversations();
+    const textareaDesktop = document.getElementById("receiver-field");
+    const userListDivDesktop = document.getElementById("user-desktop");
+    const autoComplete = new handleAutoCompletion(
+      textareaDesktop,
+      textareaDesktop,
+      userListDivDesktop,
+      userListDivDesktop,
+      "../../src/Controllers/MessageController.php",
+      "@"
+    );
+    autoComplete.init();
+});

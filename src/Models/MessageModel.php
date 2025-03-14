@@ -65,15 +65,17 @@ class Message
                     FROM Messages m
                     JOIN Users u_sender ON m.sender_id = u_sender.user_id
                     JOIN Users u_receiver ON m.receiver_id = u_receiver.user_id
-                    WHERE (m.sender_id = :userId AND m.receiver_id = :otherUserId)
-                    OR (m.sender_id = :otherUserId AND m.receiver_id = :userId)
+                    WHERE (m.sender_id = :userId1 AND m.receiver_id = :otherUserId1)
+                    OR (m.sender_id = :userId2 AND m.receiver_id = :otherUserId2)
                     ORDER BY m.sent_at DESC
                 ";
 
         $stmt = $pdo->prepare($sqlQuery);
         $params = [
-            ":userId" => $userId,
-            ":otherUserId" => $otherUserId,
+            ":userId1" => $userId,
+            ":otherUserId1" => $otherUserId,
+            ":userId2" => $otherUserId,
+            ":otherUserId2" => $userId
         ];
 
         $stmt->execute($params);
