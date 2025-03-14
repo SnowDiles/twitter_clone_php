@@ -1,10 +1,12 @@
 <head>
     <title>Y - Home</title>
     <?php include_once('../_partials/_head.php'); ?>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+
 </head>
 
 <body data-theme="my-custom-theme" class="flex">
-    <div class="md:hidden min-h-screen flex flex-col w-full" >
+    <div class="md:hidden min-h-screen flex flex-col w-full">
         <div class="flex-1 pb-16 md:pb-0" id="top">
             <div
                 class="header relative flex items-center p-4 md:invisible border-b border-b-black dark:border-b-white md:border-r border-r-black dark:border-r-white">
@@ -38,9 +40,11 @@
                 <div class="flex-1 p-4">
                     <div class="flex gap-4">
                         <div class="flex-1">
+
                             <textarea id="post-text-area-mobile" maxlength="140"
                                 placeholder="écrivez votre ressenti ici"
                                 class="w-full bg-transparent border-none focus:outline-none resize-none mb-4 text-xl dark:text-white h-32 "></textarea>
+
                         </div>
 
                         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
@@ -52,9 +56,16 @@
                     </div>
                 </div>
                 <div class="border-t dark:border-gray-700 p-4">
+                    <div class="fixed bottom-24 z-20 hidden" style="width: 300px; height: 300px;"
+                        id="emoji-picker-container-mobile">
+                        <emoji-picker id="emoji-picker-itself" class="dark" style="width: 100%; height: 100%;"></emoji-picker>
+                    </div>
                     <div class="flex justify-start items-center">
                         <button id="upload-button-mobile" class="invert dark:invert-0 p-2 rounded-full">
                             <img src="../../assets/icons/image.png" alt="Ajouter une image" class="w-6 h-6">
+                        </button>
+                        <button id="emoji-toggle-mobile" class="invert dark:invert-0 p-2 rounded-full">
+                            <img src="../../assets/icons/emoji.png" alt="Ajouter une icone" class="w-6 h-6">
                         </button>
                         <input type="file" id="file-input-mobile" class="hidden" multiple accept="image/*" max="4">
                     </div>
@@ -75,9 +86,15 @@
                             class="invert dark:invert-0 rounded-full w-12 h-12 object-cover">
                         <div class="flex-grow flex flex-col gap-4">
                             <div class="flex items-center gap-4">
+
                                 <textarea id="post-text-area-desktop" maxlength="140"
                                     placeholder="écrivez votre ressenti ici"
-                                    class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none"></textarea>
+                                    class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none">
+                                </textarea>
+                                <div class="fixed top-36 z-20 hidden" style="width: 300px; height: 300px;"
+                                    id="emoji-picker-container">
+                                    <emoji-picker id="emoji-picker-itself" class="dark" style="width: 100%; height: 100%;"></emoji-picker>
+                                </div>
                                 <button id="post-button-desktop" class="btn variant-filled" disabled=""> Post </button>
                             </div>
 
@@ -90,6 +107,9 @@
                             <div class="flex justify-start items-center">
                                 <button id="upload-button-desktop" class="invert dark:invert-0 p-2 rounded-full">
                                     <img src="../../assets/icons/image.png" alt="Ajouter une image" class="w-6 h-6">
+                                </button>
+                                <button id="emoji-toggle" class="invert dark:invert-0 p-2 rounded-full">
+                                    <img src="../../assets/icons/emoji.png" alt="Ajouter une icone" class="w-6 h-6">
                                 </button>
 
                                 <input type="file" id="file-input-desktop" class="hidden" multiple accept="image/*"
@@ -113,12 +133,11 @@
     </div>
 
     <button id="back-to-top"
-    class="fixed bottom-8 right-8 p-3 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-300 transition-colors duration-200"
-    aria-label="Back to Top"
-    onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-    </svg>
-</button>
+        class="fixed bottom-8 right-8 p-3 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-300 transition-colors duration-200"
+        aria-label="Back to Top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
     <script type="module" src="../../public/js/home.js"></script>
 </body>

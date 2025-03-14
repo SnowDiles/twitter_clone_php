@@ -1,5 +1,9 @@
 import { handleAutoCompletion } from "./autoCompletion.js";
 import { backToTop } from "./backToTop.js";
+import { pickerVisibility } from './emojiPickerHandler.js';
+
+
+
 
 /**
  * Class representing a tweet posting functionality
@@ -645,4 +649,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "@"
   );
   autoComplete.init();
+  
+    pickerVisibility("emoji-toggle", "emoji-picker-container","post-text-area-desktop","emoji-picker-itself");
+    pickerVisibility("emoji-toggle-mobile", "emoji-picker-container-mobile","post-text-area-mobile","emoji-picker-itself");
 });
