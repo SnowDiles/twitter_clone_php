@@ -98,7 +98,7 @@ function getConversations()
 
 function sendMessage(): void
 {
-    $content = htmlspecialchars(str_replace(search: "'", replace: "'", subject: $_POST['content']));
+    $content = htmlspecialchars($_POST['content'], ENT_NOQUOTES);
     $sender = User::fetch($_SESSION["user_id"]);
     $receiverInput = htmlspecialchars($_POST['receiver']);
     
