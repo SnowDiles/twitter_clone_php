@@ -37,6 +37,7 @@
                     <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
                         class="h-[24px] w-[24px] invert dark:invert-0 hidden">
                 </a>
+
             </div>
         </div>
 
@@ -46,7 +47,7 @@
                     class="h-[24px] w-[24px] invert dark:invert-0 ">
             </a>
         </div>
-        
+
         <div class="w-full">
             <div class="border-t border-black dark:border-white pt-4">
                 <div class="relative flex items-center gap-2">
