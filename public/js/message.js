@@ -1,3 +1,5 @@
+import { handleAutoCompletion } from "./autoCompletion.js";
+
 const createConversationButton = document.getElementById("create-conversation-button");
 const promptBackground = document.getElementById("prompt-background");
 const closeButton = document.getElementById("close-button");
@@ -67,7 +69,8 @@ sendButton.onclick = _ => {
         alert("Ce message est vide");
         return;
     }
-    sendMessage(receiverField.value, contentField.value);
+    const receiver = receiverField.value.startsWith('@') ? receiverField.value.slice(1) : receiverField.value;
+    sendMessage(receiver, contentField.value);
 }
 
 const sendMessage = async (receiver, content) => {
@@ -155,4 +158,16 @@ const displayConversations = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     displayConversations();
+
+     const textareaDesktop = document.getElementById("receiver-field");
+      const userListDivDesktop = document.getElementById("user-desktop");
+      const autoComplete = new handleAutoCompletion(
+        textareaDesktop,
+        textareaDesktop,
+        userListDivDesktop,
+        userListDivDesktop,
+        "../../src/Controllers/MessageController.php",
+        "@"
+      );
+      autoComplete.init();
 });

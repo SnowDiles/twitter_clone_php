@@ -1,7 +1,7 @@
 <head>
     <title>Y - Messages</title>
     <?php require_once('../_partials/_head.php'); ?>
-    <script src="../../public/js/message.js" defer></script>
+    <script type="module" src="../../public/js/message.js" defer></script>
 </head>
 
 <body data-theme="my-custom-theme" class="flex min-h-screen">
@@ -25,6 +25,7 @@
                 </div>
                 <button id="create-conversation-button"
                     class="btn variant-filled-primary self-start text-white">Écrivez un message</button>
+
             </div>
         </div>
     </div>
@@ -53,6 +54,11 @@
                 <input id="receiver-field" class="input p-2 w-full" placeholder="À:">
                 <textarea id="message-content-field" class="textarea p-2 w-full min-h-32 max-h-64"
                     placeholder="Votre message"></textarea>
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
+                max-h-64 overflow-y-auto absolute mt-10 z-40" style="display:none" id="user-desktop">
+                    <ul class="space-y-2">
+                    </ul>
+                </div>
             </form>
         </div>
     </div>
