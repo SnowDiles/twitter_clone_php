@@ -40,6 +40,12 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+const scrollToBottom = () => {
+    if (feed) {
+        feed.scrollTop = feed.scrollHeight;
+    }
+};
+
 sendButton.onclick = _ => {
     if (!receiverField.value.length) {
         alert("Veuillez entrer un nom d'utilisateur");
@@ -235,6 +241,7 @@ const getMessages = async (otherId) => {
                     message.timestamp
                 );
             });
+            scrollToBottom();
         } else {
             alert(responseData.message);
         }
@@ -276,6 +283,9 @@ const displayMessage = (isSelf, content, username = '', timestamp) => {
     messageContainer.appendChild(header);
     messageContainer.appendChild(bubble);
     feed.appendChild(messageContainer);
+
+    scrollToBottom();
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
