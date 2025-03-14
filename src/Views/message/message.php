@@ -30,9 +30,9 @@
         </div>
     </div>
 
-    <div class="flex-col flex-[3] p-4 gap-4 max-md:pb-24 h-full hidden" id="message-feed-container">
+    <div class="flex flex-col flex-[3] p-4 gap-4 max-md:pb-24 min-h-screen" id="message-feed-container">
         <div class="flex-grow overflow-hidden">
-            <div id="message-feed" class=" overflow-y-auto">
+            <div id="message-feed" class="overflow-y-auto h-full">
                 <a href="HomeController.php" id="toggle">
                     <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
                         class="h-[24px] w-[24px] invert dark:invert-0">
@@ -41,7 +41,7 @@
         </div>
         <div class="w-full">
             <div class="border-t border-black dark:border-white p-4">
-            <div class="relative flex items-center gap-2">
+                <div class="relative flex items-center gap-2">
                     <input type="text" name="message" id="message-input" placeholder="Envoyer un message"
                         class="w-full h-10 pl-10 pr-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 border border-transparent hover:border-gray-300 dark:hover:border-gray-600 transition-all" />
                     <button id="send-message-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
