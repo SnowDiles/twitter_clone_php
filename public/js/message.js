@@ -100,7 +100,7 @@ const createConversationElement = (conversation) => {
     const timeDisplay = calculateRelativeTime(conversation.last_message_time);
 
     return `
-        <button class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg" data-user-id="${conversation.user_id}">
+        <button id="conversation-toggle" class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg" data-user-id="${conversation.user_id}">
             <div class="flex items-start space-x-3 mb-4 w-full">
                 <img src="../../assets/icons/profile.png" alt="Profile" class="w-12 h-12 rounded-full flex-shrink-0 object-cover invert dark:invert-0">
                 <div class="flex-1">
@@ -279,7 +279,7 @@ const displayMessage = (isSelf, content, username = '', timestamp) => {
 
     const bubble = document.createElement("pre");
     bubble.textContent = content;
-    bubble.classList.add("rounded-lg", "p-4", "max-w-[80%]", "shadow-sm", "whitespace-pre-wrap", "break-words");
+    bubble.classList.add("rounded-xl", "p-4", "max-w-[70%]", "w-fit", "shadow-sm", "whitespace-pre-wrap", "break-words");
 
     if (isSelf) {
         bubble.classList.add("ml-auto", "bg-blue-500", "text-white");
@@ -311,22 +311,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleResponsive(toggle, idConversationList, idMessagerie) {
-    console.log("ccc")
-    document.getElementById(toggle).addEventListener("click", function () {
+    document.getElementById("toggle").addEventListener("click", function () {
         document.getElementById(idConversationList).classList.toggle("hidden");
         document.getElementById(idMessagerie).classList.toggle("hidden");
     });
 
     document.addEventListener("click", (event) => {
         if (event.target.closest("#conversation-toggle")) {
+            console.log("test");
             if (window.matchMedia("(max-width: 48rem)").matches) {
                 document.getElementById("conversation-section").classList.toggle("hidden");
-                document.getElementById("message-feed").classList.toggle("hidden");
+                document.getElementById("message-feed-container").classList.toggle("hidden");
             } else {
-                document.getElementById("message-feed").classList.remove("hidden");
+                document.getElementById("message-feed-container").classList.remove("hidden");
             }
         }
     });
 }
-
-handleResponsive("conversation-opener", "conversation-section", "message-feed");
+handleResponsive("toggle", "conversation-section", "message-feed-container");
