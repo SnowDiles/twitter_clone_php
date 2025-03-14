@@ -94,22 +94,6 @@
                  
                 </ul>
             </div>
-
-            <!-- Form -->
-            <form class="flex flex-col gap-4">
-                <!-- Receiver Field -->
-                <input id="receiver-field" class="input p-3 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all" placeholder="À:" />
-
-                <!-- Message Content Field -->
-                <textarea id="message-content-field" class="textarea p-3 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all resize-y min-h-32 max-h-64" placeholder="Votre message"></textarea>
-
-                <!-- User Desktop (Dropdown) -->
-                <div id="user-desktop" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 max-h-64 overflow-y-auto absolute mt-14 z-40 hidden">
-                    <ul class="space-y-2 p-2">
-
-                    </ul>
-                </div>
-            </form>
         </div>
     </div>
 </body>
