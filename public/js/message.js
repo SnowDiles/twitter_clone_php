@@ -1,4 +1,6 @@
 import { handleAutoCompletion } from "./autoCompletion.js";
+import { pickerVisibility } from './emojiPickerHandler.js';
+
 
 const createConversationButton = document.getElementById("create-conversation-button");
 const promptBackground = document.getElementById("prompt-background");
@@ -304,6 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "@"
     );
     autoComplete.init();
+    pickerVisibility("emoji-toggle", "emoji-picker-container","message-input","emoji-picker-itself");
+    
 });
 
 function handleResponsive( idConversationList, idMessagerie) {
