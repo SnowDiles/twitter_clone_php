@@ -1,11 +1,12 @@
-export function pickerVisibility(emojiToggle, idPickerContainer,textArea,emojiPickerItself){
+export function pickerVisibility(emojiToggle, idPickerContainer, textArea, emojiPickerItself) {
+    const pickerContainer = document.getElementById(idPickerContainer);
 
-    document.getElementById(emojiToggle).addEventListener('click', () => {
+    document.getElementById(emojiToggle).addEventListener('click', (event) => {
         console.log(" je clique bien ");
-        const pickerContainer = document.getElementById(idPickerContainer);
         if (pickerContainer) {
             pickerContainer.classList.toggle('hidden');
         }
+        event.stopPropagation(); // Prevent the click from propagating to the document
     });
 
     document.querySelectorAll('emoji-picker').forEach(picker => {
@@ -27,4 +28,9 @@ export function pickerVisibility(emojiToggle, idPickerContainer,textArea,emojiPi
         }
     });
 
+    document.addEventListener('click', (event) => {
+        if (pickerContainer && !pickerContainer.contains(event.target) && !event.target.closest(`#${emojiToggle}`)) {
+            pickerContainer.classList.add('hidden');
+        }
+    });
 }
