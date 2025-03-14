@@ -196,7 +196,7 @@ const getMessages = async (otherId) => {
     }
 }
 
-const displayMessage = (isSelf, content, username = '', timestamp = '2025-03-12 15:45:13') => {
+const displayMessage = (isSelf, content, username = '', timestamp) => {
     const messageContainer = document.createElement("div");
     messageContainer.classList.add("mb-4");
 
