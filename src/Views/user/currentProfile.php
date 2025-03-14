@@ -25,8 +25,8 @@
                         <span class="text-xs text-tertiary-500">12 posts</span>
                     </div>
                 </div>
-                <div class="border-b border-b-black 
-                dark:border-b-white  dark:bg-black border-t border-t-black dark:border-t-white">
+                <div class="border-b border-b-black dark:border-b-white  dark:bg-black 
+                border-t border-t-black dark:border-t-white">
                     <div>
                         <img src="../../assets/userid_1500x500.png" alt="profile banner" class="w-full">
                     </div>
@@ -73,15 +73,15 @@
                         </div>
 
                         <div class="mx-3 flex gap-[6px] mb-3">
-                            <a href="./UserController.php?page=following&userId=<?php echo $CurrentUser->getId() ?>">
+                            <a href="./UserController.php?page=following&userId=<?= $CurrentUser->getId() ?>">
                                 <span class="mr-1">
-                                    <?php echo $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'following') ?>
+                                    <?= $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'following') ?>
                                 </span>
                                 <span class="text-tertiary-500">Abonnements</span>
                             </a>
-                            <a href="./UserController.php?page=follower&userId=<?php echo $CurrentUser->getId() ?>">
+                            <a href="./UserController.php?page=follower&userId=<?= $CurrentUser->getId() ?>">
                                 <span class="mr-1">
-                                    <?php echo $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'follower') ?>
+                                    <?= $CurrentUser->getConnectionsCount($CurrentUser->getId(), 'follower') ?>
                                 </span>
                                 <span class="text-tertiary-500">Abonnés</span>
                             </a>
@@ -112,11 +112,8 @@
             <div class="h-[700px] w-[560px] card p-4 text-token space-y-4 max-w-[560px] dark:border dark:border-white">
                 <div class="flex justify-between items-center">
                     <button onclick="closeModal()">
-                        <img 
-                            src="../../assets/icons/close.png" 
-                            alt="close icon" 
-                            class="h-[30px] w-[30px] invert dark:invert-0"
-                        >
+                        <img src="../../assets/icons/close.png" alt="close icon" 
+                        class="h-[30px] w-[30px] invert dark:invert-0">
                     </button>
                     <span class="text-xl md:text-3xl font-bold mr-[4em]">Edit profile</span>
                     <button type="button" class="btn variant-filled" onclick="saveChanges()">Sauvegarder</button>

@@ -56,6 +56,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                     echo json_encode(['success' => false, 'message' => 'Post ID manquant']);
                 }
                 break;
+            case 'toggleFollow':
+                handleFollowToggle($_POST['userId'], $_POST['isFollowing']);
+                break;
             case 'userEditProfile':
                 $userData = json_decode($_POST['data']);
                 updateUserData($userData);
@@ -78,7 +81,6 @@ if (isset($_GET['page'])) {
     $page = $_GET['page'];
     if ($page === "following" || $page === "follower") {
         $CurrentUser = User::fetch($_GET['userId'] ?? $_SESSION['user_id']);
-
         include_once("../Views/user/connections.php");
         exit;
     }
@@ -92,6 +94,7 @@ if (isset($_GET['userId'])) {
         exit;
     } else {
         $otherUser = User::fetch($id);
+        $isFollowing = $otherUser->isFollowing($_SESSION['user_id'], $otherUser->getId());
         include_once('../Views/user/otherProfile.php');
         exit;
     }
@@ -188,11 +191,35 @@ function determineButtonVisibility(int $connectionUserId, User $targetUser, int 
         return false;
     }
 
-    if ($targetUser->getId() === $currentUserId) {
-        return true;
+    return true;
+}
+
+function handleFollowToggle($userId, $isFollowing)
+{
+    $currentUser = User::fetch($_SESSION['user_id']);
+    $targetUser = User::fetch($userId);
+
+    if (!$targetUser || !$currentUser) {
+        echo json_encode(['success' => false, 'message' => 'Utilisateur non trouvé']);
+        exit;
     }
 
-    return !$targetUser->isFollowing($currentUserId, $targetUser->getId());
+    if ($isFollowing === 'false') {
+        $handle = $currentUser->addFollow($targetUser->getId());
+    } else {
+        $handle = $currentUser->removeFollow($targetUser->getId());
+    }
+
+    if ($handle) {
+        echo json_encode([
+            'success' => true
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false
+        ]);
+    }
+    exit;
 }
 
 function updateUserData($userData)

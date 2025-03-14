@@ -1,3 +1,5 @@
+import { handleAutoCompletion } from "./autoCompletion.js";
+
 const createConversationButton = document.getElementById("create-conversation-button");
 const promptBackground = document.getElementById("prompt-background");
 const closeButton = document.getElementById("close-button");

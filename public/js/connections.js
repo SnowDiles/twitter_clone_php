@@ -7,7 +7,7 @@ function createFormData() {
     formData.append('action', 'getConnections');
     formData.append('userId', userId);
     formData.append('type', page);
-    
+
     return formData;
 }
 
@@ -53,16 +53,13 @@ function displayConnections(connections) {
     connections.forEach(user => {
         const userHTML = createUserHTML(user);
         container.insertAdjacentHTML('beforeend', userHTML);
-        
-        if (user.showButton) {
-            attachButtonListeners(user.user_id);
-        }
+
     });
 }
 
 function createUserHTML(user) {
     const buttonHTML = user.showButton ? createButtonHTML(user) : '';
-    
+
     return `
         <div class="flex items-center justify-between py-4">
             ${createUserInfoHTML(user)}
@@ -72,45 +69,26 @@ function createUserHTML(user) {
 }
 
 function createButtonHTML(user) {
-    const buttonText = user.isFollowing ? 'Abonné' : 'Suivre';
-    const buttonClass = getButtonClass(user.isFollowing);
-    
+    const buttonText = user.isFollowing ? 'Ne plus suivre' : 'Suivre';
+
     return `
         <button 
-            class="px-4 py-1 rounded-full text-sm font-medium follow-button ${buttonClass}"
+            id="button-follow"
+            class="btn variant-filled-secondary mt-3 font-bold invert dark:invert-0"
             data-user-id="${user.user_id}"
-            data-following="${user.isFollowing}"
-            data-default-text="${buttonText}"
-            data-hover-text="${user.isFollowing ? 'Se désabonner' : buttonText}">
+            data-following="${user.isFollowing}">
             ${buttonText}
         </button>
     `;
 }
 
-function attachButtonListeners(userId) {
-    const button = document.querySelector(`[data-user-id="${userId}"]`);
-    if (!button) return;
 
-    button.addEventListener('mouseenter', () => {
-        button.textContent = button.dataset.hoverText;
-    });
-    
-    button.addEventListener('mouseleave', () => {
-        button.textContent = button.dataset.defaultText;
-    });
-}
-
-function getButtonClass(isFollowing) {
-    return isFollowing
-        ? 'bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900 hover:text-red-600 dark:hover:text-red-400'
-        : 'bg-primary-500 dark:bg-primary-600 text-white hover:bg-primary-600 dark:hover:bg-primary-700';
-}
 
 function createUserInfoHTML(user) {
     return `
         <a href="./UserController.php?userId=${user.user_id}" class="flex items-center flex-grow">
             <div class="flex items-center">
-                <div class="w-12 h-12 rounded-full bg-gray-300"></div>
+                <img src="../../assets/icons/outline/account.png" alt="Profile" class="w-12 h-12 rounded-full invert dark:invert-0">
                 <div class="ml-3">
                     <div class="font-medium hover:underline">${user.display_name}</div>
                     <div class="text-gray-500">@${user.username}</div>

@@ -294,7 +294,7 @@ class User
         return (bool) $stmt->fetchColumn();
     }
 
-    public function getConnectionsCount($userId, string $type = 'following'): int
+    public function getConnectionsCount(int $userId, string $type = 'following'): int
     {
         $pdo = DB::connection();
 
@@ -313,6 +313,39 @@ class User
         }
 
         return (int) $stmt->fetchColumn();
+    }
+
+    public function addFollow(int $targetUserId): bool
+    {
+        $pdo = DB::connection();
+        $query = "INSERT INTO Follows (follower_id, following_id) 
+                VALUES (:follower_id, :following_id)";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":follower_id" => $this->id,
+            ":following_id" => $targetUserId
+        ];
+
+        return $stmt->execute($params);
+    }
+
+    public function removeFollow(int $targetUserId): bool
+    {
+        $pdo = DB::connection();
+        $query = "DELETE FROM Follows 
+            WHERE follower_id = :follower_id 
+            AND following_id = :following_id";
+
+        $stmt = $pdo->prepare($query);
+
+        $params = [
+            ":follower_id" => $this->id,
+            ":following_id" => $targetUserId
+        ];
+
+        return $stmt->execute($params);
     }
 
     public static function updateInformations($setQueryParams, $paramsToBind): bool
