@@ -4,7 +4,6 @@
     include_once('../_partials/_head.php');
     ?>
     <script src="../../public/js/user.js"></script>
-
 </head>
 
 <body data-theme="my-custom-theme">

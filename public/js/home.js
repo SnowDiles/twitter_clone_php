@@ -334,6 +334,14 @@ class TweetFeed {
 
     this.loadTweets();
     this.loadRetweetListener();
+    this.loadTweetListener();
+  }
+
+  handleTweetClick(postId) {
+    if (postId) {
+      window.location.href =
+        "./HomeController.php?request=reply&postId=" + postId;
+    }
   }
 
   async createTweetElement(tweet) {
@@ -403,7 +411,7 @@ class TweetFeed {
     }
 
     return `
-        <div class="p-4 w-full border-b border-b-black dark:border-b-white">
+        <div class="p-4 w-full border-b border-b-black dark:border-b-white tweet-container" data-post-id="${tweet.post_id}">
             <div class="flex gap-3">
                 <div class="w-13 h-13 flex-shrink-0">
                     <img src="../../assets/icons/profile.png" alt="profile" class="invert dark:invert-0 w-12 h-12 object-cover rounded-full">
@@ -516,6 +524,20 @@ class TweetFeed {
         this.createRetweet(postId).then(() => {
           this.updateRetweetCount(postId, button);
         });
+      }
+    });
+  }
+
+  loadTweetListener() {
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".repost-button")) {
+        return;
+      }
+
+      const tweetContainer = event.target.closest(".tweet-container");
+      if (tweetContainer) {
+        const postId = tweetContainer.getAttribute("data-post-id");
+        this.handleTweetClick(postId);
       }
     });
   }

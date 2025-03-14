@@ -15,6 +15,25 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] === null || empty($_SES
     exit;
 }
 
+if ($_GET) {
+    switch ($_GET["request"]) {
+        case "reply":
+            $postId = $_GET['postId'];
+            $postData = getPost($postId);
+            $postTime = getPostTime($postData);
+            $replyData = getPostReply($postId);
+
+            foreach ($replyData as $data) {
+                $replyTime[] = getPostTime($data);
+            }
+
+            include_once('../Views/reply/reply.php');
+            exit;
+            break;
+    }
+}
+
+
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     header('Content-Type: application/json');
 
@@ -25,10 +44,19 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 $post = createPost(content: $content);
                 handleHashtag($post, $_POST);
                 break;
-
             case 'addPostsMedia':
                 $post = handleMediaUpload($_FILES['images'], $_POST, htmlspecialchars($_SESSION['user_id']));
                 handleHashtag($post->getId(), $_POST);
+                break;
+            case 'addReplyToPost':
+                $postId = isset($_POST['postId']) ? intval($_POST['postId']) : null;
+                if (!$postId) {
+                    echo json_encode(['success' => false, 'message' => 'Post ID manquant ou invalide']);
+                    exit;
+                }
+                $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
+                $post = createReply($postId, $content, htmlspecialchars($_SESSION['user_id']));
+                handleHashtag($post, $_POST);
                 break;
             case 'getRetweetCount':
                 if (isset($_POST['postId'])) {
@@ -80,6 +108,52 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         return;
     }
     exit;
+}
+
+function getPost($postId)
+{
+    $post = Post::getById($postId);
+    if ($post) {
+        return $post;
+    } else {
+        return false;
+    }
+}
+
+function getPostTime($postData)
+{
+    $timezone = new DateTimeZone('Europe/Paris');
+    $now = new DateTime('now', $timezone);
+
+    // Handle both DateTime objects and arrays
+    if ($postData instanceof DateTime) {
+        $postCreatedAt = $postData;
+    } else {
+        $postCreatedAt = new DateTime($postData['created_at'], $timezone);
+    }
+
+    $diffSeconds = $now->getTimestamp() - $postCreatedAt->getTimestamp();
+
+    if ($diffSeconds < 60) {
+        $relative_time = "à l'instant";
+    } elseif ($diffSeconds < 3600) {
+        $relative_time = floor($diffSeconds / 60) . 'm';
+    } elseif ($diffSeconds < 86400) {
+        $relative_time = floor($diffSeconds / 3600) . 'h';
+    } elseif ($diffSeconds < 604800) {
+        $relative_time = floor($diffSeconds / 86400) . 'j';
+    } else {
+        $relative_time = floor($diffSeconds / 604800) . 'sem';
+    }
+
+    // If $postData is an array, maintain the original behavior
+    if (!($postData instanceof DateTime)) {
+        $postData['relative_time'] = $relative_time;
+        return $postData['relative_time'];
+    }
+
+    // Otherwise just return the calculated relative time
+    return $relative_time;
 }
 
 function getAllPost($user)
@@ -265,6 +339,32 @@ function createPost($content): int|null
         echo json_encode(['success' => false]);
         return null;
     }
+}
+
+function createReply($postId, $content, $userId)
+{
+    $user = User::fetch($userId);
+    $result = Post::createReply($postId, $content, $user);
+    if ($result) {
+        $response = [
+            'success' => true,
+            'postId' => $result->getId(),
+            'userId' => $result->getUserId(),
+            'content' => $result->getContent(),
+            'createdAt' => getPostTime($result->getCreatedAt()),
+            'userDisplayName' => $user->getDisplayName(),
+            'userName' => $user->getUsername()
+        ];
+        echo json_encode(['success' => true, "data" => $response]);
+    } else {
+        echo json_encode(['success' => false]);
+    }
+}
+
+function getPostReply($postId)
+{
+    $result = Post::getReplyFromPost($postId);
+    return $result;
 }
 
 function handleHashtag($post, $postData): void

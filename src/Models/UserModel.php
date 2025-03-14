@@ -193,6 +193,8 @@ class User
                 Users u ON p.user_id = u.user_id
               WHERE
                 p.user_id = :user_id
+              AND
+                p.reply_to IS NULL
               ORDER BY p.created_at DESC";
 
         $stmt = $pdo->prepare($query);
