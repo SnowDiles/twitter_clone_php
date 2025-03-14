@@ -40,7 +40,9 @@ sendButton.onclick = _ => {
         alert("Ce message est vide");
         return;
     }
-    sendMessage(receiverField.value, contentField.value);
+
+    const receiver = receiverField.value.startsWith('@') ? receiverField.value.slice(1) : receiverField.value;
+    sendMessage(receiver.trim(), contentField.value);
 }
 
 const sendMessage = async (receiver, content) => {
@@ -263,10 +265,4 @@ function handleResponsive(toggle, idConversationList, idMessagerie) {
         }
     });
 }
-
-
-displayMessage(true, "It's my message");
-displayMessage(true, "It's my dedledjedlekdjeldkejdelkdjeldekjdelkejdlekdjedlekdjeldekjdelkjdeldkjedlekdjeldekdjldk");
-
-displayMessage(false, "It's their message", "John Doe");
 handleResponsive("conversation-opener", "conversation-section", "message-feed");
