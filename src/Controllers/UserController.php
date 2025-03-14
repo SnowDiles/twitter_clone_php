@@ -111,7 +111,7 @@ function getPostsById($id)
         $reposts = Post::getRepostByUserId($id);
 
         foreach ($reposts as &$repost) {
-            $repost['repost'] = 'vous avez retweete';
+            $repost['repost'] = 'Vous avez retweeté';
             $repost['created_at'] = $repost['repost_created_at'];
         }
         unset($repost);

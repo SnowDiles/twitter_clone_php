@@ -46,7 +46,7 @@
                                 <?php if ($_SESSION['user_id'] == $CurrentUser->getId()) { ?>
                                     <button class="btn variant-ringed-secondary 
                                             mt-3 invert dark:invert-0 text-white dark:text-dark" onclick="openModal()">
-                                        Editer le profile
+                                        Modifier le profil
                                     </button>
                                 <?php } else { ?>
                                     <button class="btn-icon mt-3">
@@ -114,7 +114,7 @@
                         <img src="../../assets/icons/close.png" alt="close icon" 
                         class="h-[30px] w-[30px] invert dark:invert-0">
                     </button>
-                    <span class="text-xl md:text-3xl font-bold mr-[4em]">Edit profile</span>
+                    <span class="text-xl md:text-3xl font-bold mr-[4em]">Modifier profil</span>
                     <button type="button" class="btn variant-filled" onclick="saveChanges()">Sauvegarder</button>
                 </div>
 
