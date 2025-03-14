@@ -60,6 +60,9 @@ sendButton.onclick = _ => {
 
     const receiver = receiverField.value.startsWith('@') ? receiverField.value.slice(1) : receiverField.value;
     sendMessage(receiver.trim(), contentField.value);
+    displayConversations();
+    promptBackground.classList.add("hidden");
+
 }
 
 
