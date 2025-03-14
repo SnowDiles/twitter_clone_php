@@ -51,17 +51,17 @@ const sendMessage = async (receiver, content) => {
 
     try {
         const response = await fetch("../../src/Controllers/MessageController.php", {
-          method: "POST",
-          headers: {
-            "X-Requested-With": "XMLHttpRequest",
-          },
-          body: formData,
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: formData,
         });
         const responseData = await response.json();
         if (!responseData.success) {
             alert(responseData.message);
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Error while sending message:", error);
     }
 }
@@ -71,7 +71,7 @@ const createConversationElement = (conversation) => {
     const now = new Date();
     const diffTime = Math.abs(now - timestamp);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     const timeDisplay = diffDays === 1 ? "1j" : `${diffDays}j`;
 
     return `
@@ -115,7 +115,7 @@ const renderConversations = (conversations) => {
         conversationsContainer.innerHTML = '<p class="text-center text-gray-500">Aucune conversation</p>';
         return;
     }
-    
+
     conversationsContainer.innerHTML = conversations
         .map(conv => createConversationElement(conv))
         .join('');
@@ -162,7 +162,7 @@ const getConversations = async () => {
 
 const displayConversations = () => {
     getConversations();
-};  
+};
 
 const getMessages = async (otherId) => {
     const formData = new FormData();
@@ -236,12 +236,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const textareaDesktop = document.getElementById("receiver-field");
     const userListDivDesktop = document.getElementById("user-desktop");
     const autoComplete = new handleAutoCompletion(
-      textareaDesktop,
-      textareaDesktop,
-      userListDivDesktop,
-      userListDivDesktop,
-      "../../src/Controllers/MessageController.php",
-      "@"
+        textareaDesktop,
+        textareaDesktop,
+        userListDivDesktop,
+        userListDivDesktop,
+        "../../src/Controllers/MessageController.php",
+        "@"
     );
     autoComplete.init();
 });
+
+function handleResponsive(toggle, idConversationList, idMessagerie) {
+    document.getElementById(toggle).addEventListener("click", function () {
+        document.getElementById(idConversationList).classList.toggle("hidden");
+        document.getElementById(idMessagerie).classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (event) => {
+        if (event.target.closest("#conversation-toggle")) {
+            if (window.matchMedia("(max-width: 48rem)").matches) {
+                document.getElementById("conversation-section").classList.toggle("hidden");
+                document.getElementById("message-feed").classList.toggle("hidden");
+            } else {
+                document.getElementById("message-feed").classList.remove("hidden");
+            }
+        }
+    });
+}
+
+
+displayMessage(true, "It's my message");
+displayMessage(true, "It's my dedledjedlekdjeldkejdelkdjeldekjdelkejdlekdjedlekdjeldekjdelkjdeldkjedlekdjeldekdjldk");
+
+displayMessage(false, "It's their message", "John Doe");
+handleResponsive("conversation-opener", "conversation-section", "message-feed");
