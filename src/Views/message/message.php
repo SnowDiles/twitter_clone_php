@@ -30,13 +30,10 @@
         </div>
     </div>
 
-    <div class="flex flex-col flex-[3] p-4 gap-4 min-h-screen md:max-w-xl w-full border-r border-r-black dark:border-r-white" id="message-feed-container">
+    <div class="flex flex-col flex-[3] p-4 gap-4 min-h-screen md:max-w-xl w-full md:border-r border-r-black dark:border-r-white" id="message-feed-container">
         <div class="flex-grow overflow-hidden">
             <div id="message-feed" class="overflow-y-auto h-full">
-                <a href="HomeController.php" id="toggle">
-                    <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
-                        class="h-[24px] w-[24px] invert dark:invert-0 hidden">
-                </a>
+               
 
             </div>
         </div>

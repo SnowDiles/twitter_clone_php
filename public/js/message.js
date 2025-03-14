@@ -236,9 +236,6 @@ const getMessages = async (otherId) => {
             body: formData,
         });
         const responseData = await response.json();
-
-        console.log(responseData)
-
         if (responseData.success) {
             responseData.messages.forEach(message => {
                 displayMessage(
@@ -310,15 +307,14 @@ document.addEventListener('DOMContentLoaded', () => {
     autoComplete.init();
 });
 
-function handleResponsive(toggle, idConversationList, idMessagerie) {
-    document.getElementById("toggle").addEventListener("click", function () {
+function handleResponsive( idConversationList, idMessagerie) {
+    document.getElementById("conversation-opener").addEventListener("click", function () {
         document.getElementById(idConversationList).classList.toggle("hidden");
         document.getElementById(idMessagerie).classList.toggle("hidden");
     });
 
     document.addEventListener("click", (event) => {
         if (event.target.closest("#conversation-toggle")) {
-            console.log("test");
             if (window.matchMedia("(max-width: 48rem)").matches) {
                 document.getElementById("conversation-section").classList.toggle("hidden");
                 document.getElementById("message-feed-container").classList.toggle("hidden");
@@ -328,4 +324,4 @@ function handleResponsive(toggle, idConversationList, idMessagerie) {
         }
     });
 }
-handleResponsive("toggle", "conversation-section", "message-feed-container");
+handleResponsive("conversation-section", "message-feed-container");
