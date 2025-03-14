@@ -36,6 +36,13 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                     }
                 }
                 break;
+            case 'getConversations':
+                getConversations();
+                break;
+            case 'getMessages':
+                $otherId = htmlspecialchars($_POST['otherId']);
+                getMessages($otherId);
+                die();
             default:
                 echo json_encode(['success' => false, 'message' => "Méthode non reconnue"]);
         }
@@ -48,18 +55,62 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
 require_once('../Views/message/message.php');
 
+function getMessages($otherId)
+{
+    $currentUserId = $_SESSION['user_id'];
+
+    $messages = Message::getConversationMessages($currentUserId, $otherId);
+
+    if ($messages) {
+        echo json_encode([
+            'success' => true, 
+            'messages' => array_map(function($message) use ($currentUserId) {
+                return [
+                    'id' => $message['message_id'],
+                    'content' => $message['content'],
+                    'timestamp' => $message['sent_at'],
+                    'isSelf' => $message['sender_id'] == $currentUserId,
+                    'username' => $message['sender_id'] == $currentUserId ? 
+                        'Moi' : $message['sender_username']
+                ];
+            }, $messages)
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => "Aucun message trouvé"
+        ]);
+    }
+}
+
+function getConversations()
+{
+    $user = User::fetch($_SESSION["user_id"]);
+    $allConversation = $user->getAllConversation($user->getId());
+
+    if ($allConversation) {
+        echo json_encode((['success' => true, 'conversations' => $allConversation]));
+    } else {
+        echo json_encode((['success' => false, 'message' => "Aucune conversation"]));
+    }
+    return;
+}
+
 function sendMessage(): void
 {
-    $content = htmlspecialchars(str_replace(search: "'", replace: "'", subject: $_POST['content']));
+    $content = htmlspecialchars($_POST['content'], ENT_NOQUOTES);
     $sender = User::fetch($_SESSION["user_id"]);
-    $receiverUsername = htmlspecialchars($_POST['receiver']);
-    $receiverId = User::retrieveIdWithUsername($receiverUsername);
+    $receiverInput = htmlspecialchars($_POST['receiver']);
+    
+    $receiverId = is_numeric($receiverInput) ? 
+        intval($receiverInput) : 
+        User::retrieveIdWithUsername($receiverInput);
 
     if ($receiverId === null) {
         echo json_encode(
             [
                 'success' => false,
-                'message' => "L'utilisateur @$receiverUsername n'existe pas"
+                'message' => "L'utilisateur spécifié n'existe pas"
             ]
         );
         return;

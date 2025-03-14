@@ -208,7 +208,7 @@
                             </div>
                         </div>
                         <div class="flex justify-center items-center gap-2">
-                            <a href="Logout.php" class="underline text-tertiary-500 hover:text-tertiary-700">
+                            <a href="LogoutController.php" class="underline text-tertiary-500 hover:text-tertiary-700">
                                 Voulez-vous vous déconnecter
                             </a>
                             <img src="../../assets/icons/logout.png" alt="logout icon" class="w-[20px] h-[20px">

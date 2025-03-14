@@ -1,5 +1,9 @@
 import { handleAutoCompletion } from "./autoCompletion.js";
 import { backToTop } from "./backToTop.js";
+import { pickerVisibility } from './emojiPickerHandler.js';
+
+
+
 
 /**
  * Class representing a tweet posting functionality
@@ -430,9 +434,7 @@ class TweetFeed {
                             </div>
                             ${imagesHtml}
                             <div class="flex items-center gap-4 mt-2">
-                                <button class="flex items-center">
-                                    <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
-                                </button>
+                               
                                 <button class="repost-button flex items-center" data-post-id="${tweet.post_id}">
                                     <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/repost.png" alt="Repost">
                                     <span>${tweet.nbr_retweet}</span>
@@ -645,4 +647,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "@"
   );
   autoComplete.init();
+  
+    pickerVisibility("emoji-toggle", "emoji-picker-container","post-text-area-desktop","emoji-picker-itself");
+    pickerVisibility("emoji-toggle-mobile", "emoji-picker-container-mobile","post-text-area-mobile","emoji-picker-itself");
 });

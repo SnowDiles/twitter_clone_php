@@ -387,6 +387,45 @@ class User
         return $stmt->execute([':user_id' => $userId, ':theme' => $theme]);
     }
 
+    public static function getAllConversation(int $userId): array
+    {
+        $pdo = DB::connection();
+
+        $sqlQuery = "SELECT DISTINCT
+                        u.user_id,
+                        u.username,
+                        u.display_name,
+                        (
+                            SELECT content 
+                            FROM Messages 
+                            WHERE (sender_id = ? AND receiver_id = u.user_id) 
+                            OR (sender_id = u.user_id AND receiver_id = ?)
+                            ORDER BY sent_at DESC
+                            LIMIT 1
+                        ) as last_message,
+                        (
+                            SELECT sent_at 
+                            FROM Messages 
+                            WHERE (sender_id = ? AND receiver_id = u.user_id) 
+                            OR (sender_id = u.user_id AND receiver_id = ?)
+                            ORDER BY sent_at DESC
+                            LIMIT 1
+                        ) as last_message_time
+                    FROM Users u
+                    WHERE u.user_id IN (
+                        SELECT sender_id FROM Messages WHERE receiver_id = ?
+                        UNION
+                        SELECT receiver_id FROM Messages WHERE sender_id = ?
+                    )
+                    ORDER BY last_message_time DESC
+                ";
+
+        $stmt = $pdo->prepare($sqlQuery);
+        $stmt->execute([$userId, $userId, $userId, $userId, $userId, $userId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getId(): int
     {
         return $this->id;
