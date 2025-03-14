@@ -62,7 +62,6 @@ sendButton.onclick = _ => {
     sendMessage(receiver.trim(), contentField.value);
     displayConversations();
     promptBackground.classList.add("hidden");
-
 }
 
 

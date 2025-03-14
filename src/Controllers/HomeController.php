@@ -29,7 +29,6 @@ if ($_GET) {
 
             include_once('../Views/reply/reply.php');
             exit;
-            break;
     }
 }
 
