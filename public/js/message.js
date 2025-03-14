@@ -108,7 +108,6 @@ const createConversationElement = (conversation) => {
                         <span class="font-bold text-xl">${conversation.display_name}</span>
                         <span class="text-gray-500 ml-2 text-sm">@${conversation.username}</span>
                         <span class="text-gray-500 ml-1 text-sm">·</span>
-                        <span class="text-gray-500 ml-1 text-sm">${timeDisplay}</span>
                     </div>
                     <div class="mt-1 text-black dark:text-white text-base">
                         ${conversation.last_message}
