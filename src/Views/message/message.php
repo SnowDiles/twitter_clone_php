@@ -30,13 +30,14 @@
         </div>
     </div>
 
-    <div class="flex flex-col flex-[3] p-4 gap-4 max-md:pb-24 min-h-screen max-w-xl border-r border-r-black dark:border-r-white" id="message-feed-container">
-        <div class="flex-grow overflow-hidden">
-            <div id="message-feed" class="overflow-y-auto h-full">
+    <div class="flex flex-col flex-[3] p-4 gap-4 max-md:pb-24 h-screen max-h-screen max-w-xl border-r border-r-black dark:border-r-white overflow-hidden" id="message-feed-container">
+        <div class="flex-grow overflow-hidden min-h-0 max-h-full h-full">
+            <div id="message-feed" class="overflow-y-auto h-full max-h-full w-full flex flex-col">
                 <a href="HomeController.php" id="toggle">
                     <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
                         class="h-[24px] w-[24px] invert dark:invert-0">
                 </a>
+
             </div>
         </div>
 
@@ -46,7 +47,7 @@
                     class="h-[24px] w-[24px] invert dark:invert-0 ">
             </a>
         </div>
-        
+
         <div class="w-full">
             <div class="border-t border-black dark:border-white p-4">
                 <div class="relative flex items-center gap-2">
