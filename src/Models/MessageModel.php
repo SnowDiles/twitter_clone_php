@@ -67,7 +67,7 @@ class Message
                     JOIN Users u_receiver ON m.receiver_id = u_receiver.user_id
                     WHERE (m.sender_id = :userId1 AND m.receiver_id = :otherUserId1)
                     OR (m.sender_id = :userId2 AND m.receiver_id = :otherUserId2)
-                    ORDER BY m.sent_at DESC
+                    ORDER BY m.sent_at ASC
                 ";
 
         $stmt = $pdo->prepare($sqlQuery);
