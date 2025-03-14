@@ -13,7 +13,7 @@
         <div class="flex flex-col items-center w-full">
             <div id="message-header"
                 class="w-full h-[54px] p-4 items-center flex gap-5 border-b border-black dark:border-white">
-                <a href="HomeController.php">
+                <a href="./HomeController.php">
                     <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
                         class="h-[24px] w-[24px] invert dark:invert-0">
                 </a>
@@ -35,6 +35,14 @@
             <div id="message-feed" class="h-full overflow-y-auto"> 
             </div>
         </div>
+
+        <div class="absolute top-0 left-0 m-4 md:hidden">
+            <a id="conversation-opener">
+                <img src="../../assets/icons/arrow-back.png" alt="arrow back icon"
+                    class="h-[24px] w-[24px] invert dark:invert-0 ">
+            </a>
+        </div>
+        
         <div class="w-full">
             <div class="border-t border-black dark:border-white p-4">
                 <div class="relative flex items-center gap-2">

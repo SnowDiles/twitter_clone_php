@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleResponsive(toggle, idConversationList, idMessagerie) {
+    console.log("ccc")
     document.getElementById(toggle).addEventListener("click", function () {
         document.getElementById(idConversationList).classList.toggle("hidden");
         document.getElementById(idMessagerie).classList.toggle("hidden");
@@ -327,4 +328,5 @@ function handleResponsive(toggle, idConversationList, idMessagerie) {
         }
     });
 }
+
 handleResponsive("conversation-opener", "conversation-section", "message-feed");
