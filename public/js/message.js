@@ -154,8 +154,6 @@ const getConversations = async () => {
         if (responseData.success) {
             renderConversations(responseData.conversations);
             updateHeader(responseData.conversations.length > 0);
-        } else {
-            alert(responseData.message);
         }
     } catch (error) {
         console.error("Error while fetching conversations:", error);
