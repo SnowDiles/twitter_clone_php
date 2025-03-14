@@ -40,6 +40,8 @@ const fakeConversations = [
     }
 ];
 
+const feed = document.getElementById("message-feed");
+
 const hidePrompt = () => {
     promptBackground.classList.add("hidden");
 }
@@ -100,9 +102,9 @@ const conversationsContainer = document.querySelector('.w-full.p-4.flex.flex-col
 
 const createConversationElement = (conversation) => {
     return `
-        <button class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg">
+        <button id="conversation-toggle" class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg">
             <div class="flex items-start space-x-3 mb-4 w-full">
-                <img src="../../assets/icons/profile.png" alt="Profile" class="w-12 h-12 rounded-full flex-shrink-0 object-cover invert dark:inset-0">
+                <img src="../../assets/icons/profile.png" alt="Profile" class="w-12 h-12 rounded-full flex-shrink-0 object-cover invert dark:invert-0">
                 <div class="flex-1">
                     <div class="flex items-center flex-wrap">
                         <span class="font-bold text-xl">${conversation.user.name}</span>
@@ -156,18 +158,74 @@ const displayConversations = () => {
     updateHeader();
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    displayConversations();
+displayConversations();
+const textareaDesktop = document.getElementById("receiver-field");
+const userListDivDesktop = document.getElementById("user-desktop");
+const autoComplete = new handleAutoCompletion(
+    textareaDesktop,
+    textareaDesktop,
+    userListDivDesktop,
+    userListDivDesktop,
+    "../../src/Controllers/MessageController.php",
+    "@"
+);
+autoComplete.init();
 
-     const textareaDesktop = document.getElementById("receiver-field");
-      const userListDivDesktop = document.getElementById("user-desktop");
-      const autoComplete = new handleAutoCompletion(
-        textareaDesktop,
-        textareaDesktop,
-        userListDivDesktop,
-        userListDivDesktop,
-        "../../src/Controllers/MessageController.php",
-        "@"
-      );
-      autoComplete.init();
-});
+function handleResponsive(toggle, idConversationList, idMessagerie) {
+    document.getElementById(toggle).addEventListener("click", function () {
+        document.getElementById(idConversationList).classList.toggle("hidden");
+        document.getElementById(idMessagerie).classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (event) => {
+        if (event.target.closest("#conversation-toggle")) {
+            if (window.matchMedia("(max-width: 48rem)").matches) {
+                document.getElementById("conversation-section").classList.toggle("hidden");
+                document.getElementById("message-feed").classList.toggle("hidden");
+            } else {
+                document.getElementById("message-feed").classList.remove("hidden");
+            }
+        }
+    });
+}
+
+const displayMessage = (isSelf, content, username = '', timestamp = '2025-03-12 15:45:13') => {
+    const messageContainer = document.createElement("div");
+    messageContainer.classList.add("mb-4");
+
+    const header = document.createElement("div");
+    header.classList.add("flex", "m-4", "items-center", "mb-1", isSelf ? "justify-end" : "justify-start");
+
+    const usernameSpan = document.createElement("span");
+    usernameSpan.textContent = isSelf ? 'Moi' : username;
+    usernameSpan.classList.add("font-semibold", "text-sm");
+
+    const timeSpan = document.createElement("span");
+    const date = new Date(timestamp);
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    timeSpan.textContent = ` · ${formattedTime}`;
+    timeSpan.classList.add("text-gray-500", "text-sm", "ml-2");
+
+    header.appendChild(usernameSpan);
+    header.appendChild(timeSpan);
+
+    const bubble = document.createElement("pre");
+    bubble.textContent = content;
+    bubble.classList.add("rounded-xl", "p-4", "m-4","w-fit", "max-w-[70%]", "shadow-sm", "whitespace-pre-wrap", "break-words");
+
+    if (isSelf) {
+        bubble.classList.add("ml-auto", "bg-blue-500", "text-white");
+    } else {
+        bubble.classList.add("mr-auto", "bg-gray-100", "text-gray-800");
+    }
+
+    messageContainer.appendChild(header);
+    messageContainer.appendChild(bubble);
+    feed.appendChild(messageContainer);
+}
+
+displayMessage(true, "It's my message");
+displayMessage(true, "It's my dedledjedlekdjeldkejdelkdjeldekjdelkejdlekdjedlekdjeldekjdelkjdeldkjedlekdjeldekdjldk");
+
+displayMessage(false, "It's their message", "John Doe");
+handleResponsive("conversation-opener", "conversation-section", "message-feed");
