@@ -18,7 +18,7 @@
         <a href="../Controllers/SearchController.php" class="flex items-center justify-center w-12 h-12">
             <img src="../../assets/icons/search.png" alt="Search" class="w-10 h-10 invert dark:invert-0">
         </a>
-        <a href="../Controllers/MessageController.php" class="flex items-center justify-center w-12 h-12">
+        <a href="../Controllers/MessageController.php" class="flex items-center justify-center w-12 h-12" id="message-redirect">
             <img src="../../assets/icons/outline/message.png" alt="Message" class="w-10 h-10 invert dark:invert-0">
         </a>
     </div>

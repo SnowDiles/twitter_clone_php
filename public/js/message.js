@@ -316,12 +316,15 @@ function handleResponsive( idConversationList, idMessagerie) {
     document.addEventListener("click", (event) => {
         if (event.target.closest("#conversation-toggle")) {
             if (window.matchMedia("(max-width: 48rem)").matches) {
-                document.getElementById("conversation-section").classList.toggle("hidden");
-                document.getElementById("message-feed-container").classList.toggle("hidden");
+                document.getElementById("conversation-section").classList.add("hidden");
+                document.getElementById("message-feed-container").classList.remove("hidden");
             } else {
                 document.getElementById("message-feed-container").classList.remove("hidden");
             }
         }
     });
+
+    document.getElementById("message-feed-container").classList.add("hidden");
+    document.getElementById("conversation-section").classList.remove("hidden");
 }
 handleResponsive("conversation-section", "message-feed-container");
