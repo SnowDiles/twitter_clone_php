@@ -23,6 +23,22 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             case 'sendMessage':
                 sendMessage();
                 break;
+            case 'autoCompletation':
+                if (isset($_POST['username'])) {
+                    $username = htmlspecialchars($_POST['username']);
+                    $users = User::searchUsernames(username: $username);
+                    if ($users !== false) {
+                        echo json_encode(['success' => true, 'data' => ['user' => $users]]);
+                        die();
+                    } else {
+                        echo json_encode(['success' => false]);
+                        die();
+                    }
+                }
+                break;
+            case 'getConversations':
+                getConversations();
+                break;
             default:
                 echo json_encode(['success' => false, 'message' => "Méthode non reconnue"]);
         }
@@ -34,6 +50,19 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 }
 
 require_once('../Views/message/message.php');
+
+function getConversations()
+{
+    $user = User::fetch($_SESSION["user_id"]);
+    $allConversation = $user->getAllConversation($user->getId());
+
+    if ($allConversation) {
+        echo json_encode((['success' => true, 'conversations' => $allConversation]));
+    } else {
+        echo json_encode((['success' => false, 'message' => "Aucune conversation"]));
+    }
+    return;
+}
 
 function sendMessage(): void
 {
