@@ -12,7 +12,7 @@
         <?php require_once('../_partials/_navbar.php') ?>
     </div>
 
-    <div id="conversation-section" class="md:flex w-full md:w-[400px] border-r border-black dark:border-white">
+    <div id="conversation-section" class="md:flex w-full md:w-[400px] md:border-r border-black dark:border-white">
         <div class="flex flex-col items-center w-full">
             <div id="message-header"
                 class="w-full h-[54px] p-4 items-center flex gap-5 border-b border-black dark:border-white">
@@ -66,32 +66,24 @@
 
     <div id="prompt-background" class="absolute w-screen h-screen bg-black bg-opacity-50 flex justify-center items-center hidden">
     <div class="flex flex-col gap-6 p-6 rounded-lg bg-white dark:bg-gray-900 shadow-2xl w-full h-full md:max-w-2xl md:w-4/6 md:h-auto max-md:rounded-none">
-        <!-- Header -->
         <div class="flex items-center w-full gap-4">
-            <!-- Close Button -->
             <button id="close-button" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                 <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18" />
                     <path d="m6 6 12 12" />
                 </svg>
             </button>
-            <!-- Title -->
             <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Nouveau message</span>
-            <!-- Send Button -->
             <button id="send-button" class="btn variant-filled-primary ml-auto px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors">
                 Envoyer
             </button>
         </div>
 
-        <!-- Form -->
         <form class="flex flex-col gap-4">
-            <!-- Receiver Field -->
             <input id="receiver-field" class="input p-3 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all" placeholder="À:" />
 
-            <!-- Message Content Field -->
             <textarea id="message-content-field" class="textarea p-3 w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all resize-y min-h-32 max-h-64" placeholder="Votre message"></textarea>
 
-            <!-- User Desktop (Dropdown) -->
             <div id="user-desktop" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 max-h-64 overflow-y-auto absolute mt-14 z-40 hidden">
                 <ul class="space-y-2 p-2">
                  

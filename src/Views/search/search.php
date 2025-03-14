@@ -13,7 +13,7 @@
         <div class=" flex-[4] min-h-screen max-h-screen overflow-y-scroll">
             <div class="flex">
                 <div
-                    class="flex gap-10 p-4 items-center w-full justify-self-center md:max-w-xl border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
+                    class="flex gap-10 p-4 items-center w-full justify-self-center md:max-w-xl md:border-r border-r-black dark:border-r-white border-b border-b-black dark:border-b-white">
                     <div class="md:invisible">
                         <img src="../../assets/pptest.jpg" alt="profile picture icon" class="h-12 w-12 rounded-full">
                     </div>
@@ -34,7 +34,7 @@
             </div>
 
 
-            <div class="feed md:hidden border-r border-r-black dark:border-r-white min-h-screen">
+            <div class="feed md:hidden md:border-r border-r-black dark:border-r-white min-h-screen">
                 <div id="loading-mobile" class="text-center p-4 hidden">
                     <span>Chargement...</span>
                 </div>
@@ -42,7 +42,7 @@
             <main class="flex-1 relative z-10 ">
                 <div
                 class="feed-desktop hidden md:flex min-h-screen w-full flex-[4] max-h-screen">
-                    <div id="tweets-container" class="flex-1 h-full min-h-screen flex flex-col md:max-w-xl border-r border-r-black dark:border-r-white">
+                    <div id="tweets-container" class="flex-1 h-full min-h-screen flex flex-col md:max-w-xl md:border-r border-r-black dark:border-r-white">
                     </div>
                     <div id="loading" class="text-center p-4 hidden">
                         <span>Chargement...</span>
