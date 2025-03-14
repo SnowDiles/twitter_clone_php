@@ -47,10 +47,13 @@
                                     <img src="../../assets/icons/message.png" alt="message icon"
                                         class="w-[25px] h-[25px] invert dark:invert-0">
                                 </button>
-                                <button class="btn variant-filled-secondary 
-                                            mt-3 font-bold invert 
-                                            dark:invert-0">
-                                    Suivre
+
+                                <button
+                                    id="button-follow"
+                                    class="btn variant-filled-secondary mt-3 font-bold invert dark:invert-0"
+                                    data-user-id="<?= $otherUser->getId() ?>"
+                                    data-following="<?= $isFollowing ? 'true' : 'false' ?>">
+                                    <?= $isFollowing ? 'Ne plus suivre' : 'Suivre' ?>
                                 </button>
                             </div>
                         </div>
@@ -95,5 +98,6 @@
         </div>
     </div>
     <script src="../../public/js/user.js"></script>
+    <script src="../../public/js/follow.js"></script>
 
 </body>
