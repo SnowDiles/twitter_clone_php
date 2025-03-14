@@ -7,7 +7,7 @@
     <div class="md:hidden min-h-screen flex flex-col w-full" >
         <div class="flex-1 pb-16 md:pb-0" id="top">
             <div
-                class="header relative flex items-center p-4 md:invisible border-b border-b-black dark:border-b-white border-r border-r-black dark:border-r-white">
+                class="header relative flex items-center p-4 md:invisible border-b border-b-black dark:border-b-white md:border-r border-r-black dark:border-r-white">
                 <a href="../Controllers/UserController.php" class="block w-12 h-12 absolute left-4">
                     <img src="../../assets/icons/profile.png" alt="profile"
                         class="invert dark:invert-0 w-full h-full rounded-full">
