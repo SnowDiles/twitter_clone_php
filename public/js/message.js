@@ -4,12 +4,21 @@ const createConversationButton = document.getElementById("create-conversation-bu
 const promptBackground = document.getElementById("prompt-background");
 const closeButton = document.getElementById("close-button");
 
+const messageInput = document.getElementById('message-input');
+const sendMessageBtn = document.getElementById('send-message-btn');
+
 const sendButton = document.getElementById("send-button");
 const receiverField = document.getElementById("receiver-field");
 const contentField = document.getElementById("message-content-field");
 
 const feed = document.getElementById("message-feed");
 const conversationsContainer = document.querySelector('.w-full.p-4.flex.flex-col.gap-5');
+
+let currentReceiverId = null;
+
+const setCurrentReceiver = (userId) => {
+    currentReceiverId = userId;
+};
 
 const hidePrompt = () => {
     promptBackground.classList.add("hidden");
@@ -44,6 +53,7 @@ sendButton.onclick = _ => {
     const receiver = receiverField.value.startsWith('@') ? receiverField.value.slice(1) : receiverField.value;
     sendMessage(receiver.trim(), contentField.value);
 }
+
 
 const sendMessage = async (receiver, content) => {
     const formData = new FormData();
@@ -126,10 +136,43 @@ const renderConversations = (conversations) => {
         button.addEventListener('click', () => {
             feed.innerHTML = '';
             const userId = button.getAttribute('data-user-id');
+            setCurrentReceiver(userId); 
             getMessages(userId);
         });
     });
 };
+
+const handleSendMessage = async () => {
+    const content = messageInput.value.trim();
+    
+    if (!content) {
+        alert("Le message ne peut pas être vide");
+        return;
+    }
+    
+    if (!currentReceiverId) {
+        alert("Veuillez sélectionner un destinataire");
+        return;
+    }
+
+    try {
+        await sendMessage(currentReceiverId, content);
+        messageInput.value = '';
+        feed.innerHTML = '';
+        await getMessages(currentReceiverId);
+    } catch (error) {
+        console.error("Erreur lors de l'envoi du message:", error);
+        alert("Erreur lors de l'envoi du message");
+    }
+};
+
+sendMessageBtn.addEventListener('click', handleSendMessage);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+    }
+});
 
 const updateHeader = (hasConversations) => {
     const headerContainer = document.querySelector('#message-header');
@@ -180,6 +223,8 @@ const getMessages = async (otherId) => {
             body: formData,
         });
         const responseData = await response.json();
+
+        console.log(responseData)
 
         if (responseData.success) {
             responseData.messages.forEach(message => {

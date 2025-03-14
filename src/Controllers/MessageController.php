@@ -100,14 +100,17 @@ function sendMessage(): void
 {
     $content = htmlspecialchars(str_replace(search: "'", replace: "'", subject: $_POST['content']));
     $sender = User::fetch($_SESSION["user_id"]);
-    $receiverUsername = htmlspecialchars($_POST['receiver']);
-    $receiverId = User::retrieveIdWithUsername($receiverUsername);
+    $receiverInput = htmlspecialchars($_POST['receiver']);
+    
+    $receiverId = is_numeric($receiverInput) ? 
+        intval($receiverInput) : 
+        User::retrieveIdWithUsername($receiverInput);
 
     if ($receiverId === null) {
         echo json_encode(
             [
                 'success' => false,
-                'message' => "L'utilisateur @$receiverUsername n'existe pas"
+                'message' => "L'utilisateur spécifié n'existe pas"
             ]
         );
         return;
