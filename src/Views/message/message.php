@@ -66,12 +66,12 @@
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                     </button>
-                    
+
 
                     <div class="absolute inset-y-0 left-0 flex items-center pl-2">
-                    <button id="emoji-toggle" class="invert dark:invert-0 p-2 pr-4 rounded-full">
-                        <img src="../../assets/icons/emoji.png" alt="Ajouter une icone" class="w-6 h-6 min-w-6 min-h-6">
-                    </button>
+                        <button id="emoji-toggle" class="invert dark:invert-0 p-2 pr-4 rounded-full">
+                            <img src="../../assets/icons/emoji.png" alt="Ajouter une icone" class="w-6 h-6 min-w-6 min-h-6">
+                        </button>
                     </div>
                 </div>
             </div>

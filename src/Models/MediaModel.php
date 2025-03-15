@@ -3,6 +3,7 @@
 namespace Model;
 
 require_once __DIR__ . "/../Controllers/PDOConnection.php";
+
 use Environment\DB;
 
 use DateTime;

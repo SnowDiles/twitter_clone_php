@@ -106,13 +106,13 @@
         <div class="bg-black bg-opacity-50 w-full 
                     h-full fixed top-0 left-0 flex items-center 
                     justify-center hidden z-[10]
-                    dark:!bg-[#80808094]" 
+                    dark:!bg-[#80808094]"
             id="edit-profile-modal">
             <div class="h-[700px] w-[560px] card p-4 text-token space-y-4 max-w-[560px] dark:border dark:border-white">
                 <div class="flex justify-between items-center">
                     <button onclick="closeModal()">
-                        <img src="../../assets/icons/close.png" alt="close icon" 
-                        class="h-[30px] w-[30px] invert dark:invert-0">
+                        <img src="../../assets/icons/close.png" alt="close icon"
+                            class="h-[30px] w-[30px] invert dark:invert-0">
                     </button>
                     <span class="text-xl md:text-3xl font-bold mr-[4em]">Modifier profil</span>
                     <button type="button" class="btn variant-filled" onclick="saveChanges()">Sauvegarder</button>
@@ -139,8 +139,8 @@
                 <div class="flex flex-col">
                     <span class="self-center mb-2 text-xl">Modifier mes informations</span>
                     <form action="" class="flex flex-col gap-4" id="user-edit-profile">
-                        <input 
-                            class="input dark:border dark:!border-white" 
+                        <input
+                            class="input dark:border dark:!border-white"
                             type="text"
                             placeholder="<?php echo $CurrentUser->getDisplayName() ?>"
                             name="name" />
@@ -150,58 +150,53 @@
                             $bio = "Bio...";
                         }
                         ?>
-                        <textarea 
-                            class="textarea h-[58px] resize-none dark:border dark:!border-white" 
+                        <textarea
+                            class="textarea h-[58px] resize-none dark:border dark:!border-white"
                             maxlength="160" placeholder="<?php echo $bio ?>" name="bio"></textarea>
-                        <input 
-                            class="input dark:border dark:!border-white" 
-                            type="password" 
-                            name="oldPassword" 
-                            placeholder="Ancien mot de passe" 
-                        />
-                        <input 
-                            class="input dark:border dark:!border-white" 
-                            type="password" 
-                            name="newPassword" 
-                            placeholder="Nouveau mot de passe" 
-                        />
-                        <input 
-                            class="input dark:border dark:!border-white" 
-                            type="email" 
-                            name="email" 
-                            placeholder="<?php echo $CurrentUser->getEmail() ?>" 
-                        />
+                        <input
+                            class="input dark:border dark:!border-white"
+                            type="password"
+                            name="oldPassword"
+                            placeholder="Ancien mot de passe" />
+                        <input
+                            class="input dark:border dark:!border-white"
+                            type="password"
+                            name="newPassword"
+                            placeholder="Nouveau mot de passe" />
+                        <input
+                            class="input dark:border dark:!border-white"
+                            type="email"
+                            name="email"
+                            placeholder="<?php echo $CurrentUser->getEmail() ?>" />
                     </form>
                     <form action="" id="theme-form">
                         <div class="flex justify-evenly">
-                            <div 
-                                onclick="selectTheme('light')" 
+                            <div
+                                onclick="selectTheme('light')"
                                 class="bg-white text-black p-2 flex 
                                 items-center flex-row-reverse gap-3 h-[40px] 
-                                cursor-pointer dark:border dark:!border-white"
-                            >
+                                cursor-pointer dark:border dark:!border-white">
                                 <div>
-                                    <input 
-                                        type="radio" 
-                                        name="theme" 
-                                        value="light" 
-                                        id="theme-light" 
+                                    <input
+                                        type="radio"
+                                        name="theme"
+                                        value="light"
+                                        id="theme-light"
                                         <?php echo ($_SESSION['theme'] == 'light') ? 'checked' : ''; ?>>
                                 </div>
                                 <div><span>Light</span></div>
                             </div>
-                            <div 
-                                onclick="selectTheme('dark')" 
+                            <div
+                                onclick="selectTheme('dark')"
                                 class="bg-black text-white 
                                 p-2 flex items-center flex-row-reverse 
-                                gap-3 h-[40px] cursor-pointer dark:border dark:!border-white"
-                            >
+                                gap-3 h-[40px] cursor-pointer dark:border dark:!border-white">
                                 <div>
-                                    <input 
-                                        type="radio" 
-                                        name="theme" 
-                                        value="dark" 
-                                        id="theme-dark" 
+                                    <input
+                                        type="radio"
+                                        name="theme"
+                                        value="dark"
+                                        id="theme-dark"
                                         <?php echo ($_SESSION['theme'] == 'dark') ? 'checked' : ''; ?>>
                                 </div>
                                 <div><span>Dark</span></div>

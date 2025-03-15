@@ -22,8 +22,8 @@ if ($_GET) {
             $postData = getPost($postId);
             $postTime = getPostTime($postData);
             $replyData = getPostReply($postId);
-            $postMedia = Post::getPostMediaByPostId( $postId);
-            
+            $postMedia = Post::getPostMediaByPostId($postId);
+
             if ($postData && isset($postData['content'])) {
                 preg_match_all('/#[a-zA-Z0-9_]+/', $postData['content'], $hashtags);
                 if ($hashtags) {
@@ -37,11 +37,10 @@ if ($_GET) {
                 if ($mentions) {
                     foreach ($mentions[0] as $mention) {
                         $userId = User::retrieveIdWithUsername(ltrim($mention, '@'));
-                        if($userId){
+                        if ($userId) {
                             $mentionLink = '<a href="./UserController.php?userId=' . $userId . '" class="text-primary-500">' . $mention . '</a>';
                             $postData['content'] = str_replace($mention, $mentionLink, $postData['content']);
                         }
-
                     }
                 }
             }
@@ -77,7 +76,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 }
                 $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
                 $replyPost = createReply($postId, $content, htmlspecialchars($_SESSION['user_id']));
-                handleHashtag($replyPost->getId(),  $_POST);
+                handleHashtag($replyPost->getId(), $_POST);
                 break;
             case 'getRetweetCount':
                 if (isset($_POST['postId'])) {

@@ -6,7 +6,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-class Env {
+class Env
+{
     private static ?Env $instance = null;
 
     public readonly string $dbName;
@@ -15,7 +16,8 @@ class Env {
     public readonly string $dbPassword;
     public readonly string $passwordSalt;
 
-    private function __construct() {
+    private function __construct()
+    {
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
         $dotenv->load();
 
@@ -26,7 +28,8 @@ class Env {
         $this->passwordSalt = $_ENV['PASSWORD_SALT'];
     }
 
-    public static function get(): Env {
+    public static function get(): Env
+    {
         if (self::$instance === null) {
             self::$instance = new self();
         }

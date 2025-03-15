@@ -156,13 +156,13 @@ class Post
             return null;
         }
 
-    return $stmt->fetchAll();
-}
+        return $stmt->fetchAll();
+    }
 
 
-  public static function getPostMediaByPostId(int $postId): ?array
-  {
-    $pdo = DB::connection();
+    public static function getPostMediaByPostId(int $postId): ?array
+    {
+        $pdo = DB::connection();
 
         $query = "SELECT
                 p.post_id,

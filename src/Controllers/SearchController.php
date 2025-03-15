@@ -77,7 +77,6 @@ function getPostsByHashtag($hashtag)
                 $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
                 $post['media'] = array_filter($media, function ($m) use ($post) {
                     return $m['post_id'] == $post['post_id'];
-
                 });
             }
             if (!empty($posts)) {

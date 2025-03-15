@@ -6,10 +6,12 @@ require_once __DIR__ . '/EnvSetup.php';
 
 use PDO;
 
-class DB {
+class DB
+{
     private static ?PDO $instance = null;
 
-    public static function connection(): PDO {
+    public static function connection(): PDO
+    {
         if (self::$instance === null) {
             $env = Env::get();
 

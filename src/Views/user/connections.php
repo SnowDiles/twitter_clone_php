@@ -15,8 +15,8 @@
 
                     <div class="p-4 border-b border-black dark:border-white
                      md:hidden relative">
-                        <a href="../Controllers/UserController.php" 
-                        class="absolute left-1 top-1/2 -translate-y-1/2 w-10 h-10">
+                        <a href="../Controllers/UserController.php"
+                            class="absolute left-1 top-1/2 -translate-y-1/2 w-10 h-10">
                             <img src="../../assets/icons/arrow-back.png" alt="back"
                                 class="invert dark:invert-0 w-full h-full rounded-full">
                         </a>

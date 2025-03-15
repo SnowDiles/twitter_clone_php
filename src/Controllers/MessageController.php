@@ -63,14 +63,14 @@ function getMessages($otherId)
 
     if ($messages) {
         echo json_encode([
-            'success' => true, 
-            'messages' => array_map(function($message) use ($currentUserId) {
+            'success' => true,
+            'messages' => array_map(function ($message) use ($currentUserId) {
                 return [
                     'id' => $message['message_id'],
                     'content' => $message['content'],
                     'timestamp' => $message['sent_at'],
                     'isSelf' => $message['sender_id'] == $currentUserId,
-                    'username' => $message['sender_id'] == $currentUserId ? 
+                    'username' => $message['sender_id'] == $currentUserId ?
                         'Moi' : $message['sender_username']
                 ];
             }, $messages)
@@ -101,9 +101,9 @@ function sendMessage(): void
     $content = htmlspecialchars($_POST['content'], ENT_NOQUOTES);
     $sender = User::fetch($_SESSION["user_id"]);
     $receiverInput = htmlspecialchars($_POST['receiver']);
-    
-    $receiverId = is_numeric($receiverInput) ? 
-        intval($receiverInput) : 
+
+    $receiverId = is_numeric($receiverInput) ?
+        intval($receiverInput) :
         User::retrieveIdWithUsername($receiverInput);
 
     if ($receiverId === null) {
