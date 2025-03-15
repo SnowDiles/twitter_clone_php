@@ -158,6 +158,8 @@ class Post
 
     return $stmt->fetchAll();
 }
+
+
   public static function getPostMediaByPostId(int $postId): ?array
   {
     $pdo = DB::connection();
