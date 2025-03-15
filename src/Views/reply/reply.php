@@ -41,7 +41,7 @@
                             </div>
                             <div class="ml-0 mt-3">
                                 <div class="text-small text-xl break-all max-w-full">
-                                    <?php echo htmlspecialchars($postData['content']) ?>
+                                    <?php echo $postData['content'] ?>
                                 </div>
 
                                 <?php if (isset($postMedia) && !empty($postMedia)) : ?>
@@ -190,7 +190,18 @@
                                                 </div>
                                                 <div class="ml-0 mt-3">
                                                     <div class="text-small text-xl break-all max-w-full">
-                                                        <?php echo $reply["content"] ?>
+                                                        <?php
+                                                        if ($reply && isset($reply['content'])) {
+                                                            preg_match_all('/#[a-zA-Z0-9_]+/', $reply['content'], $hashtags);
+                                                            if ($hashtags) {
+                                                                foreach ($hashtags[0] as $hashtag) {
+                                                                    $hashtagLink = '<a href="./SearchController.php?hashtag=' . ltrim($hashtag, '#') . '" class="text-primary-500">' . $hashtag . '</a>';
+                                                                    $reply['content'] = str_replace($hashtag, $hashtagLink, $reply['content']);
+                                                                }
+                                                            }
+                                                        }
+                                                        echo $reply["content"];
+                                                        ?>
                                                     </div>
                                                     <!-- ${imagesHtml} -->
                                                     <div class="flex items-center gap-4 mt-2">

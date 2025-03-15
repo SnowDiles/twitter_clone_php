@@ -23,10 +23,32 @@ if ($_GET) {
             $postTime = getPostTime($postData);
             $replyData = getPostReply($postId);
             $postMedia = Post::getPostMediaByPostId( $postId);
+            
+            if ($postData && isset($postData['content'])) {
+                preg_match_all('/#[a-zA-Z0-9_]+/', $postData['content'], $hashtags);
+                if ($hashtags) {
+                    foreach ($hashtags[0] as $hashtag) {
+                        $hashtagLink = '<a href="./SearchController.php?hashtag=' . ltrim($hashtag, '#') . '" class="text-primary-500">' . $hashtag . '</a>';
+                        $postData['content'] = str_replace($hashtag, $hashtagLink, $postData['content']);
+                    }
+                }
+
+                preg_match_all('/@[a-zA-Z0-9_]+/', $postData['content'], $mentions);
+                if ($mentions) {
+                    foreach ($mentions[0] as $mention) {
+                        $userId = User::retrieveIdWithUsername(ltrim($mention, '@'));
+                        if($userId){
+                            $mentionLink = '<a href="./UserController.php?userId=' . $userId . '" class="text-primary-500">' . $mention . '</a>';
+                            $postData['content'] = str_replace($mention, $mentionLink, $postData['content']);
+                        }
+
+                    }
+                }
+            }
+
             foreach ($replyData as $data) {
                 $replyTime[] = getPostTime($data);
             }
-
             include_once('../Views/reply/reply.php');
             exit;
     }
@@ -54,8 +76,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                     exit;
                 }
                 $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
-                $post = createReply($postId, $content, htmlspecialchars($_SESSION['user_id']));
-                handleHashtag($post, $_POST);
+                $replyPost = createReply($postId, $content, htmlspecialchars($_SESSION['user_id']));
+                handleHashtag($replyPost->getId(),  $_POST);
                 break;
             case 'getRetweetCount':
                 if (isset($_POST['postId'])) {
@@ -355,8 +377,10 @@ function createReply($postId, $content, $userId)
             'userName' => $user->getUsername()
         ];
         echo json_encode(['success' => true, "data" => $response]);
+        return $result;
     } else {
         echo json_encode(['success' => false]);
+        return null;
     }
 }
 
@@ -366,7 +390,7 @@ function getPostReply($postId)
     return $result;
 }
 
-function handleHashtag($post, $postData): void
+function handleHashtag($postId, $postData): void
 {
     $content = str_replace(search: "'", replace: "'", subject: $postData['content']);
     preg_match_all('/#([\w]+)/', subject: $content, matches: $matches);
@@ -377,7 +401,7 @@ function handleHashtag($post, $postData): void
                 Post::insertHashtagIntoDatabase(hashtag: $hashtag);
             }
             $hashtagId = Post::getHashtagId(hashtag: $hashtag);
-            Post::insertIntoPostHashtag(postId: $post, hashtagId: $hashtagId);
+            Post::insertIntoPostHashtag(postId: $postId, hashtagId: $hashtagId);
         }
     }
 }
