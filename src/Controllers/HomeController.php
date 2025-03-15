@@ -22,7 +22,7 @@ if ($_GET) {
             $postData = getPost($postId);
             $postTime = getPostTime($postData);
             $replyData = getPostReply($postId);
-
+            $postMedia = Post::getPostMediaByPostId( $postId);
             foreach ($replyData as $data) {
                 $replyTime[] = getPostTime($data);
             }

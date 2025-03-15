@@ -44,21 +44,28 @@
                                     <?php echo htmlspecialchars($postData['content']) ?>
                                 </div>
 
-                                <?php if (isset($postData['media']) && !empty($postData['media'])) : ?>
-                                    <div class="grid grid-cols-2 gap-2 mt-2">
-                                        <?php foreach ($postData['media'] as $media) : ?>
-                                            <img src="<?php echo htmlspecialchars($media['file_name']) ?>"
-                                                alt="Media"
-                                                class="rounded-lg max-h-64 w-auto">
-                                        <?php endforeach; ?>
-                                    </div>
+                                <?php if (isset($postMedia) && !empty($postMedia)) : ?>
+                                    <?php
+                                    $imageElements = '';
+                                    foreach ($postMedia as $media) {
+                                        $url = htmlspecialchars($media['file_name']);
+                                        $imageElements .= "
+                                            <a href=\"{$url}\" class=\"flex justify-center items-center overflow-hidden target=\"_blank\">
+                                                <img src=\"{$url}\" alt=\"Tweet media\" class=\"max-w-full object-contain rounded-lg\">
+                                            </a>
+                                        ";
+                                    }
+                                    $imagesHtml = "
+                                        <div class=\"mt-3 mb-3 grid gap-2 p-2.5 rounded-[30px] mr-5 " . (count($postMedia) > 1 ? "grid-cols-2" : "grid-cols-1") . "\">
+                                            {$imageElements}
+                                        </div>
+                                    ";
+                                    echo $imagesHtml;
+                                    ?>
                                 <?php endif; ?>
 
                                 <div class="flex items-center gap-4 mt-2">
-                                    <button class="flex items-center">
-                                        <img class="invert dark:invert-0 w-5 h-5" 
-                                        src="../../assets/icons/comment.png" alt="Commentaire">
-                                    </button>
+                                  
                                     <button class="repost-button flex items-center" 
                                     data-post-id="<?php echo $postData['id'] ?? '' ?>">
                                         <img class="invert dark:invert-0 w-5 h-5" 

@@ -89,8 +89,7 @@
 
                                 <textarea id="post-text-area-desktop" maxlength="140"
                                     placeholder="écrivez votre ressenti ici"
-                                    class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none">
-                                </textarea>
+                                    class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none"></textarea>
                                 <div class="fixed top-36 z-20 hidden" style="width: 300px; height: 300px;"
                                     id="emoji-picker-container">
                                     <emoji-picker id="emoji-picker-itself" class="dark" style="width: 100%; height: 100%;"></emoji-picker>
