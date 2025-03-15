@@ -160,7 +160,6 @@ const submitAnswer = (device) => {
   const tweetContent =
     device === "desktop" ? tweetContentDesktop : tweetContentMobile;
 
-  const fileInput = document.getElementById("file-input-desktop");
   const view = "desktop";
   if (!isValidTweetLength(tweetContent.value)) {
     return alert("Votre message est trop long !");
@@ -168,22 +167,11 @@ const submitAnswer = (device) => {
 
   const sourcePost = document.getElementById("source-post");
   const sourcePostId = sourcePost.dataset.postId;
-  const fileInputType =
-    view === "mobile" ? this.mobileMediaFileInput : fileInput;
   const formData = new FormData();
-  const mediaFiles = Array.from(fileInputType.files);
 
   formData.append("content", tweetContent.value);
   formData.append("postId", sourcePostId);
-
-  if (mediaFiles.length) {
-    mediaFiles.forEach((file) => {
-      formData.append("images[]", file);
-    });
-    formData.append("action", "addPostsMedia");
-  } else {
-    formData.append("action", "addReplyToPost");
-  }
+  formData.append("action", "addReplyToPost");
 
   submitTweet(formData, view);
 };
