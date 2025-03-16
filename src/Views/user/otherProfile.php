@@ -22,7 +22,7 @@
                     </a>
                     <div class="flex flex-col">
                         <span><?= $otherUser->getDisplayName() ?></span>
-                        <span class="text-xs text-tertiary-500">12 posts</span>
+                        <span class="text-xs text-tertiary-500"><?= $otherUser->getPostsCount() ?> posts</span>                    
                     </div>
                 </div>
 

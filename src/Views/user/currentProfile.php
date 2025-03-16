@@ -21,7 +21,7 @@
                     </a>
                     <div class="flex flex-col">
                         <span><?php echo $CurrentUser->getDisplayName() ?></span>
-                        <span class="text-xs text-tertiary-500">12 posts</span>
+                        <span class="text-xs text-tertiary-500"><?= $CurrentUser->getPostsCount() ?> posts</span>                    
                     </div>
                 </div>
                 <div class="border-b border-b-black dark:border-b-white  dark:bg-black 

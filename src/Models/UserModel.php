@@ -426,6 +426,16 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getPostsCount(): int 
+    {
+        $db = DB::connection();
+        $query = "SELECT COUNT(*) as count FROM Posts WHERE user_id = :user_id";
+        $stmt = $db->prepare($query);
+        $stmt->execute([':user_id' => $this->id]);
+        $result = $stmt->fetch();
+        return (int)$result['count'];
+    }
+
     public function getId(): int
     {
         return $this->id;
