@@ -333,10 +333,15 @@ class TweetFeed {
     this.desktopTweetsContainer = document.getElementById("tweets-container");
     this.mobileTweetsContainer = document.querySelector(".feed.md\\:invisible");
     this.loadingElement = document.getElementById("loading");
+    
+    this.offset = 0;
+    this.limit = 10;
+    this.hasMore = true;
 
     this.loadTweets();
     this.loadRetweetListener();
     this.loadTweetListener();
+    this.initInfiniteScroll();
   }
 
   handleTweetClick(postId) {
@@ -587,16 +592,43 @@ class TweetFeed {
     return Object.values(post.media).map((media) => media.file_name);
   }
 
+  initInfiniteScroll() {
+    const desktopContainer = document.getElementById("tweet-contain");
+    if (desktopContainer) {
+      desktopContainer.addEventListener("scroll", this.handleScroll.bind(this));
+    }
+    
+    const mobileContainer = document.querySelector(".flex-1.pb-16");
+    if (mobileContainer) {
+      mobileContainer.addEventListener("scroll", this.handleScroll.bind(this));
+    }
+  }
+
+  handleScroll(event) {
+    if (this.isLoading || !this.hasMore) return;
+
+    const container = event.target;
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    
+    if (scrollTop + clientHeight >= scrollHeight - 200) {
+      this.loadTweets();
+    }
+  }
+
   async loadTweets() {
-    if (this.isLoading) return;
+    if (this.isLoading || !this.hasMore) return;
+    
     this.isLoading = true;
     this.loadingElement.classList.remove("hidden");
 
     try {
       const formData = new FormData();
       formData.append("action", "getAllPosts");
+      formData.append("offset", this.offset);
+      formData.append("limit", this.limit);
 
       const response = await this.getPost(formData);
+      
       if (response.success && response.posts) {
         for (const post of response.posts) {
           const tweet = {
@@ -613,8 +645,13 @@ class TweetFeed {
           };
           await this.insertTweetInContainers(tweet);
         }
+        
+        this.offset = response.offset;
+        this.hasMore = response.hasMore;
+        
       } else if (response.message === "Pas de tweet") {
         await this.insertTweetInContainers({ message: response.message });
+        this.hasMore = false;
       }
     } catch (error) {
       console.error("Erreur lors du chargement des tweets:", error);

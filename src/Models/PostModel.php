@@ -441,6 +441,51 @@ class Post
         return $stmt->fetchAll();
     }
 
+    public static function getPaginatedPosts(array $userIds, int $offset = 0, int $limit = 10): array
+    {
+        $pdo = DB::connection();
+
+        $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+
+        $sql = "SELECT p.*, u.display_name, u.username
+                FROM Posts p
+                INNER JOIN Users u ON p.user_id = u.user_id
+                WHERE p.user_id IN ({$placeholders})
+                ORDER BY p.created_at DESC
+                LIMIT ? OFFSET ?";
+
+        $stmt = $pdo->prepare($sql);
+
+        $paramIndex = 1;
+        foreach ($userIds as $userId) {
+            $stmt->bindValue($paramIndex++, $userId, PDO::PARAM_INT);
+        }
+
+        $stmt->bindValue($paramIndex++, $limit, PDO::PARAM_INT);
+        $stmt->bindValue($paramIndex, $offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function countTotalPosts(array $userIds): int
+    {
+        $pdo = DB::connection();
+
+        $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+
+        $sql = "SELECT COUNT(*) FROM Posts WHERE user_id IN ({$placeholders})";
+        $stmt = $pdo->prepare($sql);
+
+        $paramIndex = 1;
+        foreach ($userIds as $userId) {
+            $stmt->bindValue($paramIndex++, $userId, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+
     public function getId(): int
     {
         return $this->id;

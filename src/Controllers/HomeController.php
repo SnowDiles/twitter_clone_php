@@ -153,7 +153,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 break;
             case 'getAllPosts':
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
-                getAllPost($user);
+                $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
+                $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10;
+                getAllPost($user, $offset, $limit);
                 break;
             case 'trendinHashtags':
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
@@ -238,7 +240,7 @@ function getPostTime($postData)
     return $relative_time;
 }
 
-function getAllPost($user)
+function getAllPost($user, $offset = 0, $limit = 10)
 {
     if ($user) {
         $follingList = $user->getAllFollowing($user->getId());
@@ -253,32 +255,29 @@ function getAllPost($user)
 
         $followingIds[] = $user->getId();
 
-        $allPosts = [];
-        foreach ($followingIds as $followingId) {
-            $posts = $user->getAllPosts($followingId);
-            if ($posts) {
-                foreach ($posts as &$post) {
-                    $media = $user->getPostMedia($followingId);
-                    $post['media'] = array_filter($media, function ($m) use ($post) {
-                        return $m['post_id'] == $post['post_id'];
-                    });
-                    $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
-                }
-                $allPosts = array_merge($allPosts, $posts);
-            }
-        }
+        $paginatedPosts = Post::getPaginatedPosts($followingIds, $offset, $limit);
 
-        usort($allPosts, function ($a, $b) {
-            return strtotime($b['created_at']) - strtotime($a['created_at']);
-        });
-
-        if (!empty($allPosts)) {
-            echo json_encode(['success' => true, 'posts' => $allPosts]);
-        } else {
+        if (empty($paginatedPosts) && $offset === 0) {
             echo json_encode(['success' => true, 'message' => 'Pas de tweet']);
+            return;
         }
+
+        foreach ($paginatedPosts as &$post) {
+            $post['media'] = Post::getPostMediaByPostId($post['post_id']);
+            $post['nbr_retweet'] = count(Post::getRetweetPosts($post['post_id']));
+        }
+
+        $totalCount = Post::countTotalPosts($followingIds);
+        $hasMore = ($offset + $limit) < $totalCount;
+
+        echo json_encode([
+            'success' => true,
+            'posts' => $paginatedPosts,
+            'hasMore' => $hasMore,
+            'offset' => $offset + count($paginatedPosts)
+        ]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erreur lors de la création de l\'user.']);
+        echo json_encode(['success' => false, 'message' => 'Utilisateur non trouvé']);
     }
 }
 
