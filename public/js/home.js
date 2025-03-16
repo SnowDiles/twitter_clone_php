@@ -648,6 +648,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   autoComplete.init();
   
-    pickerVisibility("emoji-toggle", "emoji-picker-container","post-text-area-desktop","emoji-picker-itself");
-    pickerVisibility("emoji-toggle-mobile", "emoji-picker-container-mobile","post-text-area-mobile","emoji-picker-itself");
+    pickerVisibility("emoji-toggle", "emoji-picker-container","post-text-area-desktop","emoji-picker-itself","post-button-desktop");
+    pickerVisibility("emoji-toggle-mobile", "emoji-picker-container-mobile","post-text-area-mobile","emoji-picker-itself","post-button-mobile");
 });

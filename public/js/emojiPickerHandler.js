@@ -1,4 +1,4 @@
-export function pickerVisibility(emojiToggle, idPickerContainer, textArea, emojiPickerItself) {
+export function pickerVisibility(emojiToggle, idPickerContainer, textArea, emojiPickerItself,postButton) {
     const pickerContainer = document.getElementById(idPickerContainer);
 
     document.getElementById(emojiToggle).addEventListener('click', (event) => {
@@ -13,6 +13,7 @@ export function pickerVisibility(emojiToggle, idPickerContainer, textArea, emoji
         picker.addEventListener('emoji-click', event => {
             const textAreaElement = document.getElementById(textArea);
             textAreaElement.value = textAreaElement.value + event.detail.unicode;
+            document.getElementById(postButton).disabled = false;
         });
     });
 
