@@ -2,11 +2,10 @@ export function pickerVisibility(emojiToggle, idPickerContainer, textArea, emoji
     const pickerContainer = document.getElementById(idPickerContainer);
 
     document.getElementById(emojiToggle).addEventListener('click', (event) => {
-        console.log(" je clique bien ");
         if (pickerContainer) {
             pickerContainer.classList.toggle('hidden');
         }
-        event.stopPropagation(); // Prevent the click from propagating to the document
+        event.stopPropagation();
     });
 
     document.querySelectorAll('emoji-picker').forEach(picker => {

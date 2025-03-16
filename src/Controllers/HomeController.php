@@ -78,6 +78,57 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 $replyPost = createReply($postId, $content, htmlspecialchars($_SESSION['user_id']));
                 handleHashtag($replyPost->getId(), $_POST);
                 break;
+            case 'addReplyToPostMedia':
+                $postId = isset($_POST['postId']) ? intval($_POST['postId']) : null;
+                if (!$postId) {
+                    echo json_encode(['success' => false, 'message' => 'Post ID manquant ou invalide']);
+                    exit;
+                }
+                $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
+                $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
+                $replyPost = Post::createReply($postId, $content, $user);
+                
+                if ($replyPost) {
+                    for ($i = 0; $i < count($_FILES['images']['name']); $i++) {
+                        $singleMedia = [
+                            'name' => $_FILES['images']['name'][$i],
+                            'type' => $_FILES['images']['type'][$i],
+                            'tmp_name' => $_FILES['images']['tmp_name'][$i],
+                            'error' => $_FILES['images']['error'][$i],
+                            'size' => $_FILES['images']['size'][$i]
+                        ];
+
+                        $uploadedMedia = processMediaUpload($singleMedia);
+                        if ($uploadedMedia) {
+                            $mediaPath = $uploadedMedia[0];
+                            $mediaShortCode = $uploadedMedia[1];
+                            $media = Media::create($mediaPath, $mediaShortCode);
+
+                            if ($media) {
+                                Post::attachMedia($replyPost, $media);
+                            }
+                        }
+                    }
+                    $response = [
+                        'success' => true,
+                        'data' => [
+                            'postId' => $replyPost->getId(),
+                            'userId' => $replyPost->getUserId(),
+                            'content' => $replyPost->getContent(),
+                            'createdAt' => getPostTime($replyPost->getCreatedAt()),
+                            'userDisplayName' => $user->getDisplayName(),
+                            'userName' => $user->getUsername(),
+                            'images' => array_map(function($img) {
+                                return $img['file_name'];
+                            }, Post::getPostMediaByPostId($replyPost->getId()))
+                        ]
+                    ];
+                    echo json_encode($response);
+                    handleHashtag($replyPost->getId(), $_POST);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Erreur lors de la création de la réponse']);
+                }
+                break;
             case 'getRetweetCount':
                 if (isset($_POST['postId'])) {
                     $postId = intval($_POST['postId']);
@@ -386,6 +437,11 @@ function createReply($postId, $content, $userId)
 function getPostReply($postId)
 {
     $result = Post::getReplyFromPost($postId);
+    if ($result) {
+        foreach ($result as &$reply) {
+            $reply['media'] = Post::getPostMediaByPostId($reply['post_id']);
+        }
+    }
     return $result;
 }
 

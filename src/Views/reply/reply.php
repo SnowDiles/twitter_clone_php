@@ -190,20 +190,23 @@
                                                 </div>
                                                 <div class="ml-0 mt-3">
                                                     <div class="text-small text-xl break-all max-w-full">
-                                                        <?php
-                                                        if ($reply && isset($reply['content'])) {
-                                                            preg_match_all('/#[a-zA-Z0-9_]+/', $reply['content'], $hashtags);
-                                                            if ($hashtags) {
-                                                                foreach ($hashtags[0] as $hashtag) {
-                                                                    $hashtagLink = '<a href="./SearchController.php?hashtag=' . ltrim($hashtag, '#') . '" class="text-primary-500">' . $hashtag . '</a>';
-                                                                    $reply['content'] = str_replace($hashtag, $hashtagLink, $reply['content']);
-                                                                }
-                                                            }
-                                                        }
-                                                        echo $reply["content"];
-                                                        ?>
+                                                        <?php echo $reply["content"]; ?>
                                                     </div>
-                                                    <!-- ${imagesHtml} -->
+                                                    
+                                                    <?php if (isset($reply['media']) && !empty($reply['media'])) : ?>
+                                                        <div class="mt-3 mb-3 grid gap-2 p-2.5 rounded-[30px] mr-5 <?php echo count($reply['media']) > 1 ? 'grid-cols-2' : 'grid-cols-1'; ?>">
+                                                            <?php foreach ($reply['media'] as $media) : ?>
+                                                                <a href="<?php echo htmlspecialchars($media['file_name']); ?>" 
+                                                                   class="flex justify-center items-center overflow-hidden" 
+                                                                   target="_blank">
+                                                                    <img src="<?php echo htmlspecialchars($media['file_name']); ?>" 
+                                                                         alt="Reply media" 
+                                                                         class="max-w-full object-contain rounded-lg">
+                                                                </a>
+                                                            <?php endforeach; ?>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                    
                                                     <div class="flex items-center gap-4 mt-2">
                                                         <button class="flex items-center">
                                                             <img 

@@ -48,19 +48,16 @@ const handleTweetClick = (postId) => {
 };
 
 const createReply = (reply) => {
-  let imagesHtml = "";
-  if (reply.images && reply.images.length) {
-    imagesHtml = `
-        <div class="mt-2 flex flex-wrap gap-2">
-          ${reply.images
-            .map(
-              (img) =>
-                `<img src="${img}" alt="Tweet image" class="max-w-full rounded-lg">`
-            )
-            .join("")}
-        </div>
-      `;
-  }
+  const imagesHtml = reply.images && reply.images.length > 0 
+    ? `
+    <div class="mt-3 mb-3 grid gap-2 p-2.5 rounded-[30px] mr-5 ${reply.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}">
+      ${reply.images.map(img => `
+        <a href="${img}" class="flex justify-center items-center overflow-hidden" target="_blank">
+          <img src="${img}" alt="Reply media" class="max-w-full object-contain rounded-lg">
+        </a>
+      `).join('')}
+    </div>
+  ` : '';
 
   // Create the tweet element
   const tweetElement = document.createElement("div");
@@ -84,6 +81,7 @@ const createReply = (reply) => {
             <div class="text-small text-xl break-all max-w-full">
               ${reply.content}
             </div>
+            ${imagesHtml}
             <div class="flex items-center gap-4 mt-2">
               <button class="flex items-center">
                 <img class="invert dark:invert-0 w-5 h-5" src="../../assets/icons/comment.png" alt="Commentaire">
@@ -98,8 +96,8 @@ const createReply = (reply) => {
       </div>
     `;
 
-  // Append the new tweet to the container
-  const tweetsContainer = document.getElementById("tweets-container");
+// Append the new tweet to the container
+const tweetsContainer = document.getElementById("tweets-container");
   if (tweetsContainer) {
     tweetsContainer.prepend(tweetElement);
   }
@@ -107,7 +105,12 @@ const createReply = (reply) => {
 
 const updatePostBtn = () => {
   const hasContent = postTextArea.value.trim() !== "";
-  postBtn.disabled = !hasContent;
+  const desktopMediaInput = document.getElementById("file-input-desktop");
+  const mobileMediaInput = document.getElementById("file-input-mobile");
+  const hasMediaFiles = (desktopMediaInput?.files.length > 0) || (mobileMediaInput?.files.length > 0);
+  
+  postBtn.disabled = !hasContent && !hasMediaFiles;
+  postBtnMobile.disabled = !hasContent && !hasMediaFiles;
 };
 
 const isValidTweetLength = (content) => {
@@ -138,8 +141,22 @@ const submitTweet = async (formData, view) => {
     if (responseData.success) {
       createReply(responseData.data);
       const tweetContent = document.getElementById("post-text-area-desktop");
+      const mobileTextArea = document.getElementById("post-text-area-mobile");
       tweetContent.value = "";
+      mobileTextArea.value = "";
+
+      const desktopFileInput = document.getElementById("file-input-desktop");
+      const mobileFileInput = document.getElementById("file-input-mobile");
+      if (desktopFileInput) desktopFileInput.value = "";
+      if (mobileFileInput) mobileFileInput.value = "";
+
+      const desktopPreviewContainer = document.querySelector(".image-preview-container");
+      const mobilePreviewContainer = document.querySelector("#mobile-modal .image-preview-container");
+      if (desktopPreviewContainer) desktopPreviewContainer.remove();
+      if (mobilePreviewContainer) mobilePreviewContainer.remove();
+
       closeMobileModal();
+      updatePostBtn();
     } else {
       console.error("Erreur serveur:", responseData.message);
       alert(responseData.message || "Une erreur est survenue");
@@ -150,17 +167,97 @@ const submitTweet = async (formData, view) => {
   }
 };
 
-const submitAnswer = (device) => {
-  if (!isValidTweetLength(postTextArea.value.trim())) {
+const handleMediaSelection = (event, view) => {
+  const files = Array.from(event.target.files);
+
+  if (files.length > 4) {
+    alert("Vous ne pouvez pas télécharger plus de 4 images");
+    event.target.value = "";
     return;
   }
 
+  if (!files.every((file) => file.type.startsWith("image/"))) {
+    alert("Veuillez sélectionner uniquement des images");
+    event.target.value = "";
+    return;
+  }
+
+  const existingImageContainer = document.querySelector(
+    view === "mobile"
+      ? "#mobile-modal .image-preview-container"
+      : ".image-preview-container"
+  );
+  if (existingImageContainer) {
+    existingImageContainer.remove();
+  }
+
+  const imageContainer = document.createElement("div");
+  imageContainer.className = "image-preview-container w-full grid gap-2";
+  imageContainer.className += files.length > 1 ? " grid-cols-2" : " grid-cols-1";
+
+  const loadImages = files.map((file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const previewWrapper = document.createElement("div");
+        previewWrapper.className = `relative ${
+          files.length > 1 ? "h-[150px]" : "h-[300px]"
+        }`;
+
+        const previewImage = document.createElement("img");
+        previewImage.src = e.target.result;
+        previewImage.className = "w-full h-full object-cover rounded-lg";
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className =
+          "absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center";
+        deleteButton.innerHTML = "x";
+        deleteButton.onclick = (e) => {
+          e.preventDefault();
+          previewWrapper.remove();
+          if (!imageContainer.children.length) {
+            imageContainer.remove();
+          }
+        };
+
+        previewWrapper.appendChild(previewImage);
+        previewWrapper.appendChild(deleteButton);
+        imageContainer.appendChild(previewWrapper);
+        resolve();
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  Promise.all(loadImages).then(() => {
+    if (view === "mobile") {
+      const mobileContainer = document.querySelector("#mobile-modal .flex-1");
+      if (mobileContainer) {
+        const textareaContainer = mobileContainer.querySelector(".flex.gap-4");
+        if (textareaContainer) {
+          mobileContainer.insertBefore(
+            imageContainer,
+            textareaContainer.nextSibling
+          );
+        }
+      }
+    } else {
+      const desktopContainer = postTextArea.closest(".flex-grow.flex.flex-col.gap-4");
+      if (desktopContainer) {
+        const insertBeforeElement = desktopContainer.querySelector(".flex.justify-start") ||
+          desktopContainer.lastElementChild;
+        desktopContainer.insertBefore(imageContainer, insertBeforeElement);
+      }
+    }
+  });
+};
+
+const submitAnswer = (device) => {
   const tweetContentDesktop = document.getElementById("post-text-area-desktop");
   const tweetContentMobile = document.getElementById("post-text-area-mobile");
-  const tweetContent =
-    device === "desktop" ? tweetContentDesktop : tweetContentMobile;
+  const tweetContent = device === "desktop" ? tweetContentDesktop : tweetContentMobile;
+  const fileInput = device === "desktop" ? document.getElementById("file-input-desktop") : document.getElementById("file-input-mobile");
 
-  const view = "desktop";
   if (!isValidTweetLength(tweetContent.value)) {
     return alert("Votre message est trop long !");
   }
@@ -171,10 +268,37 @@ const submitAnswer = (device) => {
 
   formData.append("content", tweetContent.value);
   formData.append("postId", sourcePostId);
-  formData.append("action", "addReplyToPost");
+  
+  const mediaFiles = Array.from(fileInput.files);
+  if (mediaFiles.length) {
+    mediaFiles.forEach((file) => {
+      formData.append("images[]", file);
+    });
+    formData.append("action", "addReplyToPostMedia");
+  } else {
+    formData.append("action", "addReplyToPost");
+  }
 
-  submitTweet(formData, view);
+  submitTweet(formData, device);
 };
+
+document.getElementById("upload-button-desktop")?.addEventListener("click", () => {
+  document.getElementById("file-input-desktop").click();
+});
+
+document.getElementById("upload-button-mobile")?.addEventListener("click", () => {
+  document.getElementById("file-input-mobile").click();
+});
+
+document.getElementById("file-input-desktop")?.addEventListener("change", (event) => {
+  handleMediaSelection(event, "desktop");
+  updatePostBtn(); 
+});
+
+document.getElementById("file-input-mobile")?.addEventListener("change", (event) => {
+  handleMediaSelection(event, "mobile");
+  updatePostBtn();
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   replyListener();
