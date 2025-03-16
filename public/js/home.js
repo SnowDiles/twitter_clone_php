@@ -2,6 +2,8 @@ import { handleAutoCompletion } from "./autoCompletion.js";
 import { backToTop } from "./backToTop.js";
 import { pickerVisibility } from "./emojiPickerHandler.js";
 import { trendingHashtags } from "./trendingHashtags.js";
+import { searchUser } from "./userSearch.js";
+
 
 /**
  * Class representing a tweet posting functionality
@@ -682,6 +684,19 @@ document.addEventListener("DOMContentLoaded", () => {
     "@"
   );
   autoComplete.init();
+
+  const userSearchTextArea = document.getElementById("user-search-text-area");
+  const userSearchDesktop = document.getElementById("user-search-desktop");
+  const autoComplete2 = new handleAutoCompletion(
+    userSearchTextArea,
+    userSearchTextArea,
+    userSearchDesktop,
+    userSearchDesktop,
+    "../../src/Controllers/HomeController.php",
+    "@"
+  );
+  autoComplete2.init();
+  searchUser(userSearchTextArea);
 
   pickerVisibility(
     "emoji-toggle",

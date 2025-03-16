@@ -16,7 +16,6 @@
                 </a>
                 <img src="../../assets/icons/logo.png" alt="logo" class="invert dark:invert-0 w-12 h-12 mx-auto">
             </div>
-            <hr class="border-t md:invisible">
             <div class="feed md:invisible">
                 <div id="loading-mobile" class="text-center p-4 hidden">
                     <span>Chargement...</span>
@@ -133,9 +132,31 @@
             </main>
         </div>
 
-        <div
-            class="hidden lg:flex p-6 pl-0 pt-4 min-w-fit w-20 justify-start h-fit mt-20 ml-8 rounded-xl border  border-black dark:border-white">
-            <div class="p-4 space-y-2">
+
+
+        <div class="hidden lg:flex p-6 pl-0 pt-4 min-w-fit w-20 justify-start h-fit mt-10 ml-8 flex-col mb-12 sticky">
+            <div class="p-4 space-y-2 border  border-black dark:border-white rounded-xl">
+                <div class="w-full">
+
+                    <div >
+                        <div class="relative flex items-center gap-2">
+                            <input type="text" name="user-search-input" id="user-search-text-area"
+                                placeholder="Rechercher un utilisateur"
+                                class="w-full h-10 pr-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2
+                         focus:ring-blue-500 dark:focus:ring-blue-400 border border-transparent hover:border-gray-300 dark:hover:border-gray-600 transition-all" />
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg w-64 
+                            max-h-64 overflow-y-auto absolute mt-4 z-40" style="display:none;" id="user-search-desktop">
+                        <ul class="space-y-2">
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="p-4 space-y-2 border  border-black dark:border-white mt-4 rounded-xl">
                 <h1 class="pb-6 font-bold text-xl">Hashtags Populaires</h1>
                 <ul id="hashtag-container">
                 </ul>

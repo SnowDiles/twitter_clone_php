@@ -162,6 +162,17 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 getAllPost($user);
                 break;
 
+            case 'searchUser':
+                $userId = User::retrieveIdWithUsername(htmlspecialchars($_POST["userName"]));
+
+                if ($userId !== false) {
+                    echo json_encode(['success' => true, 'data' => ['userId' => $userId]]);
+                    die();
+                } else {
+                    echo json_encode(['success' => false]);
+                    die();
+                }
+
             case 'trendingHashtags':
                 $hashtags = Post::getTrendingHashtags();
                 if ($hashtags !== false) {
@@ -172,7 +183,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                     die();
                 }
 
-            break;
+                break;
             case 'checkMention':
                 if (isset($_POST['mention']) && !empty($_POST['mention'])) {
                     $mention = ltrim($_POST['mention'], '@');

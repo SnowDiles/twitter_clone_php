@@ -11,7 +11,7 @@
 
         <div class="flex flex-[4]">
             <div class="flex flex-col w-full md:max-w-xl">
-                <div class="flex-1 pb-16 md:pb-0 border-r border-black">
+                <div class="flex-1 pb-16 md:pb-0 border-r border-black dark:border-white">
 
                     <div class="p-4 border-b border-black dark:border-white
                      md:hidden relative">
