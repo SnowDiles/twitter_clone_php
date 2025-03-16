@@ -90,7 +90,7 @@
 
 
                 <main class="flex-1 relative z-10">
-                    <div class="feed-desktop">
+                    <div class="feed-desktop ">
                         <div id="tweets-container">
                         </div>
                         <div id="loading" class="text-center p-4 hidden">
