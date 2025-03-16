@@ -1,9 +1,7 @@
 import { handleAutoCompletion } from "./autoCompletion.js";
 import { backToTop } from "./backToTop.js";
-import { pickerVisibility } from './emojiPickerHandler.js';
-
-
-
+import { pickerVisibility } from "./emojiPickerHandler.js";
+import { trendingHashtags } from "./trendingHashtags.js";
 
 /**
  * Class representing a tweet posting functionality
@@ -647,7 +645,25 @@ document.addEventListener("DOMContentLoaded", () => {
     "@"
   );
   autoComplete.init();
-  
-    pickerVisibility("emoji-toggle", "emoji-picker-container","post-text-area-desktop","emoji-picker-itself","post-button-desktop");
-    pickerVisibility("emoji-toggle-mobile", "emoji-picker-container-mobile","post-text-area-mobile","emoji-picker-itself","post-button-mobile");
+
+  pickerVisibility(
+    "emoji-toggle",
+    "emoji-picker-container",
+    "post-text-area-desktop",
+    "emoji-picker-itself",
+    "post-button-desktop"
+  );
+  pickerVisibility(
+    "emoji-toggle-mobile",
+    "emoji-picker-container-mobile",
+    "post-text-area-mobile",
+    "emoji-picker-itself",
+    "post-button-mobile"
+  );
+
+  const trendingHashtagsHandler = new trendingHashtags(
+    "../../src/Controllers/HomeController.php",
+    "hashtag-container"
+  );
+  trendingHashtagsHandler.init();
 });

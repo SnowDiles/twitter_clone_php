@@ -87,7 +87,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 $content = str_replace(search: "'", replace: "'", subject: $_POST['content']);
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
                 $replyPost = Post::createReply($postId, $content, $user);
-                
+
                 if ($replyPost) {
                     for ($i = 0; $i < count($_FILES['images']['name']); $i++) {
                         $singleMedia = [
@@ -118,7 +118,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                             'createdAt' => getPostTime($replyPost->getCreatedAt()),
                             'userDisplayName' => $user->getDisplayName(),
                             'userName' => $user->getUsername(),
-                            'images' => array_map(function($img) {
+                            'images' => array_map(function ($img) {
                                 return $img['file_name'];
                             }, Post::getPostMediaByPostId($replyPost->getId()))
                         ]
@@ -155,11 +155,22 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                 $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
                 getAllPost($user);
                 break;
-            case 'retweet':
-                if (Post::repost(idUser: $_SESSION["user_id"], idPosts: $_POST['postId']) == false) {
-                    Post::deleteRepost($_SESSION["user_id"], idPosts: $_POST['postId']);
-                }
+            case 'trendinHashtags':
+                $user = User::fetch(htmlspecialchars($_SESSION['user_id']));
+                getAllPost($user);
                 break;
+
+            case 'trendingHashtags':
+                $hashtags = Post::getTrendingHashtags();
+                if ($hashtags !== false) {
+                    echo json_encode(['success' => true, 'data' => ['hashtags' => $hashtags]]);
+                    die();
+                } else {
+                    echo json_encode(['success' => false]);
+                    die();
+                }
+
+            break;
             case 'checkMention':
                 if (isset($_POST['mention']) && !empty($_POST['mention'])) {
                     $mention = ltrim($_POST['mention'], '@');

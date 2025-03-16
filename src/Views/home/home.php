@@ -58,7 +58,8 @@
                 <div class="border-t dark:border-gray-700 p-4">
                     <div class="fixed bottom-24 z-20 hidden" style="width: 300px; height: 300px;"
                         id="emoji-picker-container-mobile">
-                        <emoji-picker id="emoji-picker-itself" class="dark" style="width: 100%; height: 100%;"></emoji-picker>
+                        <emoji-picker id="emoji-picker-itself" class="dark"
+                            style="width: 100%; height: 100%;"></emoji-picker>
                     </div>
                     <div class="flex justify-start items-center">
                         <button id="upload-button-mobile" class="invert dark:invert-0 p-2 rounded-full">
@@ -92,7 +93,8 @@
                                     class="flex-grow bg-transparent text-xl placeholder-gray-500 border-none focus:outline-none resize-none"></textarea>
                                 <div class="fixed top-36 z-20 hidden" style="width: 300px; height: 300px;"
                                     id="emoji-picker-container">
-                                    <emoji-picker id="emoji-picker-itself" class="dark" style="width: 100%; height: 100%;"></emoji-picker>
+                                    <emoji-picker id="emoji-picker-itself" class="dark"
+                                        style="width: 100%; height: 100%;"></emoji-picker>
                                 </div>
                                 <button id="post-button-desktop" class="btn variant-filled" disabled=""> Post </button>
                             </div>
@@ -126,10 +128,22 @@
                     <div id="loading" class="text-center p-4 hidden">
                         <span>Chargement...</span>
                     </div>
+
                 </div>
             </main>
         </div>
+
+        <div
+            class="hidden lg:flex p-6 pl-0 pt-4 min-w-fit w-20 justify-start h-fit mt-20 ml-8 rounded-xl border  border-black dark:border-white">
+            <div class="p-4 space-y-2">
+                <h1 class="pb-6 font-bold text-xl">Hashtags Populaires</h1>
+                <ul id="hashtag-container">
+                </ul>
+            </div>
+        </div>
     </div>
+
+
 
     <button id="back-to-top"
         class="fixed bottom-8 right-8 p-3 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-300 transition-colors duration-200"

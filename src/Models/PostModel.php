@@ -289,6 +289,34 @@ class Post
         return $stmt->fetchAll();
     }
 
+
+    public static function getTrendingHashtags(): array|null{
+
+      $pdo = DB::connection();
+
+      $query = "SELECT 
+            p.hashtag_id, 
+            h.tag, 
+            COUNT(p.hashtag_id) AS nbr_use 
+            FROM 
+            PostHashtag p 
+            JOIN 
+            Hashtags h ON p.hashtag_id = h.hashtag_id 
+            GROUP BY 
+            p.hashtag_id 
+            ORDER BY 
+            COUNT(p.hashtag_id) DESC 
+            LIMIT 5";
+
+      $stmt = $pdo->prepare($query);
+
+      if (!$stmt->execute()) {
+        return null;
+      }
+
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
     public static function getById(int $postId): ?array
     {
         $pdo = DB::connection();
